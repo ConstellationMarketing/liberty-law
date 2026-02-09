@@ -31,7 +31,7 @@ export default function Header() {
                 <img
                   src={settings.logoUrl}
                   alt={settings.logoAlt}
-                  className="h-[55px] w-auto max-w-[280px] object-contain brightness-0 invert"
+                  className="h-[55px] w-auto max-w-[280px] object-contain"
                 />
               </Link>
             </div>
