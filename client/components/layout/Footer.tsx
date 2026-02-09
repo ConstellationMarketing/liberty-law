@@ -33,7 +33,7 @@ export default function Footer() {
   const enabledSocialLinks = settings.socialLinks.filter((s) => s.enabled);
 
   return (
-    <footer className="bg-law-dark relative">
+    <footer className="bg-law-dark relative overflow-x-hidden">
       {/* Top Section: Tagline and Call Box */}
       <div className="max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px] flex flex-col lg:flex-row lg:items-center gap-8">
         {/* Left: Tagline */}
@@ -75,7 +75,7 @@ export default function Footer() {
       </div>
 
       {/* Footer Links Section - 4 Column Grid */}
-      <div className="border-t border-b border-[#838383] max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[22%_22%_22%_34%] gap-8 lg:gap-6">
+      <div className="border-t border-b border-[#838383] max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[22%_22%_22%_34%] gap-8 lg:gap-6 overflow-x-hidden">
         {/* Column 1: Logo + Address Only */}
         <div className="flex flex-col items-center">
           {/* Logo */}
