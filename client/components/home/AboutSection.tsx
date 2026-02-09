@@ -15,7 +15,7 @@ const defaultContent: AboutContent = {
   phoneLabel: "Call Us 24/7",
   contactLabel: "Contact Us",
   contactText: "For a Free Consultation",
-  attorneyImage: "/images/team/attorney-1.png",
+  attorneyImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1770650324534-about-meeting.webp",
   attorneyImageAlt: "Liberty Law team in a meeting",
   features: [],
   stats: [
@@ -34,7 +34,7 @@ export default function AboutSection({ content }: AboutSectionProps) {
     <div className="bg-white pt-[30px] md:pt-[54px]">
       {/* Main Content Section */}
       <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] pt-[20px] md:pt-[27px]">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-[5.5%] items-center">
+        <div className="grid grid-cols-1 md:grid-cols-[30%_1fr] gap-8 md:gap-[5%] items-center">
           {/* Left Column - Text Content */}
           <div className="md:w-full">
             {/* Section Label */}
