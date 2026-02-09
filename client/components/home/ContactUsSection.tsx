@@ -38,38 +38,24 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
                 <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark pb-[10px]">
                   {data.heading}
                 </h2>
-                <p className="font-outfit text-[16px] md:text-[24px] leading-[24px] md:leading-[36px] text-black">
-                  {data.description}
-                </p>
               </div>
             </div>
           </div>
 
-          {/* Background Image Section with Two Parts */}
+          {/* Background Image Section */}
           <div
             className="relative w-full flex flex-col sm:flex-row pr-0 sm:pr-[20px]"
             style={{
-              backgroundImage: "url(/images/backgrounds/contact-us-bg.jpg)",
+              backgroundImage: "url(https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F0c4e832eec56483d8b1a5f411eb9f074?format=webp&width=800&height=1200)",
               backgroundPosition: "50% 50%",
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
             }}
           >
-            {/* Left Image */}
-            <div className="sm:w-[45.758%] sm:mr-[8.483%] relative -mt-[30px] ml-auto text-right">
-              <img
-                src="/images/team/attorney-2.png"
-                alt="Contact Us"
-                width={338}
-                height={462}
-                loading="lazy"
-                className="inline-block max-w-full w-[338px]"
-              />
-            </div>
 
             {/* Right Overlay Box */}
             <div
-              className="sm:w-[45.758%] relative p-[30px] ml-auto"
+              className="w-full sm:w-[45.758%] relative p-[30px] ml-auto"
               style={{
                 backgroundColor: "rgba(4, 48, 76, 0.54)",
               }}
