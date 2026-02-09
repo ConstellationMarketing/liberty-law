@@ -65,10 +65,10 @@ export default function Index() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-black pb-[10px] font-normal group-hover:text-white transition-colors duration-300">
+                  <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-white pb-[10px] font-normal transition-colors duration-300">
                     {phoneLabel}
                   </h4>
-                  <p className="font-outfit text-[clamp(1.75rem,5vw,40px)] text-black leading-tight group-hover:text-white transition-colors duration-300">
+                  <p className="font-outfit text-[clamp(1.75rem,5vw,40px)] text-white leading-tight transition-colors duration-300">
                     {phoneDisplay}
                   </p>
                 </div>

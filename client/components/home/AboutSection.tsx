@@ -60,7 +60,7 @@ export default function AboutSection({ content }: AboutSectionProps) {
           {/* Left Column - About Text and CTAs */}
           <div className="md:w-full">
             {/* About Us Label */}
-            <div className="text-[rgb(107,141,12)] font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] mb-[10px]">
+            <div className="text-[#EC3024] font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] mb-[10px]">
               {data.sectionLabel}
             </div>
 
@@ -84,10 +84,10 @@ export default function AboutSection({ content }: AboutSectionProps) {
                   />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-black pb-[10px] group-hover:text-white transition-colors duration-300">
+                  <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-white pb-[10px] transition-colors duration-300">
                     {phoneLabel}
                   </h4>
-                  <p className="font-outfit text-[28px] md:text-[40px] text-black leading-none group-hover:text-white transition-colors duration-300">
+                  <p className="font-outfit text-[28px] md:text-[40px] text-white leading-none transition-colors duration-300">
                     {phoneDisplay}
                   </p>
                 </div>
@@ -104,10 +104,10 @@ export default function AboutSection({ content }: AboutSectionProps) {
                   />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-black pb-[10px] group-hover:text-white transition-colors duration-300">
+                  <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-white pb-[10px] transition-colors duration-300">
                     {data.contactLabel}
                   </h4>
-                  <p className="font-outfit text-[18px] md:text-[24px] text-black leading-none group-hover:text-white transition-colors duration-300">
+                  <p className="font-outfit text-[18px] md:text-[24px] text-white leading-none transition-colors duration-300">
                     {data.contactText}
                   </p>
                 </div>

@@ -21,10 +21,10 @@ export default function PracticeAreasSection() {
                   <DollarSign className="w-8 h-8 text-black group-hover:text-white transition-colors duration-300" />
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-black pb-[10px] group-hover:text-white transition-colors duration-300">
+                  <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-white pb-[10px] transition-colors duration-300">
                     Discover
                   </h4>
-                  <p className="font-outfit text-[18px] md:text-[24px] text-black leading-none group-hover:text-white transition-colors duration-300">
+                  <p className="font-outfit text-[18px] md:text-[24px] text-white leading-none transition-colors duration-300">
                     All Practice Areas
                   </p>
                 </div>
