@@ -138,8 +138,8 @@ export default function Footer() {
 
         {/* Column 4: Map */}
         {settings.mapEmbedUrl && (
-          <div>
-            <div className="relative h-full min-h-[300px]">
+          <div className="overflow-hidden">
+            <div className="relative h-full min-h-[300px] overflow-hidden">
               <iframe
                 src={settings.mapEmbedUrl}
                 width="100%"
