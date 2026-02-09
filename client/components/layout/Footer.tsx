@@ -40,7 +40,7 @@ export default function Footer() {
         <div className="lg:w-[75%]">
           <div>
             <p className="font-playfair text-[clamp(2rem,6vw,59.136px)] leading-tight md:leading-[70.9632px] font-light text-white">
-              Committed to achieving the best possible outcome for your situation.
+              Committed to achieving <span className="text-law-accent">the best possible outcome</span> for your situation.
             </p>
           </div>
         </div>
