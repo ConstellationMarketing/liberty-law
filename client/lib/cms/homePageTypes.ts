@@ -164,7 +164,7 @@ export const defaultHomeContent: HomePageContent = {
     phoneLabel: "Call Us 24/7",
     contactLabel: "Contact Us",
     contactText: "For a Free Consultation",
-    attorneyImage: "/images/team/attorney-1.png",
+    attorneyImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1770650324534-about-meeting.webp",
     attorneyImageAlt: "Liberty Law team in a meeting",
     features: [],
     stats: [
