@@ -47,12 +47,13 @@ export default function PracticeAreasGrid({ areas }: PracticeAreasGridProps) {
           ))}
 
           {/* Branding filler for remaining grid space */}
-          <div
-            className="relative min-h-[400px] lg:min-h-[480px] sm:col-span-2 lg:col-span-2 bg-cover bg-center"
-            style={{
-              backgroundImage: `url(/images/practice-areas/branding-filler.webp)`,
-            }}
-          />
+          <div className="relative min-h-[400px] lg:min-h-[480px] sm:col-span-2 lg:col-span-2 bg-law-dark flex items-center justify-center overflow-hidden">
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2Fa1ea6dfbbf1843f0a81b4a7860758155?format=webp&width=800"
+              alt="Liberty Law"
+              className="w-[70%] max-w-[500px] opacity-20 object-contain"
+            />
+          </div>
         </div>
       </div>
     </div>
