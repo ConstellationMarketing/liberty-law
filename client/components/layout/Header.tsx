@@ -21,10 +21,10 @@ export default function Header() {
       {/* Top padding background that scrolls away */}
       <div className="bg-law-dark h-[30px]"></div>
 
-      {/* Header wrapper */}
-      <div>
+      {/* Sticky header wrapper */}
+      <div className="sticky top-0 z-50">
         <div className="max-w-[2560px] mx-auto w-[95%]">
-          <div className="sticky top-0 z-50 bg-law-card border border-law-border px-[30px] py-[10px] flex items-center justify-between">
+          <div className="bg-law-card border border-law-border px-[30px] py-[10px] flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
               <Link to="/" className="mr-[30px]">
