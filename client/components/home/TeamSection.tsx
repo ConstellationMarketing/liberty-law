@@ -6,15 +6,15 @@ const attorneyImage =
 
 export default function TeamSection() {
   return (
-    <div className="bg-white py-[40px] md:py-[60px]">
+    <div className="bg-law-dark py-[40px] md:py-[60px]">
       <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%]">
-        <div className="grid grid-cols-1 md:grid-cols-[45%_1fr] gap-8 md:gap-[5%] items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[45%_1fr] gap-8 md:gap-[5%] items-stretch">
           {/* Left Column - Attorney Photo */}
-          <div>
+          <div className="min-h-[400px]">
             <img
               src={attorneyImage}
               alt="David Liberty, Founder & Managing Attorney"
-              className="w-full h-auto object-cover"
+              className="w-full h-full object-cover"
               loading="lazy"
             />
           </div>
@@ -27,12 +27,12 @@ export default function TeamSection() {
             </p>
 
             {/* Heading */}
-            <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark mb-[20px] md:mb-[30px]">
+            <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-white mb-[20px] md:mb-[30px]">
               Meet Our Team
             </h2>
 
             {/* Intro Paragraph */}
-            <p className="font-outfit text-[16px] md:text-[18px] leading-[26px] md:leading-[30px] text-gray-700 mb-[25px] md:mb-[30px]">
+            <p className="font-outfit text-[16px] md:text-[18px] leading-[26px] md:leading-[30px] text-white/80 mb-[25px] md:mb-[30px]">
               David Liberty is a dedicated advocate who brings a unique
               perspective to every case he handles. With a background that spans
               both criminal defense and prosecution as well as complex real
@@ -41,15 +41,15 @@ export default function TeamSection() {
             </p>
 
             {/* Name & Title */}
-            <h3 className="font-playfair text-[22px] md:text-[26px] leading-tight text-law-dark font-semibold">
+            <h3 className="font-playfair text-[22px] md:text-[26px] leading-tight text-white font-semibold">
               David Liberty
             </h3>
-            <p className="font-outfit text-[16px] md:text-[18px] text-gray-500 mb-[20px] md:mb-[25px]">
+            <p className="font-outfit text-[16px] md:text-[18px] text-white/60 mb-[20px] md:mb-[25px]">
               Founder &amp; Managing Attorney
             </p>
 
             {/* Bio Paragraph */}
-            <p className="font-outfit text-[15px] md:text-[17px] leading-[24px] md:leading-[28px] text-gray-700 mb-[30px] md:mb-[40px]">
+            <p className="font-outfit text-[15px] md:text-[17px] leading-[24px] md:leading-[28px] text-white/80 mb-[30px] md:mb-[40px]">
               David earned his Juris Doctor from the Chicago-Kent College of Law
               in 2014, where he was inducted into the Bar and Gavel Society for
               his outstanding service to the legal community. Before founding
