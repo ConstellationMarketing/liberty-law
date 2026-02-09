@@ -40,9 +40,7 @@ export default function Footer() {
         <div className="lg:w-[75%]">
           <div>
             <p className="font-playfair text-[clamp(2rem,6vw,59.136px)] leading-tight md:leading-[70.9632px] font-light text-white">
-              <span className="text-law-accent">Your rights. Our mission.</span>
-              <br />
-              Backed by integrity and relentless representation.
+              Committed to achieving the best possible outcome for your situation.
             </p>
           </div>
         </div>
@@ -84,11 +82,11 @@ export default function Footer() {
             <img
               src={settings.logoUrl}
               alt={settings.logoAlt}
-              className="h-[33px] w-auto max-w-[180px] object-contain brightness-0 invert"
+              className="h-[60px] md:h-[80px] w-auto max-w-[280px] object-contain brightness-0 invert"
             />
           </Link>
           {(settings.addressLine1 || settings.addressLine2) && (
-            <div className="mt-4 font-outfit text-[16px] font-light leading-[24px] text-white/80">
+            <div className="mt-4 font-outfit text-[20px] md:text-[24px] font-light leading-[28px] md:leading-[32px] text-white/80">
               {settings.addressLine1 && <p>{settings.addressLine1}</p>}
               {settings.addressLine2 && <p>{settings.addressLine2}</p>}
             </div>
