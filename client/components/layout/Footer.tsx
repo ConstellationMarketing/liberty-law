@@ -75,14 +75,14 @@ export default function Footer() {
       </div>
 
       {/* Footer Links Section */}
-      <div className="border-t border-b border-[#838383] max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px] flex flex-col lg:flex-row gap-6 md:gap-8 lg:gap-[3%]">
+      <div className="border-t border-b border-[#838383] max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px] flex flex-col lg:flex-row lg:items-start gap-6 md:gap-8 lg:gap-[3%]">
         {/* Logo Column */}
         <div className="lg:w-[20%] lg:mr-[3%]">
           <Link to="/" className="block">
             <img
               src={settings.logoUrl}
               alt={settings.logoAlt}
-              className="h-[60px] md:h-[80px] w-auto max-w-[280px] object-contain brightness-0 invert"
+              className="h-[60px] md:h-[80px] w-auto max-w-[280px] object-contain"
             />
           </Link>
           {(settings.addressLine1 || settings.addressLine2) && (
@@ -121,9 +121,9 @@ export default function Footer() {
               <h3 className="font-outfit text-[28px] md:text-[36px] leading-tight md:leading-[36px] text-white pb-[10px]">
                 Practice Areas
               </h3>
-              <ul className="text-[18px] md:text-[24px] font-light leading-tight md:leading-[36px] space-y-1">
+              <ul className="text-[18px] md:text-[24px] font-light leading-tight md:leading-[36px] space-y-1 columns-1 md:columns-2 lg:columns-1 xl:columns-2 gap-4">
                 {settings.footerPracticeLinks.map((link) => (
-                  <li key={link.label}>
+                  <li key={link.label} className="break-inside-avoid">
                     <Link
                       to={link.href || "/practice-areas"}
                       className="hover:text-law-accent transition-colors"
@@ -144,11 +144,11 @@ export default function Footer() {
               <iframe
                 src={settings.mapEmbedUrl}
                 width="100%"
-                height="250"
+                height="350"
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-[250px]"
+                className="w-full h-[350px]"
                 title="Office Location"
               ></iframe>
             </div>
