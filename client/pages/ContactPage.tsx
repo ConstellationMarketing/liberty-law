@@ -86,7 +86,7 @@ export default function ContactPage() {
                   <div className="flex justify-center mb-[20px]">
                     <div className="bg-law-accent p-[20px] inline-block transition-all duration-300 group-hover:bg-white group-hover:scale-110">
                       <Icon
-                        className="w-[35px] h-[35px] md:w-[40px] md:h-[40px] text-white"
+                        className="w-[35px] h-[35px] md:w-[40px] md:h-[40px] text-white group-hover:text-black transition-colors duration-300"
                         strokeWidth={1.5}
                       />
                     </div>
