@@ -71,7 +71,7 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
             <div
               className="sm:w-[45.758%] relative p-[30px] ml-auto"
               style={{
-                backgroundColor: "rgba(29, 73, 70, 0.54)",
+                backgroundColor: "rgba(4, 48, 76, 0.54)",
               }}
             >
               <div className="relative mb-[10px]">
