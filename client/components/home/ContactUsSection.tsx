@@ -103,7 +103,7 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
                     <div className="mt-[20px] md:mt-[30px] flex justify-start">
                       <div className="bg-law-accent p-[15px] inline-block">
                         <Scale
-                          className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] text-black"
+                          className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] text-white"
                           strokeWidth={1.5}
                         />
                       </div>
