@@ -43,7 +43,7 @@ export default function Seo({
       <title>{fullTitle}</title>
       <meta name="description" content={fullDescription} />
       
-      {noindex && <meta name="robots" content="noindex, nofollow" />}
+      {shouldNoindex && <meta name="robots" content="noindex, nofollow" />}
       
       {fullCanonical && <link rel="canonical" href={fullCanonical} />}
       
