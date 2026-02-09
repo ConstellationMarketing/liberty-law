@@ -62,21 +62,28 @@ export default function TeamSection() {
               worked on some of the most serious cases in the state.
             </p>
 
-            {/* Contact Us Button */}
-            <Link to="/contact">
-              <div className="bg-law-accent p-[8px] w-full max-w-[300px] cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
-                <div className="flex items-center gap-4">
-                  <div className="flex-1 pl-[10px]">
-                    <p className="font-outfit text-[20px] md:text-[22px] text-white leading-none transition-colors duration-300">
-                      Contact Us
-                    </p>
-                  </div>
-                  <div className="bg-white p-[15px] flex items-center justify-center group-hover:bg-black transition-colors duration-300">
-                    <ArrowRight className="w-6 h-6 text-black group-hover:text-white transition-colors duration-300" />
-                  </div>
+            {/* Call Box */}
+            <div className="bg-law-accent p-[8px] w-full max-w-[400px] cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
+              <div className="flex items-start gap-4">
+                <div className="bg-white p-[15px] mt-1 flex items-center justify-center group-hover:bg-black transition-colors duration-300">
+                  <svg
+                    className="w-8 h-8 text-black group-hover:text-white transition-colors duration-300"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z" />
+                  </svg>
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-white pb-[10px] font-normal transition-colors duration-300">
+                    {phoneLabel}
+                  </h4>
+                  <p className="font-outfit text-[clamp(1.75rem,5vw,40px)] text-white leading-tight transition-colors duration-300">
+                    {phoneDisplay}
+                  </p>
                 </div>
               </div>
-            </Link>
+            </div>
           </div>
         </div>
       </div>
