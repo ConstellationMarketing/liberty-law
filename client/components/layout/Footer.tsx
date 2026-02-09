@@ -74,32 +74,33 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Footer Links Section */}
-      <div className="border-t border-b border-[#838383] max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px] flex flex-col lg:flex-row lg:items-start gap-6 md:gap-8 lg:gap-[3%]">
-        {/* Logo Column */}
-        <div className="lg:w-[20%] lg:mr-[3%]">
-          <Link to="/" className="block">
+      {/* Footer Links Section - 3 Column Grid */}
+      <div className="border-t border-b border-[#838383] max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px] grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6">
+        {/* Column 1: Logo + Address + Resources (25% width) */}
+        <div>
+          {/* Logo */}
+          <Link to="/" className="block mb-6">
             <img
               src={settings.logoUrl}
               alt={settings.logoAlt}
-              className="h-[60px] md:h-[80px] w-auto max-w-[280px] object-contain"
+              className="h-[50px] md:h-[60px] w-auto max-w-[250px] object-contain"
             />
           </Link>
+
+          {/* Address */}
           {(settings.addressLine1 || settings.addressLine2) && (
-            <div className="mt-4 font-outfit text-[20px] md:text-[24px] font-light leading-[28px] md:leading-[32px] text-white/80">
+            <div className="mb-6 font-outfit text-[18px] md:text-[20px] font-light leading-[26px] md:leading-[28px] text-white/80">
               {settings.addressLine1 && <p>{settings.addressLine1}</p>}
               {settings.addressLine2 && <p>{settings.addressLine2}</p>}
             </div>
           )}
-        </div>
 
-        {/* Resources Column */}
-        <div className="lg:w-[20%] lg:mr-[3%]">
-          <div className="font-outfit text-[18px] md:text-[24px] font-light leading-tight md:leading-[36px] text-white">
-            <h3 className="font-outfit text-[28px] md:text-[36px] leading-tight md:leading-[36px] text-white pb-[10px]">
+          {/* Resources */}
+          <div>
+            <h3 className="font-outfit text-[24px] md:text-[28px] leading-tight text-white pb-[10px]">
               Resources
             </h3>
-            <ul className="text-[18px] md:text-[24px] font-light leading-tight md:leading-[36px] space-y-1">
+            <ul className="font-outfit text-[16px] md:text-[20px] font-light leading-[24px] md:leading-[28px] space-y-1 text-white">
               {resourceLinks.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -114,41 +115,39 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Practice Areas Column */}
+        {/* Column 2: Practice Areas (35% width) */}
         {settings.footerPracticeLinks.length > 0 && (
-          <div className="lg:w-[20%] lg:mr-[3%]">
-            <div className="font-outfit text-[18px] md:text-[24px] font-light leading-tight md:leading-[36px] text-white">
-              <h3 className="font-outfit text-[28px] md:text-[36px] leading-tight md:leading-[36px] text-white pb-[10px]">
-                Practice Areas
-              </h3>
-              <ul className="text-[18px] md:text-[24px] font-light leading-tight md:leading-[36px] space-y-1 columns-1 md:columns-2 lg:columns-1 xl:columns-2 gap-4">
-                {settings.footerPracticeLinks.map((link) => (
-                  <li key={link.label} className="break-inside-avoid">
-                    <Link
-                      to={link.href || "/practice-areas"}
-                      className="hover:text-law-accent transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div>
+            <h3 className="font-outfit text-[24px] md:text-[28px] leading-tight text-white pb-[10px]">
+              Practice Areas
+            </h3>
+            <ul className="font-outfit text-[16px] md:text-[20px] font-light leading-[24px] md:leading-[28px] space-y-1 lg:columns-2 lg:gap-8 text-white">
+              {settings.footerPracticeLinks.map((link) => (
+                <li key={link.label} className="break-inside-avoid">
+                  <Link
+                    to={link.href || "/practice-areas"}
+                    className="hover:text-law-accent transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
 
-        {/* Map Column */}
+        {/* Column 3: Map (40% width) */}
         {settings.mapEmbedUrl && (
-          <div className="lg:w-[40%] max-w-[900px]">
-            <div className="relative">
+          <div>
+            <div className="relative h-full min-h-[300px]">
               <iframe
                 src={settings.mapEmbedUrl}
                 width="100%"
-                height="350"
+                height="100%"
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-[350px]"
+                className="w-full h-full min-h-[300px] lg:min-h-[350px]"
                 title="Office Location"
               ></iframe>
             </div>
