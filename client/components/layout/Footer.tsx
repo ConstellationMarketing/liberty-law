@@ -138,7 +138,7 @@ export default function Footer() {
 
         {/* Column 4: Map */}
         {settings.mapEmbedUrl && (
-          <div className="overflow-hidden">
+          <div className="overflow-hidden min-w-0 max-w-full">
             <div className="relative h-full min-h-[300px] overflow-hidden">
               <iframe
                 src={settings.mapEmbedUrl}
@@ -147,7 +147,7 @@ export default function Footer() {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="w-full h-full min-h-[300px] lg:min-h-[350px]"
+                className="w-full h-full min-h-[300px] lg:min-h-[350px] max-w-full"
                 title="Office Location"
               ></iframe>
             </div>
