@@ -34,7 +34,7 @@ const NotFound = () => {
             The page you are looking for doesn't exist or has been moved.
           </p>
           <Link to="/">
-            <Button className="bg-law-accent text-black font-outfit text-[20px] px-8 py-6 h-auto hover:bg-law-accent/90">
+            <Button className="bg-law-accent text-white font-outfit text-[20px] px-8 py-6 h-auto hover:bg-law-accent/90">
               Return to Home
             </Button>
           </Link>
