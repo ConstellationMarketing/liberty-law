@@ -39,7 +39,7 @@ export default function PracticeAreaCard({
         <div className="flex justify-start">
           <div className="bg-law-accent p-[15px] inline-block transition-all duration-300 group-hover:bg-white">
             <Icon
-              className="w-[30px] h-[30px] md:w-[35px] md:h-[35px] text-black"
+              className="w-[30px] h-[30px] md:w-[35px] md:h-[35px] text-white group-hover:text-black transition-colors duration-300"
               strokeWidth={1.5}
             />
           </div>

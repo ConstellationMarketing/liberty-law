@@ -18,7 +18,7 @@ export default function ValueCard({
         <div className="mb-[20px] md:mb-[30px]">
           <div className="bg-law-accent p-[20px] md:p-[25px] inline-block transition-all duration-300 group-hover:bg-white group-hover:scale-110">
             <Icon
-              className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] text-black transition-colors duration-300"
+              className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] text-white group-hover:text-black transition-colors duration-300"
               strokeWidth={1.5}
             />
           </div>
