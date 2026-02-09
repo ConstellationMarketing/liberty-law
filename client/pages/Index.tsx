@@ -8,7 +8,6 @@ import PracticeAreasGrid from "@site/components/home/PracticeAreasGrid";
 import AwardsSection from "@site/components/home/AwardsSection";
 import TestimonialsSection from "@site/components/home/TestimonialsSection";
 import ProcessSection from "@site/components/home/ProcessSection";
-import GoogleReviewsSection from "@site/components/home/GoogleReviewsSection";
 import FaqSection from "@site/components/home/FaqSection";
 import ContactUsSection from "@site/components/home/ContactUsSection";
 import { useHomeContent } from "@site/hooks/useHomeContent";
@@ -99,8 +98,6 @@ export default function Index() {
       {/* Process Section */}
       <ProcessSection content={content.process} />
 
-      {/* Google Reviews Section */}
-      <GoogleReviewsSection content={content.googleReviews} />
 
       {/* FAQ Section */}
       <FaqSection content={content.faq} />
