@@ -7,7 +7,7 @@ import PracticeAreasSection from "@site/components/home/PracticeAreasSection";
 import PracticeAreasGrid from "@site/components/home/PracticeAreasGrid";
 import AwardsSection from "@site/components/home/AwardsSection";
 import TestimonialsSection from "@site/components/home/TestimonialsSection";
-import ProcessSection from "@site/components/home/ProcessSection";
+import TeamSection from "@site/components/home/TeamSection";
 import FaqSection from "@site/components/home/FaqSection";
 import ContactUsSection from "@site/components/home/ContactUsSection";
 import { useHomeContent } from "@site/hooks/useHomeContent";
@@ -95,8 +95,8 @@ export default function Index() {
       {/* Testimonials Section */}
       <TestimonialsSection content={content.testimonials} />
 
-      {/* Process Section */}
-      <ProcessSection content={content.process} />
+      {/* Meet Our Team Section */}
+      <TeamSection />
 
 
       {/* FAQ Section */}
