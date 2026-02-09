@@ -175,7 +175,7 @@ export default function Footer() {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`inline-block w-[52px] h-[52px] bg-[#142928] border border-[#616f6f] ${
+                      className={`inline-block w-[52px] h-[52px] bg-[#0A2540] border border-[#3C5A73] ${
                         index < enabledSocialLinks.length - 1 ? "mr-[8px]" : ""
                       } align-middle transition-all duration-300 hover:bg-law-accent hover:border-law-accent group flex items-center justify-center`}
                       title={`Follow on ${platformLabel}`}

@@ -65,7 +65,7 @@ export default function GoogleReviewsSection({
         <div className="text-center mb-[10px]">
           <p
             className="font-outfit text-[24px] leading-[36px]"
-            style={{ color: "#6b8d0c" }}
+            style={{ color: "#EC3024" }}
           >
             {data.sectionLabel}
           </p>

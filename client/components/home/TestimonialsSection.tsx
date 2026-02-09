@@ -57,7 +57,7 @@ export default function TestimonialsSection({
         <div className="text-center mb-[10px]">
           <p
             className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px]"
-            style={{ color: "#6b8d0c" }}
+            style={{ color: "#EC3024" }}
           >
             {data.sectionLabel}
           </p>
