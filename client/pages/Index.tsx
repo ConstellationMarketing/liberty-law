@@ -41,7 +41,7 @@ export default function Index() {
 
               {/* Tagline - Large decorative text */}
               <p className="font-playfair text-[clamp(2.5rem,7vw,68.8px)] font-light leading-[1.2] text-white text-left mt-[20px] md:mt-[30px]">
-                <span className="text-law-accent">Committed</span> to achieving the best possible outcome for your situation.
+                Committed to achieving <span className="text-law-accent">the best possible outcome</span> for your situation.
               </p>
 
               {/* Subtext */}
