@@ -83,7 +83,7 @@ export default function Footer() {
             <img
               src={settings.logoUrl}
               alt={settings.logoAlt}
-              className="h-[50px] md:h-[60px] w-auto max-w-[250px] object-contain mx-auto"
+              className="h-[100px] md:h-[120px] w-auto max-w-[500px] object-contain mx-auto"
             />
           </Link>
 
