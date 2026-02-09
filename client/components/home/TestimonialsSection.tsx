@@ -63,7 +63,7 @@ export default function TestimonialsSection({
           </p>
         </div>
         <div className="text-center">
-          <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-black pb-[10px]">
+          <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark pb-[10px]">
             {data.heading}
           </h2>
         </div>
