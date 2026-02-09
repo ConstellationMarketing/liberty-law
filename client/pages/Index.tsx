@@ -34,20 +34,19 @@ export default function Index() {
           {/* Left Side: Headline and Call Box */}
           <div className="lg:w-[65.667%]">
             <div className="mb-[30px] md:mb-[40px]">
-              {/* Tagline */}
-              <p className="font-outfit text-[16px] md:text-[18px] font-light text-white/80 mb-[15px] md:mb-[20px]">
+              {/* Tagline - Large decorative text */}
+              <p className="font-playfair text-[clamp(2.5rem,7vw,68.8px)] font-light leading-[1.2] text-white text-left">
                 Committed to achieving the best possible outcome for your situation.
               </p>
 
-              {/* H1 Heading */}
-              <h1 className="font-playfair text-[clamp(2.5rem,7vw,68.8px)] font-light leading-[1.2] text-white text-left">
+              {/* H1 Title */}
+              <h1 className="font-outfit text-[18px] md:text-[20px] font-medium tracking-wider uppercase text-white mt-[20px] md:mt-[30px]">
                 Naperville's Trusted{" "}
-                <span className="text-law-accent">Criminal Defense</span> &amp; Real
-                Estate Attorney
+                <span className="text-law-accent">Criminal Defense</span> &amp; Real Estate Attorney
               </h1>
 
               {/* Subtext */}
-              <p className="font-outfit text-[16px] md:text-[20px] font-light leading-[24px] md:leading-[30px] text-white/80 mt-[20px] md:mt-[25px]">
+              <p className="font-outfit text-[16px] md:text-[20px] font-light leading-[24px] md:leading-[30px] text-white/80 mt-[15px] md:mt-[20px]">
                 We provide expert representation for Criminal Defense, DUI, Real Estate, and Business Law matters across DuPage, Kane, Kendall, Will, and Grundy Counties.
               </p>
             </div>
