@@ -83,31 +83,6 @@ export default function Index() {
         </div>
       </div>
 
-      {/* Partner Badges Section - Bottom of Hero */}
-      <div className="bg-law-dark py-[20px] md:py-[30px]">
-        <div className="max-w-[2560px] mx-auto w-[95%]">
-          <div className="bg-law-card border border-law-border py-[10px] px-0 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 md:gap-0">
-            {partnerLogos.map((logo, index) => (
-              <div
-                key={index}
-                className="px-[15px] md:px-[30px] flex items-center justify-center"
-              >
-                <div className="text-center">
-                  <img
-                    src={logo.src}
-                    alt={logo.alt}
-                    className="w-[120px] md:w-[190px] max-w-full inline-block"
-                    width={190}
-                    height={123}
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* About Us Section */}
       <AboutSection content={content.about} />
 
