@@ -156,36 +156,17 @@ export const defaultHomeContent: HomePageContent = {
     { src: "/images/logos/award-badge-3.png", alt: "Award Badge" },
   ],
   about: {
-    sectionLabel: "– About Us",
-    heading: "A Leading Lawyer for an Atlanta Law Firm",
+    sectionLabel: "— Criminal Defense Lawyer",
+    heading: "About Liberty Law, P. C.",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi",
-    phone: "404-555-5555",
+      "Liberty Law is dedicated to answering your questions and providing personalized legal representation. We believe that experience is the cornerstone of a thriving law practice, and we pride ourselves on giving each new case the attention it deserves.",
+    phone: "630-449-4800",
     phoneLabel: "Call Us 24/7",
     contactLabel: "Contact Us",
     contactText: "For a Free Consultation",
     attorneyImage: "/images/team/attorney-1.png",
-    attorneyImageAlt: "Attorney",
-    features: [
-      {
-        number: "1",
-        title: "Nationwide Representation",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget augue tincidunt, rhoncus lacus a, congue diam.",
-      },
-      {
-        number: "2",
-        title: "Understanding Your Case",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget augue tincidunt, rhoncus lacus a, congue diam.",
-      },
-      {
-        number: "3",
-        title: "Seeking Compensation",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget augue tincidunt, rhoncus lacus a, congue diam.",
-      },
-    ],
+    attorneyImageAlt: "Liberty Law team in a meeting",
+    features: [],
     stats: [
       { value: "1000+", label: "Trusted Clients Served" },
       { value: "$50 Million", label: "Recovered in Legal Dispute Settlements" },
