@@ -41,6 +41,8 @@ export interface AboutContent {
 
 export interface PracticeAreaItem {
   title: string;
+  description: string;
+  icon: string;
   image: string;
   link: string;
 }
@@ -182,23 +184,73 @@ export const defaultHomeContent: HomePageContent = {
   },
   practiceAreas: [
     {
-      title: "Practice Area",
+      title: "DUI",
+      description: "Schedule a consultation if you have been charged with Driving Under the Influence. We will review your case, discuss potential defenses, and explain the next steps for your court, legal, and driver's license status.",
+      icon: "Car",
       image: "/images/practice-areas/personal-injury.jpg",
       link: "/practice-areas",
     },
     {
-      title: "Practice Area",
+      title: "Felony",
+      description: "For serious criminal charges including drug offenses, battery, or theft. We provide a confidential review of your charges to build an aggressive defense strategy to protect your rights and freedom.",
+      icon: "Lock",
       image: "/images/practice-areas/medical-malpractice.jpg",
       link: "/practice-areas",
     },
     {
-      title: "Practice Area",
+      title: "Misdemeanor",
+      description: "Legal assistance for misdemeanor charges. We help you understand the potential consequences and work toward the best possible resolution for your case.",
+      icon: "Scale",
       image: "/images/practice-areas/workers-compensation.jpg",
       link: "/practice-areas",
     },
     {
-      title: "Practice Area",
+      title: "Traffic",
+      description: "Defense for speeding tickets, driving while suspended/revoked, and other moving violations. We aim to protect your driving record and minimize fines or insurance impacts.",
+      icon: "CircleAlert",
       image: "/images/practice-areas/wrongful-death.jpg",
+      link: "/practice-areas",
+    },
+    {
+      title: "Real Estate - Buy",
+      description: "Legal representation for home buyers. We review contracts, handle title work, and guide you through the closing process to ensure a smooth purchase.",
+      icon: "Home",
+      image: "/images/practice-areas/premises-liability.jpg",
+      link: "/practice-areas",
+    },
+    {
+      title: "Real Estate - Sale",
+      description: "Legal representation for home sellers. We assist with contract negotiation, title clearance, and closing documents to protect your interests during the sale.",
+      icon: "Building",
+      image: "/images/practice-areas/product-liability.jpg",
+      link: "/practice-areas",
+    },
+    {
+      title: "Sealing/Expungement",
+      description: "Discuss your eligibility to have past criminal records expunged or sealed. We help remove barriers to employment and housing by clearing your record.",
+      icon: "FileX",
+      image: "/images/practice-areas/civil-litigation.jpg",
+      link: "/practice-areas",
+    },
+    {
+      title: "SOS - License Reinstatement",
+      description: "Assistance with formal and informal hearings to reinstate your driver's license after a revocation or suspension.",
+      icon: "CreditCard",
+      image: "/images/practice-areas/insurance-claims.jpg",
+      link: "/practice-areas",
+    },
+    {
+      title: "Evictions and Landlord/Tenant",
+      description: "Representation for landlords and tenants in residential and commercial lease disputes. We handle eviction proceedings, lease violations, security deposit issues, and other property management legal matters to ensure your rights are protected under Illinois law.",
+      icon: "Building2",
+      image: "/images/practice-areas/class-action.jpg",
+      link: "/practice-areas",
+    },
+    {
+      title: "Business Law and Consulting",
+      description: "General legal counsel for small business formation, contract disputes, or other civil legal matters.",
+      icon: "Briefcase",
+      image: "/images/practice-areas/employment-law.jpg",
       link: "/practice-areas",
     },
   ],
