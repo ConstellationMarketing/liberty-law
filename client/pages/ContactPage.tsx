@@ -86,7 +86,7 @@ export default function ContactPage() {
                   <div className="flex justify-center mb-[20px]">
                     <div className="bg-law-accent p-[20px] inline-block transition-all duration-300 group-hover:bg-white group-hover:scale-110">
                       <Icon
-                        className="w-[35px] h-[35px] md:w-[40px] md:h-[40px] text-black"
+                        className="w-[35px] h-[35px] md:w-[40px] md:h-[40px] text-white"
                         strokeWidth={1.5}
                       />
                     </div>
@@ -133,7 +133,7 @@ export default function ContactPage() {
                 <div className="flex items-center gap-3 mb-[20px]">
                   <div className="bg-law-accent p-[15px]">
                     <Clock
-                      className="w-[30px] h-[30px] text-black"
+                      className="w-[30px] h-[30px] text-white"
                       strokeWidth={1.5}
                     />
                   </div>
@@ -209,7 +209,7 @@ export default function ContactPage() {
               <div key={index} className="text-center">
                 <div className="mb-[20px] flex justify-center">
                   <div className="w-[60px] h-[60px] md:w-[70px] md:h-[70px] bg-law-accent flex items-center justify-center">
-                    <span className="font-playfair text-[32px] md:text-[40px] text-black font-bold">
+                    <span className="font-playfair text-[32px] md:text-[40px] text-white font-bold">
                       {item.number}
                     </span>
                   </div>
