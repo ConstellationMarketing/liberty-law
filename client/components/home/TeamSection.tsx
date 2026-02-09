@@ -1,10 +1,10 @@
-import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
 
 const attorneyImage =
   "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200";
 
 export default function TeamSection() {
+  const { phoneDisplay, phoneLabel } = useGlobalPhone();
   return (
     <div className="bg-law-dark py-[40px] md:py-[60px]">
       <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%]">
