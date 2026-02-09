@@ -34,16 +34,15 @@ export default function Index() {
           {/* Left Side: Headline and Call Box */}
           <div className="lg:w-[65.667%]">
             <div className="mb-[30px] md:mb-[40px]">
-              {/* Tagline - Large decorative text */}
-              <p className="font-playfair text-[clamp(2.5rem,7vw,68.8px)] font-light leading-[1.2] text-white text-left">
-                Committed to achieving the best possible outcome for your situation.
-              </p>
-
               {/* H1 Title */}
-              <h1 className="font-outfit text-[18px] md:text-[20px] font-medium tracking-wider uppercase text-white mt-[20px] md:mt-[30px]">
-                Naperville's Trusted{" "}
-                <span className="text-law-accent">Criminal Defense</span> &amp; Real Estate Attorney
+              <h1 className="font-outfit text-[18px] md:text-[20px] font-medium tracking-wider uppercase text-white">
+                Naperville's Trusted Criminal Defense &amp; Real Estate Attorney
               </h1>
+
+              {/* Tagline - Large decorative text */}
+              <p className="font-playfair text-[clamp(2.5rem,7vw,68.8px)] font-light leading-[1.2] text-white text-left mt-[20px] md:mt-[30px]">
+                <span className="text-law-accent">Committed</span> to achieving the best possible outcome for your situation.
+              </p>
 
               {/* Subtext */}
               <p className="font-outfit text-[16px] md:text-[20px] font-light leading-[24px] md:leading-[30px] text-white/80 mt-[15px] md:mt-[20px]">
