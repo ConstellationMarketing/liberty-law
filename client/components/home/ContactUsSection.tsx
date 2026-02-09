@@ -35,7 +35,7 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
                 </p>
               </div>
               <div>
-                <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-black pb-[10px]">
+                <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark pb-[10px]">
                   {data.heading}
                 </h2>
                 <p className="font-outfit text-[16px] md:text-[24px] leading-[24px] md:leading-[36px] text-black">
