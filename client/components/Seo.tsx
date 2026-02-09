@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
+import { useSiteSettings } from '@site/contexts/SiteSettingsContext';
 
 interface SeoProps {
   title?: string;
@@ -17,14 +18,17 @@ export default function Seo({
   noindex = false 
 }: SeoProps) {
   const { pathname } = useLocation();
+  const { settings } = useSiteSettings();
   const siteUrl = import.meta.env.VITE_SITE_URL || '';
-  
+
   // Build full canonical URL
   const fullCanonical = canonical || (siteUrl ? `${siteUrl}${pathname}` : undefined);
-  
-  // Build full title
-  const siteName = 'Constellation Law Firm';
-  const fullTitle = title ? `${title} | ${siteName}` : siteName;
+
+  // Build full title from CMS site name
+  const fullTitle = title ? `${title} | ${settings.siteName}` : settings.siteName;
+
+  // Merge site-wide noindex with per-page noindex
+  const shouldNoindex = noindex || settings.siteNoindex;
   
   // Default description
   const defaultDescription = 'Protecting your rights with integrity, experience, and relentless advocacy.';
