@@ -26,14 +26,12 @@ export default function Header() {
         <div className="max-w-[2560px] mx-auto w-[95%]">
           <div className="bg-law-card border border-law-border px-[30px] py-[10px] flex items-center justify-between">
             {/* Logo */}
-            <div className="flex items-center w-[300px]">
+            <div className="flex items-center">
               <Link to="/" className="mr-[30px]">
                 <img
                   src={settings.logoUrl}
                   alt={settings.logoAlt}
-                  className="w-[306px] max-w-full"
-                  width={306}
-                  height={50}
+                  className="h-[40px] w-auto max-w-[200px] object-contain brightness-0 invert"
                 />
               </Link>
             </div>
