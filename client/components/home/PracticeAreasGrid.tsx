@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import type { PracticeAreaItem } from "@site/lib/cms/homePageTypes";
 import {
   Car,
