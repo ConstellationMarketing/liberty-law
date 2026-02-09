@@ -74,12 +74,12 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Footer Links Section - 3 Column Grid */}
-      <div className="border-t border-b border-[#838383] max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px] grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6">
-        {/* Column 1: Logo + Address + Resources (25% width) */}
-        <div>
+      {/* Footer Links Section - 4 Column Grid */}
+      <div className="border-t border-b border-[#838383] max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
+        {/* Column 1: Logo + Address Only */}
+        <div className="flex flex-col">
           {/* Logo */}
-          <Link to="/" className="block mb-6">
+          <Link to="/" className="block mb-4">
             <img
               src={settings.logoUrl}
               alt={settings.logoAlt}
@@ -89,41 +89,41 @@ export default function Footer() {
 
           {/* Address */}
           {(settings.addressLine1 || settings.addressLine2) && (
-            <div className="mb-6 font-outfit text-[18px] md:text-[20px] font-light leading-[26px] md:leading-[28px] text-white/80">
+            <div className="font-outfit text-[16px] md:text-[18px] font-light leading-[24px] md:leading-[26px] text-white/80">
               {settings.addressLine1 && <p>{settings.addressLine1}</p>}
               {settings.addressLine2 && <p>{settings.addressLine2}</p>}
             </div>
           )}
-
-          {/* Resources */}
-          <div>
-            <h3 className="font-outfit text-[24px] md:text-[28px] leading-tight text-white pb-[10px]">
-              Resources
-            </h3>
-            <ul className="font-outfit text-[16px] md:text-[20px] font-light leading-[24px] md:leading-[28px] space-y-1 text-white">
-              {resourceLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    to={link.href || "#"}
-                    className="hover:text-law-accent transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
         </div>
 
-        {/* Column 2: Practice Areas (35% width) */}
+        {/* Column 2: Resources */}
+        <div>
+          <h3 className="font-outfit text-[20px] md:text-[24px] leading-tight text-white pb-[10px] text-center">
+            Resources
+          </h3>
+          <ul className="font-outfit text-[14px] md:text-[16px] font-light leading-[22px] md:leading-[24px] space-y-1 text-white text-center">
+            {resourceLinks.map((link) => (
+              <li key={link.label}>
+                <Link
+                  to={link.href || "#"}
+                  className="hover:text-law-accent transition-colors"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Column 3: Practice Areas */}
         {settings.footerPracticeLinks.length > 0 && (
           <div>
-            <h3 className="font-outfit text-[24px] md:text-[28px] leading-tight text-white pb-[10px]">
+            <h3 className="font-outfit text-[20px] md:text-[24px] leading-tight text-white pb-[10px] text-center">
               Practice Areas
             </h3>
-            <ul className="font-outfit text-[16px] md:text-[20px] font-light leading-[24px] md:leading-[28px] space-y-1 lg:columns-2 lg:gap-8 text-white">
+            <ul className="font-outfit text-[14px] md:text-[16px] font-light leading-[22px] md:leading-[24px] space-y-1 text-white text-center">
               {settings.footerPracticeLinks.map((link) => (
-                <li key={link.label} className="break-inside-avoid">
+                <li key={link.label}>
                   <Link
                     to={link.href || "/practice-areas"}
                     className="hover:text-law-accent transition-colors"
@@ -136,7 +136,7 @@ export default function Footer() {
           </div>
         )}
 
-        {/* Column 3: Map (40% width) */}
+        {/* Column 4: Map */}
         {settings.mapEmbedUrl && (
           <div>
             <div className="relative h-full min-h-[300px]">
