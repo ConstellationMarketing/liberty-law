@@ -75,21 +75,21 @@ export default function Footer() {
       </div>
 
       {/* Footer Links Section - 4 Column Grid */}
-      <div className="border-t border-b border-[#838383] max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
+      <div className="border-t border-b border-[#838383] max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[22%_22%_22%_34%] gap-8 lg:gap-6">
         {/* Column 1: Logo + Address Only */}
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center">
           {/* Logo */}
           <Link to="/" className="block mb-4">
             <img
               src={settings.logoUrl}
               alt={settings.logoAlt}
-              className="h-[50px] md:h-[60px] w-auto max-w-[250px] object-contain"
+              className="h-[50px] md:h-[60px] w-auto max-w-[250px] object-contain mx-auto"
             />
           </Link>
 
           {/* Address */}
           {(settings.addressLine1 || settings.addressLine2) && (
-            <div className="font-outfit text-[16px] md:text-[18px] font-light leading-[24px] md:leading-[26px] text-white/80">
+            <div className="font-outfit text-[16px] md:text-[18px] font-light leading-[24px] md:leading-[26px] text-white/80 text-center">
               {settings.addressLine1 && <p>{settings.addressLine1}</p>}
               {settings.addressLine2 && <p>{settings.addressLine2}</p>}
             </div>
