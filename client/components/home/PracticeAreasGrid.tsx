@@ -45,6 +45,14 @@ export default function PracticeAreasGrid({ areas }: PracticeAreasGridProps) {
               Icon={iconMap[area.icon]}
             />
           ))}
+
+          {/* Branding filler for remaining grid space */}
+          <div
+            className="relative min-h-[400px] lg:min-h-[480px] sm:col-span-2 lg:col-span-2 bg-cover bg-center"
+            style={{
+              backgroundImage: `url(/images/practice-areas/branding-filler.webp)`,
+            }}
+          />
         </div>
       </div>
     </div>
