@@ -20,7 +20,6 @@ export default function Index() {
 
   // Use CMS content for hero and partner logos
   const heroContent = content.hero;
-  const partnerLogos = content.partnerLogos;
 
   return (
     <Layout>
