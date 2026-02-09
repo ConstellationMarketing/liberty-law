@@ -84,9 +84,7 @@ export default function Footer() {
             <img
               src={settings.logoUrl}
               alt={settings.logoAlt}
-              className="w-[200px] max-w-full"
-              width={200}
-              height={33}
+              className="h-[33px] w-auto max-w-[180px] object-contain brightness-0 invert"
             />
           </Link>
           {(settings.addressLine1 || settings.addressLine2) && (
