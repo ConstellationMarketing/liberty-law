@@ -282,72 +282,17 @@ export const defaultHomeContent: HomePageContent = {
       },
     ],
   },
-  process: {
-    sectionLabel: "– Process",
-    headingLine1: "Get Started Easily.",
-    headingLine2: "Take a Look at The Steps",
-    steps: [
+  team: {
+    sectionLabel: "— Criminal Defense Legal Team",
+    heading: "Meet Our Team",
+    intro: "David Liberty is a dedicated advocate who brings a unique perspective to every case he handles. With a background that spans both criminal defense and prosecution as well as complex real estate and business transactions, David offers his clients the legal expertise needed to navigate high-stakes situations.",
+    members: [
       {
-        number: "01",
-        title: "Step 1",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.",
-      },
-      {
-        number: "02",
-        title: "Step 2",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.",
-      },
-      {
-        number: "03",
-        title: "Step 3",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.",
-      },
-    ],
-  },
-  googleReviews: {
-    sectionLabel: "– Google Reviews",
-    heading: "Real Voices, Real Trust: Our Google Reviews",
-    description:
-      "Our clients share their stories and insights about working with us. Dive into their experiences to understand how we prioritize your legal success.",
-    reviews: [
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
-      },
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
-      },
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
-      },
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
-      },
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
-      },
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
+        name: "David Liberty",
+        title: "Founder & Managing Attorney",
+        bio: "David earned his Juris Doctor from the Chicago-Kent College of Law in 2014, where he was inducted into the Bar and Gavel Society for his outstanding service to the legal community. Before founding Liberty Law, P.C., he served as a Prosecutor for the City of Joliet. This experience gave him invaluable insight into how the \"other side\" operates—knowledge he now uses to build aggressive and effective defense strategies for his clients. David started his legal career as a legal intern for the Homicide Task Force of the Cook County Public Defender's Office, where he worked on some of the most serious cases in the state.",
+        image: "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f",
+        imageAlt: "David Liberty, Founder & Managing Attorney",
       },
     ],
   },
