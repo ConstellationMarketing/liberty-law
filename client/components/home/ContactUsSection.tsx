@@ -11,11 +11,7 @@ interface ContactUsSectionProps {
 const defaultContent: ContactContent = {
   sectionLabel: "– Contact Us",
   heading: "Get your FREE case evaluation today.",
-  description:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.",
-  phone: "404-555-5555",
-  phoneLabel: "Call Us 24/7",
-  address: "4120 Presidential Parkway, Suite 200, Atlanta, GA 30340",
+  availabilityText: "Our intake team is available 24 hours a day, seven days a week",
   formHeading: "Contact Us Today To Schedule a Consultation",
 };
 
@@ -82,8 +78,7 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
                     </h4>
                     <div>
                       <p className="font-outfit text-[16px] md:text-[20px] leading-[24px] md:leading-[28px] text-white font-light">
-                        Our intake team is available 24 hours a day, seven days
-                        a week
+                        {data.availabilityText}
                       </p>
                     </div>
                     <div className="mt-[20px] md:mt-[30px] flex justify-start">
