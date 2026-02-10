@@ -26,11 +26,20 @@ export const handleSyncHomepage: RequestHandler = async (_req, res) => {
     // Fetch current homepage content
     const { data: existing, error: fetchError } = await supabase
       .from("pages")
-      .select("id, content, is_published")
+      .select("id, content, status")
       .eq("url_path", "/")
-      .single();
+      .maybeSingle();
 
-    if (fetchError || !existing) {
+    if (fetchError) {
+      console.error("Error fetching homepage:", fetchError);
+      return res.status(500).json({
+        success: false,
+        error: "Database error",
+        details: fetchError.message,
+      });
+    }
+
+    if (!existing) {
       return res.status(404).json({
         success: false,
         error: "Homepage not found in database",
