@@ -67,9 +67,10 @@ export const handleRestoreHomepage: RequestHandler = async (_req, res) => {
         practiceAreasBefore: beforeCount,
         practiceAreasAfter: afterCount,
         restored: afterCount - beforeCount,
+        allPracticeAreas: defaultHomeContent.practiceAreas.map(pa => pa.title),
       },
       data: data,
-      next_step: "Refresh your homepage to see all 10 practice areas",
+      next_step: "Hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R) to clear cache and see all 10 practice areas",
     });
   } catch (err) {
     console.error("Unexpected error:", err);
