@@ -74,6 +74,8 @@ export interface WhyChooseUsContent {
   sectionLabel: string; // "– Why Choose Us"
   heading: string; // "What Sets Us Apart"
   description: string; // Intro paragraph
+  image: string; // Image URL
+  imageAlt: string; // Image alt text
   items: WhyChooseUsItem[];
 }
 
