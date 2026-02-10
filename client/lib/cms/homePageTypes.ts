@@ -122,6 +122,7 @@ export const defaultHomeContent: HomePageContent = {
     h1Title: "Naperville's Trusted Criminal Defense & Real Estate Attorney",
     headline: "Committed to achieving the best possible outcome for your situation.",
     highlightedText: "the best possible outcome",
+    subtext: "We provide expert representation for Criminal Defense, DUI, Real Estate, and Business Law matters across DuPage, Kane, Kendall, Will, and Grundy Counties.",
     phone: "630-449-4800",
     phoneLabel: "Call Us 24/7",
   },
@@ -296,10 +297,7 @@ export const defaultHomeContent: HomePageContent = {
   contact: {
     sectionLabel: "– Contact",
     heading: "Get in Touch",
-    description: "",
-    phone: "630-449-4800",
-    phoneLabel: "Call Us 24/7",
-    address: "120 Water St Suite 310, Naperville, IL 60540",
+    availabilityText: "Our intake team is available 24 hours a day, seven days a week",
     formHeading: "Send Us a Message",
   },
 };
