@@ -4,6 +4,7 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { handleSeedHomepage } from "./routes/seed-homepage";
 import { handleRestoreHomepage } from "./routes/restore-homepage";
+import { handleSyncHomepage } from "./routes/sync-homepage";
 import { handleHealthCheck } from "./routes/health-check";
 
 export function createServer() {
