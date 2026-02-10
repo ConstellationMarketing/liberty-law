@@ -9,11 +9,6 @@ export interface HeroContent {
   phoneLabel: string;
 }
 
-export interface PartnerLogo {
-  src: string;
-  alt: string;
-}
-
 export interface AboutFeature {
   number: string;
   title: string;
