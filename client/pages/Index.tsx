@@ -35,12 +35,23 @@ export default function Index() {
             <div className="mb-[30px] md:mb-[40px]">
               {/* H1 Title */}
               <h1 className="font-outfit text-[18px] md:text-[20px] font-medium tracking-wider uppercase text-white">
-                Naperville's Trusted Criminal Defense &amp; Real Estate Attorney
+                {heroContent?.h1Title || "Naperville's Trusted Criminal Defense & Real Estate Attorney"}
               </h1>
 
               {/* Tagline - Large decorative text */}
               <p className="font-playfair text-[clamp(2.5rem,7vw,68.8px)] font-light leading-[1.2] text-white text-left mt-[20px] md:mt-[30px]">
-                Committed to achieving <span className="text-law-accent">the best possible outcome</span> for your situation.
+                {heroContent?.headline?.split(heroContent.highlightedText || "").map((part, idx, arr) => (
+                  idx === 0 ? (
+                    <span key={idx}>
+                      {part}
+                      {idx < arr.length - 1 && (
+                        <span className="text-law-accent">{heroContent.highlightedText}</span>
+                      )}
+                    </span>
+                  ) : (
+                    <span key={idx}>{part}</span>
+                  )
+                ))}
               </p>
 
               {/* Subtext */}
