@@ -6,10 +6,10 @@ This document explains how to configure the required environment variables for t
 
 The application requires three Supabase environment variables to connect to the database:
 
-| Variable | Description | Where to Use |
-|----------|-------------|--------------|
-| `VITE_SUPABASE_URL` | Your Supabase project URL | Client & Server |
-| `VITE_SUPABASE_ANON_KEY` | Public anonymous key (JWT) | Client-side |
+| Variable                    | Description                   | Where to Use     |
+| --------------------------- | ----------------------------- | ---------------- |
+| `VITE_SUPABASE_URL`         | Your Supabase project URL     | Client & Server  |
+| `VITE_SUPABASE_ANON_KEY`    | Public anonymous key (JWT)    | Client-side      |
 | `SUPABASE_SERVICE_ROLE_KEY` | Secret service role key (JWT) | Server-side only |
 
 ## Getting Your Supabase Credentials
@@ -31,6 +31,7 @@ The application requires three Supabase environment variables to connect to the 
 ### Key Format Verification
 
 Valid Supabase keys are **JWT tokens** and should:
+
 - Start with `eyJ` (base64 encoded JSON)
 - Be very long (hundreds of characters)
 - Look like: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3M...`
@@ -58,12 +59,12 @@ If you're working in the Builder.io environment, you can set environment variabl
 
 ```typescript
 // Set each variable individually
-DevServerControl.set_env_variable(["VITE_SUPABASE_URL", "https://..."])
-DevServerControl.set_env_variable(["VITE_SUPABASE_ANON_KEY", "eyJ..."])
-DevServerControl.set_env_variable(["SUPABASE_SERVICE_ROLE_KEY", "eyJ..."])
+DevServerControl.set_env_variable(["VITE_SUPABASE_URL", "https://..."]);
+DevServerControl.set_env_variable(["VITE_SUPABASE_ANON_KEY", "eyJ..."]);
+DevServerControl.set_env_variable(["SUPABASE_SERVICE_ROLE_KEY", "eyJ..."]);
 
 // Restart the dev server
-DevServerControl.restart = true
+DevServerControl.restart = true;
 ```
 
 ### Method 3: Production Deployment
@@ -86,6 +87,7 @@ http://localhost:8080/api/health
 ```
 
 This endpoint will report:
+
 - ✅ Which environment variables are set
 - ✅ Whether Supabase connection is working
 - ❌ Any configuration issues
@@ -101,6 +103,7 @@ Open your browser's developer console and look for:
 ### 3. Test Admin Access
 
 Navigate to `/admin` - you should:
+
 - ✅ See the login page (if not authenticated)
 - ✅ Be able to log in
 - ❌ NOT see a "Configuration Error" message
@@ -112,6 +115,7 @@ Navigate to `/admin` - you should:
 **Cause**: Unable to connect to Supabase database
 
 **Solution**:
+
 1. Verify all three environment variables are set
 2. Check the browser console for error messages
 3. Visit `/api/health` to diagnose the issue
@@ -122,6 +126,7 @@ Navigate to `/admin` - you should:
 **Cause**: Missing or invalid `SUPABASE_SERVICE_ROLE_KEY`
 
 **Solution**:
+
 1. Verify you copied the **service_role** key (not the anon key)
 2. Check the key format starts with `eyJ`
 3. Restart the dev server after setting the variable
@@ -131,6 +136,7 @@ Navigate to `/admin` - you should:
 **Cause**: Invalid `VITE_SUPABASE_URL`
 
 **Solution**:
+
 1. Verify the URL format: `https://[project-id].supabase.co`
 2. Ensure there are no trailing slashes
 3. Check your internet connection
@@ -140,6 +146,7 @@ Navigate to `/admin` - you should:
 **Cause**: Expired or incorrect API keys
 
 **Solution**:
+
 1. Regenerate keys in Supabase dashboard (Settings → API)
 2. Update your `.env.local` file with new keys
 3. Restart the dev server

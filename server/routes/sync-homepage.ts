@@ -1,6 +1,9 @@
 import { RequestHandler } from "express";
 import { createClient } from "@supabase/supabase-js";
-import { defaultHomeContent, HomePageContent } from "../../client/lib/cms/homePageTypes";
+import {
+  defaultHomeContent,
+  HomePageContent,
+} from "../../client/lib/cms/homePageTypes";
 
 /**
  * Sync homepage content endpoint - Updates database to match current frontend structure
@@ -43,7 +46,8 @@ export const handleSyncHomepage: RequestHandler = async (_req, res) => {
       return res.status(404).json({
         success: false,
         error: "Homepage not found in database",
-        message: "No homepage entry exists. Use /api/seed-homepage to create one.",
+        message:
+          "No homepage entry exists. Use /api/seed-homepage to create one.",
       });
     }
 
@@ -53,28 +57,29 @@ export const handleSyncHomepage: RequestHandler = async (_req, res) => {
     const syncedContent: HomePageContent = {
       // Hero - use current customizations if available
       hero: currentContent?.hero || defaultHomeContent.hero,
-      
+
       // About - preserve existing
       about: currentContent?.about || defaultHomeContent.about,
-      
+
       // Practice Areas Intro - update description to match current frontend
       practiceAreasIntro: defaultHomeContent.practiceAreasIntro,
-      
+
       // Practice Areas - use defaults (all 10 with correct content)
       practiceAreas: defaultHomeContent.practiceAreas,
-      
+
       // CTA - new section replacing awards
       cta: defaultHomeContent.cta,
-      
+
       // Testimonials - preserve existing
-      testimonials: currentContent?.testimonials || defaultHomeContent.testimonials,
-      
+      testimonials:
+        currentContent?.testimonials || defaultHomeContent.testimonials,
+
       // Team - new section replacing process/googleReviews
       team: defaultHomeContent.team,
-      
+
       // FAQ - preserve existing
       faq: currentContent?.faq || defaultHomeContent.faq,
-      
+
       // Contact - use defaults (updated address and removed description)
       contact: defaultHomeContent.contact,
     };
@@ -115,15 +120,12 @@ export const handleSyncHomepage: RequestHandler = async (_req, res) => {
           "process (replaced by Team section)",
           "googleReviews (removed from frontend)",
         ],
-        preserved: [
-          "about",
-          "testimonials",
-          "faq",
-        ],
+        preserved: ["about", "testimonials", "faq"],
       },
-      practiceAreas: syncedContent.practiceAreas.map(pa => pa.title),
+      practiceAreas: syncedContent.practiceAreas.map((pa) => pa.title),
       data: updated,
-      next_step: "Hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R) and refresh the CMS admin page to see updated content",
+      next_step:
+        "Hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R) and refresh the CMS admin page to see updated content",
     });
   } catch (err) {
     console.error("Unexpected error:", err);

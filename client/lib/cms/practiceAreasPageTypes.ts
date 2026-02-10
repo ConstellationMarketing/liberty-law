@@ -73,8 +73,7 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
   },
   grid: {
     heading: "Our Practice Areas",
-    description:
-      "Expert legal services tailored to your needs",
+    description: "Expert legal services tailored to your needs",
     areas: [
       {
         icon: "Car",
@@ -89,7 +88,8 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
         title: "Felony",
         description:
           "For serious criminal charges including drug offenses, battery, or theft. We provide a confidential review of your charges to build an aggressive defense strategy to protect your rights and freedom.",
-        image: "https://images.pexels.com/photos/5668484/pexels-photo-5668484.jpeg",
+        image:
+          "https://images.pexels.com/photos/5668484/pexels-photo-5668484.jpeg",
         link: "/practice-areas",
       },
       {
@@ -97,7 +97,8 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
         title: "Misdemeanor",
         description:
           "Legal assistance for misdemeanor charges. We help you understand the potential consequences and work toward the best possible resolution for your case.",
-        image: "https://images.pexels.com/photos/7714896/pexels-photo-7714896.jpeg",
+        image:
+          "https://images.pexels.com/photos/7714896/pexels-photo-7714896.jpeg",
         link: "/practice-areas",
       },
       {
@@ -105,7 +106,8 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
         title: "Traffic",
         description:
           "Defense for speeding tickets, driving while suspended/revoked, and other moving violations. We aim to protect your driving record and minimize fines or insurance impacts.",
-        image: "https://images.pexels.com/photos/7715101/pexels-photo-7715101.jpeg",
+        image:
+          "https://images.pexels.com/photos/7715101/pexels-photo-7715101.jpeg",
         link: "/practice-areas",
       },
       {
@@ -164,7 +166,8 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
     subtitle: "",
     description:
       "Liberty Law is dedicated to answering your questions and providing personalized legal representation. We believe that experience is the cornerstone of a thriving law practice, and we pride ourselves on giving each new case the attention it deserves.",
-    image: "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200",
+    image:
+      "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200",
     imageAlt: "David Liberty, Attorney",
     items: [
       {

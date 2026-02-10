@@ -120,9 +120,11 @@ export interface HomePageContent {
 export const defaultHomeContent: HomePageContent = {
   hero: {
     h1Title: "Naperville's Trusted Criminal Defense & Real Estate Attorney",
-    headline: "Committed to achieving the best possible outcome for your situation.",
+    headline:
+      "Committed to achieving the best possible outcome for your situation.",
     highlightedText: "the best possible outcome",
-    subtext: "We provide expert representation for Criminal Defense, DUI, Real Estate, and Business Law matters across DuPage, Kane, Kendall, Will, and Grundy Counties.",
+    subtext:
+      "We provide expert representation for Criminal Defense, DUI, Real Estate, and Business Law matters across DuPage, Kane, Kendall, Will, and Grundy Counties.",
     phone: "630-449-4800",
     phoneLabel: "Call Us 24/7",
   },
@@ -135,7 +137,8 @@ export const defaultHomeContent: HomePageContent = {
     phoneLabel: "Call Us 24/7",
     contactLabel: "Contact Us",
     contactText: "For a Free Consultation",
-    attorneyImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1770650324534-about-meeting.webp",
+    attorneyImage:
+      "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1770650324534-about-meeting.webp",
     attorneyImageAlt: "Liberty Law team in a meeting",
     features: [],
     stats: [
@@ -154,70 +157,83 @@ export const defaultHomeContent: HomePageContent = {
   practiceAreas: [
     {
       title: "DUI",
-      description: "Schedule a consultation if you have been charged with Driving Under the Influence. We will review your case, discuss potential defenses, and explain the next steps for your court, legal, and driver's license status.",
+      description:
+        "Schedule a consultation if you have been charged with Driving Under the Influence. We will review your case, discuss potential defenses, and explain the next steps for your court, legal, and driver's license status.",
       icon: "Car",
       image: "/images/practice-areas/personal-injury.jpg",
       link: "/practice-areas",
     },
     {
       title: "Felony",
-      description: "For serious criminal charges including drug offenses, battery, or theft. We provide a confidential review of your charges to build an aggressive defense strategy to protect your rights and freedom.",
+      description:
+        "For serious criminal charges including drug offenses, battery, or theft. We provide a confidential review of your charges to build an aggressive defense strategy to protect your rights and freedom.",
       icon: "Lock",
-      image: "https://images.pexels.com/photos/5668484/pexels-photo-5668484.jpeg",
+      image:
+        "https://images.pexels.com/photos/5668484/pexels-photo-5668484.jpeg",
       link: "/practice-areas",
     },
     {
       title: "Misdemeanor",
-      description: "Legal assistance for misdemeanor charges. We help you understand the potential consequences and work toward the best possible resolution for your case.",
+      description:
+        "Legal assistance for misdemeanor charges. We help you understand the potential consequences and work toward the best possible resolution for your case.",
       icon: "Scale",
-      image: "https://images.pexels.com/photos/7714896/pexels-photo-7714896.jpeg",
+      image:
+        "https://images.pexels.com/photos/7714896/pexels-photo-7714896.jpeg",
       link: "/practice-areas",
     },
     {
       title: "Traffic",
-      description: "Defense for speeding tickets, driving while suspended/revoked, and other moving violations. We aim to protect your driving record and minimize fines or insurance impacts.",
+      description:
+        "Defense for speeding tickets, driving while suspended/revoked, and other moving violations. We aim to protect your driving record and minimize fines or insurance impacts.",
       icon: "CircleAlert",
-      image: "https://images.pexels.com/photos/7715101/pexels-photo-7715101.jpeg",
+      image:
+        "https://images.pexels.com/photos/7715101/pexels-photo-7715101.jpeg",
       link: "/practice-areas",
     },
     {
       title: "Real Estate - Buy",
-      description: "Legal representation for home buyers. We review contracts, handle title work, and guide you through the closing process to ensure a smooth purchase.",
+      description:
+        "Legal representation for home buyers. We review contracts, handle title work, and guide you through the closing process to ensure a smooth purchase.",
       icon: "Home",
       image: "/images/practice-areas/premises-liability.jpg",
       link: "/practice-areas",
     },
     {
       title: "Real Estate - Sale",
-      description: "Legal representation for home sellers. We assist with contract negotiation, title clearance, and closing documents to protect your interests during the sale.",
+      description:
+        "Legal representation for home sellers. We assist with contract negotiation, title clearance, and closing documents to protect your interests during the sale.",
       icon: "Building",
       image: "/images/practice-areas/product-liability.jpg",
       link: "/practice-areas",
     },
     {
       title: "Sealing/Expungement",
-      description: "Discuss your eligibility to have past criminal records expunged or sealed. We help remove barriers to employment and housing by clearing your record.",
+      description:
+        "Discuss your eligibility to have past criminal records expunged or sealed. We help remove barriers to employment and housing by clearing your record.",
       icon: "FileX",
       image: "/images/practice-areas/civil-litigation.jpg",
       link: "/practice-areas",
     },
     {
       title: "SOS - License Reinstatement",
-      description: "Assistance with formal and informal hearings to reinstate your driver's license after a revocation or suspension.",
+      description:
+        "Assistance with formal and informal hearings to reinstate your driver's license after a revocation or suspension.",
       icon: "CreditCard",
       image: "/images/practice-areas/insurance-claims.jpg",
       link: "/practice-areas",
     },
     {
       title: "Evictions and Landlord/Tenant",
-      description: "Representation for landlords and tenants in residential and commercial lease disputes. We handle eviction proceedings, lease violations, security deposit issues, and other property management legal matters to ensure your rights are protected under Illinois law.",
+      description:
+        "Representation for landlords and tenants in residential and commercial lease disputes. We handle eviction proceedings, lease violations, security deposit issues, and other property management legal matters to ensure your rights are protected under Illinois law.",
       icon: "Building2",
       image: "/images/practice-areas/class-action.jpg",
       link: "/practice-areas",
     },
     {
       title: "Business Law and Consulting",
-      description: "General legal counsel for small business formation, contract disputes, or other civil legal matters.",
+      description:
+        "General legal counsel for small business formation, contract disputes, or other civil legal matters.",
       icon: "Briefcase",
       image: "/images/practice-areas/employment-law.jpg",
       link: "/practice-areas",
@@ -253,13 +269,15 @@ export const defaultHomeContent: HomePageContent = {
   team: {
     sectionLabel: "— Criminal Defense Legal Team",
     heading: "Meet Our Team",
-    intro: "David Liberty is a dedicated advocate who brings a unique perspective to every case he handles. With a background that spans both criminal defense and prosecution as well as complex real estate and business transactions, David offers his clients the legal expertise needed to navigate high-stakes situations.",
+    intro:
+      "David Liberty is a dedicated advocate who brings a unique perspective to every case he handles. With a background that spans both criminal defense and prosecution as well as complex real estate and business transactions, David offers his clients the legal expertise needed to navigate high-stakes situations.",
     members: [
       {
         name: "David Liberty",
         title: "Founder & Managing Attorney",
-        bio: "David earned his Juris Doctor from the Chicago-Kent College of Law in 2014, where he was inducted into the Bar and Gavel Society for his outstanding service to the legal community. Before founding Liberty Law, P.C., he served as a Prosecutor for the City of Joliet. This experience gave him invaluable insight into how the \"other side\" operates—knowledge he now uses to build aggressive and effective defense strategies for his clients. David started his legal career as a legal intern for the Homicide Task Force of the Cook County Public Defender's Office, where he worked on some of the most serious cases in the state.",
-        image: "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f",
+        bio: 'David earned his Juris Doctor from the Chicago-Kent College of Law in 2014, where he was inducted into the Bar and Gavel Society for his outstanding service to the legal community. Before founding Liberty Law, P.C., he served as a Prosecutor for the City of Joliet. This experience gave him invaluable insight into how the "other side" operates—knowledge he now uses to build aggressive and effective defense strategies for his clients. David started his legal career as a legal intern for the Homicide Task Force of the Cook County Public Defender\'s Office, where he worked on some of the most serious cases in the state.',
+        image:
+          "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f",
         imageAlt: "David Liberty, Founder & Managing Attorney",
       },
     ],
@@ -297,7 +315,8 @@ export const defaultHomeContent: HomePageContent = {
   contact: {
     sectionLabel: "– Contact",
     heading: "Get in Touch",
-    availabilityText: "Our intake team is available 24 hours a day, seven days a week",
+    availabilityText:
+      "Our intake team is available 24 hours a day, seven days a week",
     formHeading: "Send Us a Message",
   },
 };

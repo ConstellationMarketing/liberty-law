@@ -35,7 +35,8 @@ export const handleSeedHomepage: RequestHandler = async (req, res) => {
       return res.status(400).json({
         success: false,
         error: "Published homepage already exists",
-        message: "Homepage already exists. Use ?force=true to overwrite (WARNING: This will replace all content)",
+        message:
+          "Homepage already exists. Use ?force=true to overwrite (WARNING: This will replace all content)",
         existingId: existing.id,
         existingStatus: existing.status,
       });
@@ -58,7 +59,7 @@ export const handleSeedHomepage: RequestHandler = async (req, res) => {
         },
         {
           onConflict: "url_path",
-        }
+        },
       )
       .select();
 

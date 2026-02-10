@@ -122,7 +122,8 @@ export const defaultAboutContent: AboutPageContent = {
       "Liberty Law is dedicated to answering your questions and providing personalized legal representation. We believe that experience is the cornerstone of a thriving law practice, and we pride ourselves on giving each new case the attention it deserves.",
       "David Liberty is a dedicated advocate who brings a unique perspective to every case he handles. With a background that spans both criminal defense and prosecution as well as complex real estate and business transactions, David offers his clients the legal expertise needed to navigate high-stakes situations.",
     ],
-    image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1770650324534-about-meeting.webp",
+    image:
+      "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1770650324534-about-meeting.webp",
     imageAlt: "Liberty Law team",
   },
   missionVision: {
@@ -142,8 +143,9 @@ export const defaultAboutContent: AboutPageContent = {
       {
         name: "David Liberty",
         title: "Founder & Managing Attorney",
-        bio: "David earned his Juris Doctor from the Chicago-Kent College of Law in 2014, where he was inducted into the Bar and Gavel Society for his outstanding service to the legal community. Before founding Liberty Law, P.C., he served as a Prosecutor for the City of Joliet. This experience gave him invaluable insight into how the \"other side\" operates—knowledge he now uses to build aggressive and effective defense strategies for his clients. David started his legal career as a legal intern for the Homicide Task Force of the Cook County Public Defender's Office, where he worked on some of the most serious cases in the state.",
-        image: "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200",
+        bio: 'David earned his Juris Doctor from the Chicago-Kent College of Law in 2014, where he was inducted into the Bar and Gavel Society for his outstanding service to the legal community. Before founding Liberty Law, P.C., he served as a Prosecutor for the City of Joliet. This experience gave him invaluable insight into how the "other side" operates—knowledge he now uses to build aggressive and effective defense strategies for his clients. David started his legal career as a legal intern for the Homicide Task Force of the Cook County Public Defender\'s Office, where he worked on some of the most serious cases in the state.',
+        image:
+          "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200",
         specialties: [
           "Criminal Defense",
           "DUI Defense",
@@ -197,7 +199,8 @@ export const defaultAboutContent: AboutPageContent = {
     heading: "What Sets Us Apart",
     description:
       "When you choose Liberty Law, you're choosing a team that combines legal expertise with genuine care for your well-being. Here's what makes us different:",
-    image: "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200",
+    image:
+      "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200",
     imageAlt: "David Liberty, Attorney",
     items: [
       {
@@ -228,7 +231,8 @@ export const defaultAboutContent: AboutPageContent = {
   },
   cta: {
     heading: "We are ready to help you. Connect with us.",
-    description: "Committed to achieving the best possible outcome for your situation.",
+    description:
+      "Committed to achieving the best possible outcome for your situation.",
     primaryButton: {
       label: "Call Us 24/7",
       phone: "630-449-4800",

@@ -76,17 +76,23 @@ function validateEnvironment() {
   const errors: string[] = [];
 
   if (!SUPABASE_URL) {
-    errors.push('VITE_SUPABASE_URL is not set');
+    errors.push("VITE_SUPABASE_URL is not set");
   }
   if (!SUPABASE_ANON_KEY) {
-    errors.push('VITE_SUPABASE_ANON_KEY is not set');
+    errors.push("VITE_SUPABASE_ANON_KEY is not set");
   }
 
   if (errors.length > 0) {
-    console.error('[SiteSettingsContext] Missing required environment variables:');
-    errors.forEach(err => console.error(`  - ${err}`));
-    console.error('[SiteSettingsContext] Please check your .env.local file or environment configuration.');
-    console.warn('[SiteSettingsContext] Falling back to default settings. Header/Footer/Admin may not work correctly.');
+    console.error(
+      "[SiteSettingsContext] Missing required environment variables:",
+    );
+    errors.forEach((err) => console.error(`  - ${err}`));
+    console.error(
+      "[SiteSettingsContext] Please check your .env.local file or environment configuration.",
+    );
+    console.warn(
+      "[SiteSettingsContext] Falling back to default settings. Header/Footer/Admin may not work correctly.",
+    );
   }
 
   return errors.length === 0;
@@ -118,7 +124,9 @@ export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
     async function fetchSettings() {
       // Skip fetch if environment is invalid
       if (!hasValidEnvironment) {
-        console.warn('[SiteSettingsContext] Skipping settings fetch due to invalid environment configuration');
+        console.warn(
+          "[SiteSettingsContext] Skipping settings fetch due to invalid environment configuration",
+        );
         setIsLoading(false);
         return;
       }
@@ -135,21 +143,39 @@ export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
         );
 
         if (!response.ok) {
-          const errorDetails = await response.text().catch(() => 'Unable to read error details');
+          const errorDetails = await response
+            .text()
+            .catch(() => "Unable to read error details");
 
           if (response.status === 401 || response.status === 403) {
-            console.error('[SiteSettingsContext] Authentication failed - invalid or expired credentials');
-            console.error(`[SiteSettingsContext] HTTP ${response.status}: ${errorDetails}`);
-            console.warn('[SiteSettingsContext] Please verify your VITE_SUPABASE_ANON_KEY is correct');
+            console.error(
+              "[SiteSettingsContext] Authentication failed - invalid or expired credentials",
+            );
+            console.error(
+              `[SiteSettingsContext] HTTP ${response.status}: ${errorDetails}`,
+            );
+            console.warn(
+              "[SiteSettingsContext] Please verify your VITE_SUPABASE_ANON_KEY is correct",
+            );
           } else if (response.status === 404) {
-            console.error('[SiteSettingsContext] Site settings table not found or query failed');
-            console.error(`[SiteSettingsContext] HTTP ${response.status}: ${errorDetails}`);
-            console.warn('[SiteSettingsContext] Database may not be properly initialized');
+            console.error(
+              "[SiteSettingsContext] Site settings table not found or query failed",
+            );
+            console.error(
+              `[SiteSettingsContext] HTTP ${response.status}: ${errorDetails}`,
+            );
+            console.warn(
+              "[SiteSettingsContext] Database may not be properly initialized",
+            );
           } else {
-            console.error(`[SiteSettingsContext] HTTP error ${response.status}: ${errorDetails}`);
+            console.error(
+              `[SiteSettingsContext] HTTP error ${response.status}: ${errorDetails}`,
+            );
           }
 
-          console.warn('[SiteSettingsContext] Falling back to default settings');
+          console.warn(
+            "[SiteSettingsContext] Falling back to default settings",
+          );
           return;
         }
 
@@ -187,19 +213,33 @@ export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
 
           settingsCache = loadedSettings;
           setSettings(loadedSettings);
-          console.log('[SiteSettingsContext] Settings loaded successfully from database');
+          console.log(
+            "[SiteSettingsContext] Settings loaded successfully from database",
+          );
         } else {
-          console.warn('[SiteSettingsContext] No settings found in database - using defaults');
-          console.warn('[SiteSettingsContext] You may need to configure site settings in the admin panel');
+          console.warn(
+            "[SiteSettingsContext] No settings found in database - using defaults",
+          );
+          console.warn(
+            "[SiteSettingsContext] You may need to configure site settings in the admin panel",
+          );
         }
       } catch (err) {
-        if (err instanceof TypeError && err.message.includes('fetch')) {
-          console.error('[SiteSettingsContext] Network error - unable to connect to Supabase');
-          console.error('[SiteSettingsContext] Please verify VITE_SUPABASE_URL is correct:', SUPABASE_URL);
+        if (err instanceof TypeError && err.message.includes("fetch")) {
+          console.error(
+            "[SiteSettingsContext] Network error - unable to connect to Supabase",
+          );
+          console.error(
+            "[SiteSettingsContext] Please verify VITE_SUPABASE_URL is correct:",
+            SUPABASE_URL,
+          );
         } else {
-          console.error('[SiteSettingsContext] Unexpected error loading settings:', err);
+          console.error(
+            "[SiteSettingsContext] Unexpected error loading settings:",
+            err,
+          );
         }
-        console.warn('[SiteSettingsContext] Falling back to default settings');
+        console.warn("[SiteSettingsContext] Falling back to default settings");
         // Keep defaults on error
       } finally {
         setIsLoading(false);

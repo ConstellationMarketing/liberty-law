@@ -76,7 +76,9 @@ export const handleHealthCheck: RequestHandler = async (req, res) => {
         response.checks.supabase = {
           status: "error",
           message: `Supabase connection failed with HTTP ${testResponse.status}`,
-          details: await testResponse.text().catch(() => "Unable to read error"),
+          details: await testResponse
+            .text()
+            .catch(() => "Unable to read error"),
         };
         response.status = "degraded";
       }
@@ -91,7 +93,8 @@ export const handleHealthCheck: RequestHandler = async (req, res) => {
   }
 
   // Set HTTP status code based on health
-  const httpStatus = response.status === "ok" ? 200 : response.status === "degraded" ? 200 : 503;
+  const httpStatus =
+    response.status === "ok" ? 200 : response.status === "degraded" ? 200 : 503;
 
   res.status(httpStatus).json(response);
 };

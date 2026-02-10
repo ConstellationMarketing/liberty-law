@@ -11,7 +11,8 @@ interface ContactUsSectionProps {
 const defaultContent: ContactContent = {
   sectionLabel: "– Contact Us",
   heading: "Get your FREE case evaluation today.",
-  availabilityText: "Our intake team is available 24 hours a day, seven days a week",
+  availabilityText:
+    "Our intake team is available 24 hours a day, seven days a week",
   formHeading: "Contact Us Today To Schedule a Consultation",
 };
 
@@ -42,13 +43,13 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
           <div
             className="relative w-full flex flex-col sm:flex-row pr-0 sm:pr-[20px]"
             style={{
-              backgroundImage: "url(https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F0c4e832eec56483d8b1a5f411eb9f074?format=webp&width=800&height=1200)",
+              backgroundImage:
+                "url(https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F0c4e832eec56483d8b1a5f411eb9f074?format=webp&width=800&height=1200)",
               backgroundPosition: "50% 50%",
               backgroundRepeat: "no-repeat",
               backgroundSize: "cover",
             }}
           >
-
             {/* Right Overlay Box */}
             <div
               className="w-full sm:w-[45.758%] relative p-[30px] ml-auto"

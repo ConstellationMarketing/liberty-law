@@ -6,7 +6,9 @@ interface PracticeAreasSectionProps {
   content?: PracticeAreasIntroContent;
 }
 
-export default function PracticeAreasSection({ content }: PracticeAreasSectionProps) {
+export default function PracticeAreasSection({
+  content,
+}: PracticeAreasSectionProps) {
   return (
     <div className="bg-law-dark py-[15px] md:py-[20px]">
       <div className="max-w-[2560px] mx-auto w-[95%] md:w-[85%] lg:w-[80%] py-[20px] md:py-[27px]">
@@ -17,7 +19,8 @@ export default function PracticeAreasSection({ content }: PracticeAreasSectionPr
               {content?.heading || "Practice Areas"}
             </h2>
             <p className="font-outfit text-[16px] md:text-[20px] leading-[24px] md:leading-[30px] text-white/80">
-              {content?.description || "At Liberty Law, P. C., we provide the following legal services"}
+              {content?.description ||
+                "At Liberty Law, P. C., we provide the following legal services"}
             </p>
           </div>
 

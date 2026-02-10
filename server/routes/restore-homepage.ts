@@ -34,7 +34,8 @@ export const handleRestoreHomepage: RequestHandler = async (_req, res) => {
       return res.status(404).json({
         success: false,
         error: "Homepage not found in database",
-        message: "No homepage entry exists. Use /api/seed-homepage to create one.",
+        message:
+          "No homepage entry exists. Use /api/seed-homepage to create one.",
       });
     }
 
@@ -67,10 +68,13 @@ export const handleRestoreHomepage: RequestHandler = async (_req, res) => {
         practiceAreasBefore: beforeCount,
         practiceAreasAfter: afterCount,
         restored: afterCount - beforeCount,
-        allPracticeAreas: defaultHomeContent.practiceAreas.map(pa => pa.title),
+        allPracticeAreas: defaultHomeContent.practiceAreas.map(
+          (pa) => pa.title,
+        ),
       },
       data: data,
-      next_step: "Hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R) to clear cache and see all 10 practice areas",
+      next_step:
+        "Hard refresh your browser (Ctrl+Shift+R or Cmd+Shift+R) to clear cache and see all 10 practice areas",
     });
   } catch (err) {
     console.error("Unexpected error:", err);
