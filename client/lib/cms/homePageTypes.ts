@@ -139,14 +139,12 @@ export interface ContactContent {
 // Complete homepage content structure
 export interface HomePageContent {
   hero: HeroContent;
-  partnerLogos: PartnerLogo[];
   about: AboutContent;
   practiceAreasIntro: PracticeAreasIntroContent;
   practiceAreas: PracticeAreaItem[];
-  awards: AwardsContent;
+  cta: CtaContent;
   testimonials: TestimonialsContent;
-  process: ProcessContent;
-  googleReviews: GoogleReviewsContent;
+  team: TeamContent;
   faq: FaqContent;
   contact: ContactContent;
 }
