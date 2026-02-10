@@ -25,13 +25,15 @@ export default function ContactPage() {
   const { content } = useContactContent();
   const { phoneDisplay, phoneLabel } = useGlobalPhone();
 
-  // Map contact methods from CMS content with icon components
-  const contactMethods = content.contactMethods.methods.map((method) => ({
-    icon: iconMap[method.icon] || Phone,
-    title: method.title,
-    detail: method.detail,
-    subdDetail: method.subDetail,
-  }));
+  // Map contact methods from CMS content with icon components, excluding email
+  const contactMethods = content.contactMethods.methods
+    .filter((method) => method.icon !== "Mail")
+    .map((method) => ({
+      icon: iconMap[method.icon] || Phone,
+      title: method.title,
+      detail: method.detail,
+      subdDetail: method.subDetail,
+    }));
 
   // Map office hours from CMS content
   const officeHours = content.officeHours.items;
