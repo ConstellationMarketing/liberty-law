@@ -141,11 +141,11 @@ export default function PracticeAreas() {
               <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-white/90 mb-[30px]">
                 {content.whyChoose.description}
               </p>
-              {/* Stock image */}
+              {/* Attorney image */}
               <div className="hidden lg:block">
                 <img
-                  src="/images/stock/lawyer-consulting.jpg"
-                  alt="Law book with scales of justice"
+                  src="https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200"
+                  alt="David Liberty, Attorney"
                   className="w-full max-w-[400px] h-auto object-cover"
                   loading="lazy"
                 />
