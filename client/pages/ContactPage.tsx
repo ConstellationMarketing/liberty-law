@@ -77,7 +77,7 @@ export default function ContactPage() {
       {/* Contact Methods Section */}
       <div className="bg-white py-[40px] md:py-[60px]">
         <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[85%]">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-[900px] mx-auto">
             {contactMethods.map((method, index) => {
               const Icon = method.icon;
               return (
