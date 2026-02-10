@@ -152,23 +152,12 @@ export interface HomePageContent {
 // Default content - used as fallback when CMS content is not available
 export const defaultHomeContent: HomePageContent = {
   hero: {
-    h1Title: "ATLANTA PERSONAL INJURY LAWYERS",
-    headline: "with integrity, experience, and relentless advocacy.",
-    highlightedText: "Protecting your rights",
-    phone: "404-555-5555",
+    h1Title: "Naperville's Trusted Criminal Defense & Real Estate Attorney",
+    headline: "Committed to achieving the best possible outcome for your situation.",
+    highlightedText: "the best possible outcome",
+    phone: "630-449-4800",
     phoneLabel: "Call Us 24/7",
   },
-  partnerLogos: [
-    { src: "/images/logos/google-rating.png", alt: "Google Rating" },
-    {
-      src: "/images/logos/atlanta-law-firm-marketing.png",
-      alt: "Atlanta Law Firm Marketing 2023",
-    },
-    { src: "/images/logos/award-badge-1.png", alt: "Award Badge" },
-    { src: "/images/logos/legal-talk-network.png", alt: "Legal Talk Network" },
-    { src: "/images/logos/award-badge-2.png", alt: "Award Badge" },
-    { src: "/images/logos/award-badge-3.png", alt: "Award Badge" },
-  ],
   about: {
     sectionLabel: "— Criminal Defense Lawyer",
     heading: "About Liberty Law, P. C.",
