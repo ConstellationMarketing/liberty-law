@@ -197,6 +197,8 @@ export const defaultAboutContent: AboutPageContent = {
     heading: "What Sets Us Apart",
     description:
       "When you choose Liberty Law, you're choosing a team that combines legal expertise with genuine care for your well-being. Here's what makes us different:",
+    image: "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200",
+    imageAlt: "David Liberty, Attorney",
     items: [
       {
         number: "1",
