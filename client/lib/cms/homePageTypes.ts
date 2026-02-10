@@ -82,32 +82,6 @@ export interface TestimonialsContent {
   items: TestimonialItem[];
 }
 
-export interface ProcessStep {
-  number: string;
-  title: string;
-  description: string;
-}
-
-export interface ProcessContent {
-  sectionLabel: string;
-  headingLine1: string;
-  headingLine2: string;
-  steps: ProcessStep[];
-}
-
-export interface GoogleReviewItem {
-  text: string;
-  author: string;
-  ratingImage: string;
-}
-
-export interface GoogleReviewsContent {
-  sectionLabel: string;
-  heading: string;
-  description: string;
-  reviews: GoogleReviewItem[];
-}
-
 export interface FaqItem {
   question: string;
   answer: string;
