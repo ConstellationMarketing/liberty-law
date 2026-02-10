@@ -106,9 +106,6 @@ function mergeWithDefaults(
 
   return {
     hero: { ...defaults.hero, ...cmsContent.hero },
-    partnerLogos: cmsContent.partnerLogos?.length
-      ? cmsContent.partnerLogos
-      : defaults.partnerLogos,
     about: {
       ...defaults.about,
       ...cmsContent.about,
@@ -126,12 +123,9 @@ function mergeWithDefaults(
     practiceAreas: cmsContent.practiceAreas?.length
       ? cmsContent.practiceAreas
       : defaults.practiceAreas,
-    awards: {
-      ...defaults.awards,
-      ...cmsContent.awards,
-      logos: cmsContent.awards?.logos?.length
-        ? cmsContent.awards.logos
-        : defaults.awards.logos,
+    cta: {
+      ...defaults.cta,
+      ...cmsContent.cta,
     },
     testimonials: {
       ...defaults.testimonials,
@@ -140,19 +134,12 @@ function mergeWithDefaults(
         ? cmsContent.testimonials.items
         : defaults.testimonials.items,
     },
-    process: {
-      ...defaults.process,
-      ...cmsContent.process,
-      steps: cmsContent.process?.steps?.length
-        ? cmsContent.process.steps
-        : defaults.process.steps,
-    },
-    googleReviews: {
-      ...defaults.googleReviews,
-      ...cmsContent.googleReviews,
-      reviews: cmsContent.googleReviews?.reviews?.length
-        ? cmsContent.googleReviews.reviews
-        : defaults.googleReviews.reviews,
+    team: {
+      ...defaults.team,
+      ...cmsContent.team,
+      members: cmsContent.team?.members?.length
+        ? cmsContent.team.members
+        : defaults.team.members,
     },
     faq: {
       ...defaults.faq,
