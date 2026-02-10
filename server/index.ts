@@ -2,6 +2,7 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { handleSeedHomepage } from "./routes/seed-homepage";
 
 export function createServer() {
   const app = express();
@@ -18,6 +19,9 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // CMS setup routes
+  app.post("/api/seed-homepage", handleSeedHomepage);
 
   return app;
 }
