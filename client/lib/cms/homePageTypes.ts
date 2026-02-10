@@ -179,9 +179,9 @@ export const defaultHomeContent: HomePageContent = {
   },
   practiceAreasIntro: {
     sectionLabel: "– Practice Areas",
-    heading: "Legal Cases We Handle",
+    heading: "Practice Areas",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "At Liberty Law, P. C., we provide the following legal services",
   },
   practiceAreas: [
     {
