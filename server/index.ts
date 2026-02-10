@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { handleSeedHomepage } from "./routes/seed-homepage";
+import { handleHealthCheck } from "./routes/health-check";
 
 export function createServer() {
   const app = express();
@@ -19,6 +20,9 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Health check endpoint
+  app.get("/api/health", handleHealthCheck);
 
   // CMS setup routes
   app.post("/api/seed-homepage", handleSeedHomepage);
