@@ -71,6 +71,30 @@ const SiteSettingsContext = createContext<SiteSettingsContextValue | null>(
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
+// Validate environment variables at startup
+function validateEnvironment() {
+  const errors: string[] = [];
+
+  if (!SUPABASE_URL) {
+    errors.push('VITE_SUPABASE_URL is not set');
+  }
+  if (!SUPABASE_ANON_KEY) {
+    errors.push('VITE_SUPABASE_ANON_KEY is not set');
+  }
+
+  if (errors.length > 0) {
+    console.error('[SiteSettingsContext] Missing required environment variables:');
+    errors.forEach(err => console.error(`  - ${err}`));
+    console.error('[SiteSettingsContext] Please check your .env.local file or environment configuration.');
+    console.warn('[SiteSettingsContext] Falling back to default settings. Header/Footer/Admin may not work correctly.');
+  }
+
+  return errors.length === 0;
+}
+
+// Run validation at module load
+const hasValidEnvironment = validateEnvironment();
+
 // Global cache
 let settingsCache: SiteSettings | null = null;
 
