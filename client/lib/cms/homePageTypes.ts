@@ -255,21 +255,10 @@ export const defaultHomeContent: HomePageContent = {
       link: "/practice-areas",
     },
   ],
-  awards: {
-    sectionLabel: "– Achievements",
-    heading: "Awards & Membership",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi",
-    logos: [
-      { src: "/images/awards/award-1.png", alt: "Award Logo" },
-      { src: "/images/awards/award-2.png", alt: "Award Logo" },
-      { src: "/images/awards/award-3.png", alt: "Award Logo" },
-      { src: "/images/awards/award-4.png", alt: "Award Logo" },
-      { src: "/images/awards/award-5.png", alt: "Award Logo" },
-      { src: "/images/awards/award-6.png", alt: "Award Logo" },
-      { src: "/images/awards/forbes.png", alt: "Forbes" },
-      { src: "/images/awards/lc-logo.png", alt: "LC Logo" },
-    ],
+  cta: {
+    heading: "We are ready to help you. Connect with us.",
+    buttonText: "Contact Us",
+    buttonLink: "/contact",
   },
   testimonials: {
     sectionLabel: "– Testimonials",
