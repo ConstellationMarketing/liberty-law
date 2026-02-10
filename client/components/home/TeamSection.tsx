@@ -1,10 +1,16 @@
 import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
+import { TeamContent } from "@site/lib/cms/homePageTypes";
 
-const attorneyImage =
-  "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200";
+interface TeamSectionProps {
+  content?: TeamContent;
+}
 
-export default function TeamSection() {
+export default function TeamSection({ content }: TeamSectionProps) {
   const { phoneDisplay, phoneLabel } = useGlobalPhone();
+
+  // Get first team member (for single-column display)
+  const member = content?.members?.[0];
+
   return (
     <div className="bg-law-dark py-[40px] md:py-[60px]">
       <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%]">
@@ -12,8 +18,8 @@ export default function TeamSection() {
           {/* Left Column - Attorney Photo */}
           <div className="min-h-[400px]">
             <img
-              src={attorneyImage}
-              alt="David Liberty, Founder & Managing Attorney"
+              src={member?.image || "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200"}
+              alt={member?.imageAlt || "Attorney"}
               className="w-full h-full object-cover"
               loading="lazy"
             />
@@ -23,43 +29,30 @@ export default function TeamSection() {
           <div className="flex flex-col justify-center">
             {/* Section Label */}
             <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-[#EC3024] mb-[10px]">
-              — Criminal Defense Legal Team
+              {content?.sectionLabel || "— Criminal Defense Legal Team"}
             </p>
 
             {/* Heading */}
             <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-white mb-[20px] md:mb-[30px]">
-              Meet Our Team
+              {content?.heading || "Meet Our Team"}
             </h2>
 
             {/* Intro Paragraph */}
             <p className="font-outfit text-[16px] md:text-[18px] leading-[26px] md:leading-[30px] text-white/80 mb-[25px] md:mb-[30px]">
-              David Liberty is a dedicated advocate who brings a unique
-              perspective to every case he handles. With a background that spans
-              both criminal defense and prosecution as well as complex real
-              estate and business transactions, David offers his clients the
-              legal expertise needed to navigate high-stakes situations.
+              {content?.intro || "David Liberty is a dedicated advocate who brings a unique perspective to every case he handles. With a background that spans both criminal defense and prosecution as well as complex real estate and business transactions, David offers his clients the legal expertise needed to navigate high-stakes situations."}
             </p>
 
             {/* Name & Title */}
             <h3 className="font-playfair text-[22px] md:text-[26px] leading-tight text-white font-semibold">
-              David Liberty
+              {member?.name || "David Liberty"}
             </h3>
             <p className="font-outfit text-[16px] md:text-[18px] text-white/60 mb-[20px] md:mb-[25px]">
-              Founder &amp; Managing Attorney
+              {member?.title || "Founder & Managing Attorney"}
             </p>
 
             {/* Bio Paragraph */}
             <p className="font-outfit text-[15px] md:text-[17px] leading-[24px] md:leading-[28px] text-white/80 mb-[30px] md:mb-[40px]">
-              David earned his Juris Doctor from the Chicago-Kent College of Law
-              in 2014, where he was inducted into the Bar and Gavel Society for
-              his outstanding service to the legal community. Before founding
-              Liberty Law, P.C., he served as a Prosecutor for the City of
-              Joliet. This experience gave him invaluable insight into how the
-              &ldquo;other side&rdquo; operates—knowledge he now uses to build
-              aggressive and effective defense strategies for his clients. David
-              started his legal career as a legal intern for the Homicide Task
-              Force of the Cook County Public Defender&rsquo;s Office, where he
-              worked on some of the most serious cases in the state.
+              {member?.bio || "David earned his Juris Doctor from the Chicago-Kent College of Law in 2014, where he was inducted into the Bar and Gavel Society for his outstanding service to the legal community. Before founding Liberty Law, P.C., he served as a Prosecutor for the City of Joliet. This experience gave him invaluable insight into how the \"other side\" operates—knowledge he now uses to build aggressive and effective defense strategies for his clients. David started his legal career as a legal intern for the Homicide Task Force of the Cook County Public Defender's Office, where he worked on some of the most serious cases in the state."}
             </p>
 
             {/* Call Box */}
