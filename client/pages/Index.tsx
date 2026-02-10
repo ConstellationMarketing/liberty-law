@@ -5,7 +5,7 @@ import ContactForm from "@site/components/home/ContactForm";
 import AboutSection from "@site/components/home/AboutSection";
 import PracticeAreasSection from "@site/components/home/PracticeAreasSection";
 import PracticeAreasGrid from "@site/components/home/PracticeAreasGrid";
-import AwardsSection from "@site/components/home/AwardsSection";
+import CtaSection from "@site/components/home/CtaSection";
 import TestimonialsSection from "@site/components/home/TestimonialsSection";
 import TeamSection from "@site/components/home/TeamSection";
 import FaqSection from "@site/components/home/FaqSection";
@@ -95,19 +95,19 @@ export default function Index() {
       <AboutSection content={content.about} />
 
       {/* Practice Areas Section */}
-      <PracticeAreasSection />
+      <PracticeAreasSection content={content.practiceAreasIntro} />
 
       {/* Practice Areas Grid */}
       <PracticeAreasGrid areas={content.practiceAreas} />
 
-      {/* Awards & Membership Section */}
-      <AwardsSection />
+      {/* CTA Section */}
+      <CtaSection content={content.cta} />
 
       {/* Testimonials Section */}
       <TestimonialsSection content={content.testimonials} />
 
       {/* Meet Our Team Section */}
-      <TeamSection />
+      <TeamSection content={content.team} />
 
 
       {/* FAQ Section */}
