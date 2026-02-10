@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { createClient } from "@supabase/supabase-js";
 import { defaultHomeContent } from "../../client/lib/cms/homePageTypes";
 
-export const handleSeedHomepage: RequestHandler = async (_req, res) => {
+export const handleSeedHomepage: RequestHandler = async (req, res) => {
   try {
     const supabaseUrl = process.env.VITE_SUPABASE_URL;
     const supabaseKey =
@@ -18,6 +18,28 @@ export const handleSeedHomepage: RequestHandler = async (_req, res) => {
     }
 
     const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Check if published homepage already exists
+    const { data: existing } = await supabase
+      .from("pages")
+      .select("id, status, content")
+      .eq("url_path", "/")
+      .single();
+
+    // Only allow overwrite if:
+    // 1. No existing page, OR
+    // 2. Query param ?force=true is provided
+    const forceOverwrite = req.query.force === "true";
+
+    if (existing && !forceOverwrite) {
+      return res.status(400).json({
+        success: false,
+        error: "Published homepage already exists",
+        message: "Homepage already exists. Use ?force=true to overwrite (WARNING: This will replace all content)",
+        existingId: existing.id,
+        existingStatus: existing.status,
+      });
+    }
 
     // Insert or update homepage entry
     const { data, error } = await supabase
@@ -50,7 +72,9 @@ export const handleSeedHomepage: RequestHandler = async (_req, res) => {
 
     res.json({
       success: true,
-      message: "Homepage entry created/updated successfully!",
+      message: existing
+        ? "Homepage content restored with complete data (all 10 practice areas)"
+        : "Homepage entry created successfully!",
       data: data,
       next_step: "Visit /admin/pages to edit the homepage content",
     });
