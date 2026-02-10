@@ -29,6 +29,7 @@ export function createServer() {
   // CMS setup routes
   app.post("/api/seed-homepage", handleSeedHomepage);
   app.post("/api/restore-homepage", handleRestoreHomepage);
+  app.post("/api/sync-homepage", handleSyncHomepage);
 
   return app;
 }
