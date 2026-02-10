@@ -246,8 +246,8 @@ export default function AboutUs() {
               {/* Attorney image */}
               <div className="hidden lg:block">
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200"
-                  alt="David Liberty, Attorney"
+                  src={content.whyChooseUs.image}
+                  alt={content.whyChooseUs.imageAlt}
                   className="w-full max-w-[400px] h-auto object-cover"
                   loading="lazy"
                 />
