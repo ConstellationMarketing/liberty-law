@@ -5,6 +5,7 @@ export interface HeroContent {
   h1Title: string; // H1 title text (all caps, ~20px) between headline and phone button
   headline: string;
   highlightedText: string;
+  subtext: string;
   phone: string;
   phoneLabel: string;
 }
@@ -98,10 +99,7 @@ export interface FaqContent {
 export interface ContactContent {
   sectionLabel: string;
   heading: string;
-  description: string;
-  phone: string;
-  phoneLabel: string;
-  address: string;
+  availabilityText: string;
   formHeading: string;
 }
 
