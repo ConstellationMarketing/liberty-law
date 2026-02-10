@@ -34,6 +34,8 @@ export interface WhyChooseContent {
   heading: string; // "Experience Across All Practice Areas"
   subtitle: string; // Subtitle text
   description: string; // Description paragraph
+  image: string; // Image URL
+  imageAlt: string; // Image alt text
   items: WhyChooseItem[];
 }
 
