@@ -329,10 +329,10 @@ export const defaultHomeContent: HomePageContent = {
   contact: {
     sectionLabel: "– Contact",
     heading: "Get in Touch",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    phone: "404-555-5555",
+    description: "",
+    phone: "630-449-4800",
     phoneLabel: "Call Us 24/7",
-    address: "4120 Presidential Parkway, Suite 200, Atlanta, GA 30340",
+    address: "120 Water St Suite 310, Naperville, IL 60540",
     formHeading: "Send Us a Message",
   },
 };
