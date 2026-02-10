@@ -53,11 +53,25 @@ export interface PracticeAreasIntroContent {
   description: string;
 }
 
-export interface AwardsContent {
+export interface CtaContent {
+  heading: string;
+  buttonText: string;
+  buttonLink: string;
+}
+
+export interface TeamMember {
+  name: string;
+  title: string;
+  bio: string;
+  image: string;
+  imageAlt: string;
+}
+
+export interface TeamContent {
   sectionLabel: string;
   heading: string;
-  description: string;
-  logos: Array<{ src: string; alt: string }>;
+  intro: string;
+  members: TeamMember[];
 }
 
 export interface TestimonialItem {
