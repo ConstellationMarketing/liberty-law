@@ -63,158 +63,142 @@ export interface PracticeAreasPageContent {
 export const defaultPracticeAreasContent: PracticeAreasPageContent = {
   hero: {
     sectionLabel: "– Practice Areas",
-    tagline: "Comprehensive Legal Expertise",
+    tagline: "Legal Cases We Handle",
     description:
-      "Our team of experienced attorneys specializes in a wide range of legal practice areas. Whether you've been injured, wronged, or need expert legal counsel, we have the knowledge and resources to protect your rights and pursue the justice you deserve.",
-    phone: "404-555-5555",
+      "Comprehensive legal representation across criminal defense, real estate, and civil matters.",
+    phone: "630-449-4800",
     phoneLabel: "Call Us 24/7",
   },
   grid: {
-    heading: "Our Areas of Practice",
+    heading: "Our Practice Areas",
     description:
-      "Select a practice area to learn more about how our attorneys can help with your specific legal needs.",
+      "Expert legal services tailored to your needs",
     areas: [
       {
         icon: "Car",
-        title: "Personal Injury",
+        title: "DUI",
         description:
-          "Comprehensive representation for accident victims. We fight to ensure you receive fair compensation for medical bills, lost wages, and pain and suffering.",
+          "Schedule a consultation if you have been charged with Driving Under the Influence. We will review your case, discuss potential defenses, and explain the next steps for your court, legal, and driver's license status.",
         image: "/images/practice-areas/personal-injury.jpg",
-        link: "/practice-areas/personal-injury",
+        link: "/practice-areas",
       },
       {
-        icon: "Stethoscope",
-        title: "Medical Malpractice",
+        icon: "Lock",
+        title: "Felony",
         description:
-          "When healthcare providers fail in their duty of care, we hold them accountable. Expert representation for victims of medical negligence.",
-        image: "/images/practice-areas/medical-malpractice.jpg",
-        link: "/practice-areas/medical-malpractice",
-      },
-      {
-        icon: "Briefcase",
-        title: "Workers Compensation",
-        description:
-          "Injured on the job? We help you navigate the complex workers compensation system to get the benefits you deserve.",
-        image: "/images/practice-areas/workers-compensation.jpg",
-        link: "/practice-areas/workers-compensation",
-      },
-      {
-        icon: "Heart",
-        title: "Wrongful Death",
-        description:
-          "Compassionate representation for families who have lost loved ones due to negligence. We seek justice and financial security for your family.",
-        image: "/images/practice-areas/wrongful-death.jpg",
-        link: "/practice-areas/wrongful-death",
-      },
-      {
-        icon: "Building",
-        title: "Premises Liability",
-        description:
-          "Slip and fall, inadequate security, or dangerous property conditions. Property owners must maintain safe environments.",
-        image: "/images/practice-areas/premises-liability.jpg",
-        link: "/practice-areas/premises-liability",
-      },
-      {
-        icon: "Shield",
-        title: "Product Liability",
-        description:
-          "Defective products can cause serious harm. We hold manufacturers accountable for dangerous or faulty products.",
-        image: "/images/practice-areas/product-liability.jpg",
-        link: "/practice-areas/product-liability",
+          "For serious criminal charges including drug offenses, battery, or theft. We provide a confidential review of your charges to build an aggressive defense strategy to protect your rights and freedom.",
+        image: "https://images.pexels.com/photos/5668484/pexels-photo-5668484.jpeg",
+        link: "/practice-areas",
       },
       {
         icon: "Scale",
-        title: "Civil Litigation",
+        title: "Misdemeanor",
         description:
-          "Complex business disputes, contract disagreements, and civil claims require experienced legal counsel. We deliver results.",
-        image: "/images/practice-areas/civil-litigation.jpg",
-        link: "/practice-areas/civil-litigation",
+          "Legal assistance for misdemeanor charges. We help you understand the potential consequences and work toward the best possible resolution for your case.",
+        image: "https://images.pexels.com/photos/7714896/pexels-photo-7714896.jpeg",
+        link: "/practice-areas",
       },
       {
-        icon: "FileText",
-        title: "Insurance Claims",
+        icon: "CircleAlert",
+        title: "Traffic",
         description:
-          "Insurance companies often deny valid claims. We fight to ensure you receive the full benefits you're entitled to under your policy.",
-        image: "/images/practice-areas/insurance-claims.jpg",
-        link: "/practice-areas/insurance-claims",
-      },
-      {
-        icon: "Users",
-        title: "Class Action",
-        description:
-          "When multiple people are harmed by the same wrongdoing, class actions provide strength in numbers and efficient justice.",
-        image: "/images/practice-areas/class-action.jpg",
-        link: "/practice-areas/class-action",
+          "Defense for speeding tickets, driving while suspended/revoked, and other moving violations. We aim to protect your driving record and minimize fines or insurance impacts.",
+        image: "https://images.pexels.com/photos/7715101/pexels-photo-7715101.jpeg",
+        link: "/practice-areas",
       },
       {
         icon: "Home",
-        title: "Nursing Home Abuse",
+        title: "Real Estate - Buy",
         description:
-          "Protecting our most vulnerable. We investigate and prosecute cases of elder abuse and neglect in care facilities.",
-        image: "/images/practice-areas/nursing-home-abuse.jpg",
-        link: "/practice-areas/nursing-home-abuse",
+          "Legal representation for home buyers. We review contracts, handle title work, and guide you through the closing process to ensure a smooth purchase.",
+        image: "/images/practice-areas/premises-liability.jpg",
+        link: "/practice-areas",
       },
       {
-        icon: "DollarSign",
-        title: "Employment Law",
+        icon: "Building",
+        title: "Real Estate - Sale",
         description:
-          "Workplace discrimination, wrongful termination, wage disputes. We protect employee rights and ensure fair treatment.",
+          "Legal representation for home sellers. We assist with contract negotiation, title clearance, and closing documents to protect your interests during the sale.",
+        image: "/images/practice-areas/product-liability.jpg",
+        link: "/practice-areas",
+      },
+      {
+        icon: "FileX",
+        title: "Sealing/Expungement",
+        description:
+          "Discuss your eligibility to have past criminal records expunged or sealed. We help remove barriers to employment and housing by clearing your record.",
+        image: "/images/practice-areas/civil-litigation.jpg",
+        link: "/practice-areas",
+      },
+      {
+        icon: "CreditCard",
+        title: "SOS - License Reinstatement",
+        description:
+          "Assistance with formal and informal hearings to reinstate your driver's license after a revocation or suspension.",
+        image: "/images/practice-areas/insurance-claims.jpg",
+        link: "/practice-areas",
+      },
+      {
+        icon: "Building2",
+        title: "Evictions and Landlord/Tenant",
+        description:
+          "Representation for landlords and tenants in residential and commercial lease disputes. We handle eviction proceedings, lease violations, security deposit issues, and other property management legal matters to ensure your rights are protected under Illinois law.",
+        image: "/images/practice-areas/class-action.jpg",
+        link: "/practice-areas",
+      },
+      {
+        icon: "Briefcase",
+        title: "Business Law and Consulting",
+        description:
+          "General legal counsel for small business formation, contract disputes, or other civil legal matters.",
         image: "/images/practice-areas/employment-law.jpg",
-        link: "/practice-areas/employment-law",
-      },
-      {
-        icon: "TrendingUp",
-        title: "Mass Torts",
-        description:
-          "Large-scale injuries from pharmaceuticals, toxic exposure, or corporate negligence. We handle complex multi-plaintiff litigation.",
-        image: "/images/practice-areas/mass-torts.jpg",
-        link: "/practice-areas/mass-torts",
+        link: "/practice-areas",
       },
     ],
   },
   whyChoose: {
     sectionLabel: "– Why Choose Us",
-    heading: "Experience Across All Practice Areas",
+    heading: "Experience You Can Trust",
     subtitle: "",
     description:
-      "No matter your legal challenge, our diverse team brings the specialized knowledge, resources, and dedication needed to achieve the best possible outcome for your case.",
+      "Liberty Law is dedicated to answering your questions and providing personalized legal representation. We believe that experience is the cornerstone of a thriving law practice, and we pride ourselves on giving each new case the attention it deserves.",
     items: [
       {
         number: "1",
-        title: "Specialized Expertise",
+        title: "Personalized Service",
         description:
-          "Each attorney on our team brings deep knowledge in their specific practice area, ensuring you receive expert guidance tailored to your case.",
+          "Each case receives individualized attention with a legal strategy tailored to your unique situation.",
       },
       {
         number: "2",
-        title: "Proven Success Record",
+        title: "Proven Track Record",
         description:
-          "Decades of successful verdicts and settlements across all practice areas. Our track record speaks to our ability to win.",
+          "Years of successful outcomes across criminal defense, real estate, and civil matters.",
       },
       {
         number: "3",
-        title: "Comprehensive Resources",
+        title: "24/7 Availability",
         description:
-          "We invest in expert witnesses, investigators, and cutting-edge technology to build the strongest possible case for you.",
+          "Legal emergencies don't wait. Our team is available around the clock to address your concerns.",
       },
       {
         number: "4",
-        title: "Client-Centered Approach",
+        title: "Aggressive Defense",
         description:
-          "Your needs drive our strategy. We maintain open communication and keep you informed every step of the way.",
+          "We fight relentlessly to protect your rights and achieve the best possible outcome for your case.",
       },
     ],
   },
   cta: {
-    heading: "Ready to Discuss Your Case?",
+    heading: "We are ready to help you. Connect with us.",
     description:
-      "Get a free consultation with one of our experienced attorneys today.",
+      "Committed to achieving the best possible outcome for your situation.",
     primaryButton: {
       label: "Call Us 24/7",
-      phone: "404-555-5555",
+      phone: "630-449-4800",
     },
     secondaryButton: {
-      label: "Schedule Now",
+      label: "Contact Us",
       sublabel: "Free Consultation",
       link: "/contact",
     },
