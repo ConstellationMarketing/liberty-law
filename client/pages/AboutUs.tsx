@@ -96,7 +96,7 @@ export default function AboutUs() {
             {/* Left Side - Content */}
             <div>
               <div className="mb-[10px]">
-                <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-[rgb(107,141,12)]">
+                <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-law-accent">
                   {content.story.sectionLabel}
                 </p>
               </div>
@@ -166,7 +166,7 @@ export default function AboutUs() {
         <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[85%]">
           <div className="text-center mb-[30px] md:mb-[50px]">
             <div className="mb-[10px]">
-              <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-[rgb(107,141,12)]">
+              <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-law-accent">
                 {content.team.sectionLabel}
               </p>
             </div>
@@ -182,10 +182,12 @@ export default function AboutUs() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {teamMembers.map((member, index) => (
-              <TeamMemberCard key={index} {...member} />
-            ))}
+          <div className="flex justify-center">
+            <div className="w-full max-w-[500px]">
+              {teamMembers.map((member, index) => (
+                <TeamMemberCard key={index} {...member} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -231,7 +233,7 @@ export default function AboutUs() {
             {/* Left Side - Heading + Image */}
             <div>
               <div className="mb-[10px]">
-                <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-[rgb(107,141,12)]">
+                <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-law-accent">
                   {content.whyChooseUs.sectionLabel}
                 </p>
               </div>
@@ -241,11 +243,11 @@ export default function AboutUs() {
               <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-black mb-[30px]">
                 {content.whyChooseUs.description}
               </p>
-              {/* Stock image */}
+              {/* Attorney image */}
               <div className="hidden lg:block">
                 <img
-                  src="/images/stock/law-firm-team.jpg"
-                  alt="Classic law office with gavel and Lady Justice"
+                  src="https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200"
+                  alt="David Liberty, Attorney"
                   className="w-full max-w-[400px] h-auto object-cover"
                   loading="lazy"
                 />
