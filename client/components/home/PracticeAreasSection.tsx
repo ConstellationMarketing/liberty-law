@@ -1,7 +1,12 @@
 import { DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
+import { PracticeAreasIntroContent } from "@site/lib/cms/homePageTypes";
 
-export default function PracticeAreasSection() {
+interface PracticeAreasSectionProps {
+  content?: PracticeAreasIntroContent;
+}
+
+export default function PracticeAreasSection({ content }: PracticeAreasSectionProps) {
   return (
     <div className="bg-law-dark py-[15px] md:py-[20px]">
       <div className="max-w-[2560px] mx-auto w-[95%] md:w-[85%] lg:w-[80%] py-[20px] md:py-[27px]">
@@ -9,10 +14,10 @@ export default function PracticeAreasSection() {
           {/* Left Column - Practice Areas Heading */}
           <div className="md:w-full">
             <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-white pb-[10px]">
-              Practice Areas
+              {content?.heading || "Practice Areas"}
             </h2>
             <p className="font-outfit text-[16px] md:text-[20px] leading-[24px] md:leading-[30px] text-white/80">
-              At Liberty Law, P. C., we provide the following legal services
+              {content?.description || "At Liberty Law, P. C., we provide the following legal services"}
             </p>
           </div>
 
