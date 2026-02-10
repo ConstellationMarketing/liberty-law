@@ -164,6 +164,8 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
     subtitle: "",
     description:
       "Liberty Law is dedicated to answering your questions and providing personalized legal representation. We believe that experience is the cornerstone of a thriving law practice, and we pride ourselves on giving each new case the attention it deserves.",
+    image: "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200",
+    imageAlt: "David Liberty, Attorney",
     items: [
       {
         number: "1",
