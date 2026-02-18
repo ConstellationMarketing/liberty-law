@@ -55,15 +55,6 @@ export interface ValuesContent {
   items: ValueItem[];
 }
 
-export interface StatItem {
-  value: string;
-  label: string;
-}
-
-export interface StatsContent {
-  stats: StatItem[];
-}
-
 export interface WhyChooseUsItem {
   number: string;
   title: string;
@@ -100,7 +91,6 @@ export interface AboutPageContent {
   missionVision: MissionVisionContent;
   team: TeamContent;
   values: ValuesContent;
-  stats: StatsContent;
   whyChooseUs: WhyChooseUsContent;
   cta: CTAContent;
 }
@@ -184,14 +174,6 @@ export const defaultAboutContent: AboutPageContent = {
         description:
           "With experience on both sides of the courtroom, we understand how prosecutors think and use that knowledge to build stronger defenses.",
       },
-    ],
-  },
-  stats: {
-    stats: [
-      { value: "1000+", label: "Trusted Clients Served" },
-      { value: "$50 Million", label: "Recovered in Legal Dispute Settlements" },
-      { value: "98%", label: "Client Satisfaction Rate" },
-      { value: "150+", label: "Legal Professionals Available 24/7" },
     ],
   },
   whyChooseUs: {

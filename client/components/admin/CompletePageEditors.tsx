@@ -448,57 +448,6 @@ export function AboutPageEditor({
         </div>
       </Section>
 
-      {/* Stats Section */}
-      <Section title="Stats">
-        <div>
-          <Label className="block mb-2">Statistics</Label>
-          {content.stats.stats.map((stat, index) => (
-            <div key={index} className="border rounded p-3 mb-3 bg-gray-50 grid grid-cols-[1fr_1fr_auto] gap-3 items-center">
-              <Input
-                placeholder="Value (e.g., 1000+)"
-                value={stat.value}
-                onChange={(e) => {
-                  const newStats = [...content.stats.stats];
-                  newStats[index] = { ...stat, value: e.target.value };
-                  update("stats", { stats: newStats });
-                }}
-              />
-              <Input
-                placeholder="Label (e.g., Clients Served)"
-                value={stat.label}
-                onChange={(e) => {
-                  const newStats = [...content.stats.stats];
-                  newStats[index] = { ...stat, label: e.target.value };
-                  update("stats", { stats: newStats });
-                }}
-              />
-              <Button
-                type="button"
-                variant="destructive"
-                size="sm"
-                onClick={() =>
-                  update("stats", {
-                    stats: content.stats.stats.filter((_, i) => i !== index)
-                  })
-                }
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
-          ))}
-          <Button
-            type="button"
-            onClick={() =>
-              update("stats", {
-                stats: [...content.stats.stats, { value: "", label: "" }]
-              })
-            }
-          >
-            <Plus className="h-4 w-4 mr-2" /> Add Stat
-          </Button>
-        </div>
-      </Section>
-
       {/* Why Choose Us Section */}
       <Section title="Why Choose Us">
         <div className="grid gap-4">

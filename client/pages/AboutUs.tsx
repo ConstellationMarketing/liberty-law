@@ -1,7 +1,6 @@
 import Seo from "@site/components/Seo";
 import Layout from "@site/components/layout/Layout";
 import CallBox from "@site/components/shared/CallBox";
-import StatsGrid from "@site/components/shared/StatsGrid";
 import TeamMemberCard from "@site/components/about/TeamMemberCard";
 import ValueCard from "@site/components/about/ValueCard";
 import {
@@ -37,9 +36,6 @@ export default function AboutUs() {
     title: item.title,
     description: item.description,
   }));
-
-  // Map stats from CMS content
-  const stats = content.stats.stats;
 
   // Map why choose us from CMS content
   const whyChooseUs = content.whyChooseUs.items;
@@ -216,13 +212,6 @@ export default function AboutUs() {
               <ValueCard key={index} {...value} />
             ))}
           </div>
-        </div>
-      </div>
-
-      {/* Stats Section */}
-      <div className="bg-white py-[30px] md:py-[40px]">
-        <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%]">
-          <StatsGrid stats={stats} />
         </div>
       </div>
 
