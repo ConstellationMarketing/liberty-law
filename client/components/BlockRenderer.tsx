@@ -351,7 +351,7 @@ function ContactFormBlock({
         />
         <Button
           type="submit"
-          className="w-full bg-red-600 hover:bg-blue-900 text-white"
+          className="w-full bg-red-600 hover:bg-law-accent-dark text-white"
         >
           Submit
         </Button>

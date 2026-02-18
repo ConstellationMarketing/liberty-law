@@ -130,7 +130,7 @@ export default function ContactForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-red-600 text-white font-outfit text-[22px] h-[50px] hover:bg-blue-900 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full bg-red-600 text-white font-outfit text-[22px] h-[50px] hover:bg-law-accent-dark transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isSubmitting ? 'SUBMITTING...' : 'SUBMIT'}
           </button>
