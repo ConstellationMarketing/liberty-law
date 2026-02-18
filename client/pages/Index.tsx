@@ -14,7 +14,7 @@ import { useHomeContent } from "@site/hooks/useHomeContent";
 import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
 
 export default function Index() {
-  const { content, isLoading } = useHomeContent();
+  const { content, seoMeta, isLoading } = useHomeContent();
   const { phoneDisplay, phoneLabel } = useGlobalPhone();
 
   // Use CMS content for hero and partner logos
@@ -23,8 +23,11 @@ export default function Index() {
   return (
     <Layout>
       <Seo
-        title="Home"
-        description="Protecting your rights with integrity, experience, and relentless advocacy."
+        title={seoMeta.metaTitle || seoMeta.ogTitle || "Home"}
+        description={seoMeta.metaDescription || seoMeta.ogDescription || "Protecting your rights with integrity, experience, and relentless advocacy."}
+        canonical={seoMeta.canonicalUrl || undefined}
+        image={seoMeta.ogImage || undefined}
+        noindex={seoMeta.noindex}
       />
 
       {/* Hero and Contact Form Section */}

@@ -6,17 +6,40 @@ import { defaultHomeContent } from "../lib/cms/homePageTypes";
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
+interface PageSeoMeta {
+  metaTitle: string | null;
+  metaDescription: string | null;
+  canonicalUrl: string | null;
+  ogTitle: string | null;
+  ogDescription: string | null;
+  ogImage: string | null;
+  noindex: boolean;
+}
+
 interface UseHomeContentResult {
   content: HomePageContent;
+  seoMeta: PageSeoMeta;
   isLoading: boolean;
   error: Error | null;
 }
 
 // Cache for home content
 let cachedContent: HomePageContent | null = null;
+let cachedSeoMeta: PageSeoMeta | null = null;
+
+const defaultSeoMeta: PageSeoMeta = {
+  metaTitle: null,
+  metaDescription: null,
+  canonicalUrl: null,
+  ogTitle: null,
+  ogDescription: null,
+  ogImage: null,
+  noindex: false,
+};
 
 export function useHomeContent(): UseHomeContentResult {
   const [content, setContent] = useState<HomePageContent>(defaultHomeContent);
+  const [seoMeta, setSeoMeta] = useState<PageSeoMeta>(defaultSeoMeta);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -26,9 +49,10 @@ export function useHomeContent(): UseHomeContentResult {
     async function fetchHomeContent() {
       try {
         // Return cached content if available
-        if (cachedContent) {
+        if (cachedContent && cachedSeoMeta) {
           if (isMounted) {
             setContent(cachedContent);
+            setSeoMeta(cachedSeoMeta);
             setIsLoading(false);
           }
           return;
@@ -36,7 +60,7 @@ export function useHomeContent(): UseHomeContentResult {
 
         // Fetch homepage from pages table
         const response = await fetch(
-          `${SUPABASE_URL}/rest/v1/pages?url_path=eq./&status=eq.published&select=content`,
+          `${SUPABASE_URL}/rest/v1/pages?url_path=eq./&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex`,
           {
             headers: {
               apikey: SUPABASE_ANON_KEY,
@@ -55,6 +79,7 @@ export function useHomeContent(): UseHomeContentResult {
           // No CMS content, use defaults
           if (isMounted) {
             setContent(defaultHomeContent);
+            setSeoMeta(defaultSeoMeta);
             setIsLoading(false);
           }
           return;
@@ -63,14 +88,27 @@ export function useHomeContent(): UseHomeContentResult {
         const pageData = data[0];
         const cmsContent = pageData.content as HomePageContent;
 
+        // Extract SEO metadata
+        const seoMetadata: PageSeoMeta = {
+          metaTitle: pageData.meta_title || null,
+          metaDescription: pageData.meta_description || null,
+          canonicalUrl: pageData.canonical_url || null,
+          ogTitle: pageData.og_title || null,
+          ogDescription: pageData.og_description || null,
+          ogImage: pageData.og_image || null,
+          noindex: pageData.noindex || false,
+        };
+
         // Merge CMS content with defaults (CMS content takes precedence)
         const mergedContent = mergeWithDefaults(cmsContent, defaultHomeContent);
 
-        // Cache the result
+        // Cache the results
         cachedContent = mergedContent;
+        cachedSeoMeta = seoMetadata;
 
         if (isMounted) {
           setContent(mergedContent);
+          setSeoMeta(seoMetadata);
           setError(null);
         }
       } catch (err) {
@@ -94,7 +132,7 @@ export function useHomeContent(): UseHomeContentResult {
     };
   }, []);
 
-  return { content, isLoading, error };
+  return { content, seoMeta, isLoading, error };
 }
 
 // Deep merge CMS content with defaults
@@ -152,4 +190,5 @@ function mergeWithDefaults(
 // Helper to clear cache (useful after admin edits)
 export function clearHomeContentCache() {
   cachedContent = null;
+  cachedSeoMeta = null;
 }

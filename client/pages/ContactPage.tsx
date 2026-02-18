@@ -22,7 +22,7 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export default function ContactPage() {
-  const { content } = useContactContent();
+  const { content, seoMeta } = useContactContent();
   const { phoneDisplay, phoneLabel } = useGlobalPhone();
 
   // Map contact methods from CMS content with icon components, excluding email
@@ -44,8 +44,11 @@ export default function ContactPage() {
   return (
     <Layout>
       <Seo
-        title="Contact Us"
-        description="Get in touch with our experienced legal team. Free consultation available 24/7. We're here to help with your legal needs."
+        title={seoMeta.metaTitle || seoMeta.ogTitle || "Contact Us"}
+        description={seoMeta.metaDescription || seoMeta.ogDescription || "Get in touch with our experienced legal team. Free consultation available 24/7. We're here to help with your legal needs."}
+        canonical={seoMeta.canonicalUrl || undefined}
+        image={seoMeta.ogImage || undefined}
+        noindex={seoMeta.noindex}
       />
 
       {/* Hero Section */}

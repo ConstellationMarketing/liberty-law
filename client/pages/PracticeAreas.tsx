@@ -40,7 +40,7 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export default function PracticeAreas() {
-  const { content } = usePracticeAreasContent();
+  const { content, seoMeta } = usePracticeAreasContent();
   const { phoneDisplay, phoneLabel } = useGlobalPhone();
 
   // Map practice areas from CMS content with icon components
@@ -58,8 +58,11 @@ export default function PracticeAreas() {
   return (
     <Layout>
       <Seo
-        title="Practice Areas"
-        description="Explore our comprehensive areas of legal expertise. From personal injury to complex litigation, our experienced attorneys are ready to fight for your rights."
+        title={seoMeta.metaTitle || seoMeta.ogTitle || "Practice Areas"}
+        description={seoMeta.metaDescription || seoMeta.ogDescription || "Explore our comprehensive areas of legal expertise. From personal injury to complex litigation, our experienced attorneys are ready to fight for your rights."}
+        canonical={seoMeta.canonicalUrl || undefined}
+        image={seoMeta.ogImage || undefined}
+        noindex={seoMeta.noindex}
       />
 
       {/* Hero Section */}

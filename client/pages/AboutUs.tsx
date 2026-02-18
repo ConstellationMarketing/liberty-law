@@ -25,7 +25,7 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export default function AboutUs() {
-  const { content } = useAboutContent();
+  const { content, seoMeta } = useAboutContent();
   const { phoneDisplay, phoneLabel } = useGlobalPhone();
 
   // Map team members from CMS content
@@ -44,8 +44,11 @@ export default function AboutUs() {
   return (
     <Layout>
       <Seo
-        title="About Us"
-        description="Learn about our law firm's mission, values, and experienced legal team dedicated to protecting your rights."
+        title={seoMeta.metaTitle || seoMeta.ogTitle || "About Us"}
+        description={seoMeta.metaDescription || seoMeta.ogDescription || "Learn about our law firm's mission, values, and experienced legal team dedicated to protecting your rights."}
+        canonical={seoMeta.canonicalUrl || undefined}
+        image={seoMeta.ogImage || undefined}
+        noindex={seoMeta.noindex}
       />
 
       {/* Hero Section */}
