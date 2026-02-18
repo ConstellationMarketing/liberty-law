@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSiteSettings } from "@site/contexts/SiteSettingsContext";
 
 export default function Header() {
-  const { settings } = useSiteSettings();
+  const { settings, isLoading } = useSiteSettings();
 
   // Build nav items from CMS, sorted by order, excluding the CTA item
   const navItems = [...settings.navigationItems]
@@ -15,6 +15,25 @@ export default function Header() {
         item.label.toLowerCase() !== "contact" &&
         item.label.toLowerCase() !== "contact us",
     );
+
+  // Show empty placeholder while loading to prevent flash of wrong logo
+  if (isLoading) {
+    return (
+      <>
+        {/* Top padding background that scrolls away */}
+        <div className="bg-law-dark h-[30px]"></div>
+
+        {/* Sticky header wrapper - empty placeholder during load */}
+        <div className="sticky top-0 z-50">
+          <div className="max-w-[2560px] mx-auto w-[95%]">
+            <div className="bg-law-card border border-law-border px-[30px] py-[10px] h-[75px]">
+              {/* Empty placeholder during load */}
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

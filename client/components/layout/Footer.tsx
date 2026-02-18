@@ -19,7 +19,7 @@ const SOCIAL_ICONS: Record<string, typeof Facebook> = {
 };
 
 export default function Footer() {
-  const { settings, phoneDisplay, phoneLabel } = useSiteSettings();
+  const { settings, phoneDisplay, phoneLabel, isLoading } = useSiteSettings();
 
   // Build resources links: use footerAboutLinks from CMS, fall back to navigationItems
   const resourceLinks =
@@ -31,6 +31,18 @@ export default function Footer() {
 
   // Only show enabled social links
   const enabledSocialLinks = settings.socialLinks.filter((s) => s.enabled);
+
+  // Show minimal footer while loading to prevent flash of wrong branding
+  if (isLoading) {
+    return (
+      <footer className="bg-law-dark relative overflow-x-hidden">
+        {/* Minimal placeholder during load */}
+        <div className="max-w-[2560px] mx-auto w-[95%] py-[20px] md:py-[27px]">
+          <div className="h-[200px]"></div>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className="bg-law-dark relative overflow-x-hidden">
