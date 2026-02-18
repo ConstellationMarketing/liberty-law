@@ -112,9 +112,6 @@ function mergeWithDefaults(
       features: cmsContent.about?.features?.length
         ? cmsContent.about.features
         : defaults.about.features,
-      stats: cmsContent.about?.stats?.length
-        ? cmsContent.about.stats
-        : defaults.about.stats,
     },
     practiceAreasIntro: {
       ...defaults.practiceAreasIntro,

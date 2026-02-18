@@ -140,13 +140,6 @@ function mergeWithDefaults(
         ? cmsContent.values.items
         : defaults.values.items,
     },
-    stats: {
-      ...defaults.stats,
-      ...cmsContent.stats,
-      stats: cmsContent.stats?.stats?.length
-        ? cmsContent.stats.stats
-        : defaults.stats.stats,
-    },
     whyChooseUs: {
       ...defaults.whyChooseUs,
       ...cmsContent.whyChooseUs,

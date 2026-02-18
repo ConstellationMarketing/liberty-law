@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import type { AboutContent } from "@/lib/homePageTypes";
+import type { AboutContent } from "@site/lib/cms/homePageTypes";
 
 interface AboutSectionProps {
   content?: AboutContent;

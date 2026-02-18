@@ -1,4 +1,19 @@
-import type { ProcessContent, ProcessStep } from "@/lib/homePageTypes";
+// TODO: These types don't exist in homePageTypes yet - add them if needed
+// import type { ProcessContent, ProcessStep } from "@site/lib/cms/homePageTypes";
+
+// Temporary local types
+interface ProcessStep {
+  number: string;
+  title: string;
+  description: string;
+}
+
+interface ProcessContent {
+  sectionLabel: string;
+  headingLine1: string;
+  headingLine2: string;
+  steps: ProcessStep[];
+}
 
 interface ProcessSectionProps {
   content?: ProcessContent;

@@ -1,7 +1,22 @@
-import type {
-  GoogleReviewsContent,
-  GoogleReviewItem,
-} from "@/lib/homePageTypes";
+// TODO: These types don't exist in homePageTypes yet - add them if needed
+// import type {
+//   GoogleReviewsContent,
+//   GoogleReviewItem,
+// } from "@site/lib/cms/homePageTypes";
+
+// Temporary local types
+interface GoogleReviewItem {
+  text: string;
+  author: string;
+  ratingImage: string;
+}
+
+interface GoogleReviewsContent {
+  sectionLabel: string;
+  heading: string;
+  description: string;
+  reviews: GoogleReviewItem[];
+}
 
 interface GoogleReviewsSectionProps {
   content?: GoogleReviewsContent;

@@ -88,8 +88,9 @@ function RenderBlock({
       return <TwoColumnBlock block={block} isPreview={isPreview} />;
     case "practice-areas-grid":
       return <PracticeAreasGridBlock block={block} />;
-    case "google-reviews":
-      return <GoogleReviewsBlock block={block} />;
+    // TODO: Add google-reviews type to ContentBlock in vendor/cms-core if needed
+    // case "google-reviews":
+    //   return <GoogleReviewsBlock block={block} />;
     default:
       return <div className="p-4 bg-gray-100 rounded">Unknown block type</div>;
   }
@@ -312,11 +313,6 @@ function TestimonialsBlock({
               </div>
             </div>
             <p className="text-gray-600 italic">"{testimonial.text}"</p>
-            {testimonial.author && (
-              <p className="text-gray-900 font-semibold mt-4">
-                Posted By {testimonial.author}
-              </p>
-            )}
           </CardContent>
         </Card>
       ))}
@@ -409,39 +405,8 @@ function PracticeAreasGridBlock({
 }: {
   block: Extract<ContentBlock, { type: "practice-areas-grid" }>;
 }) {
-  // Check if any area has an image - if so, use image-based layout
-  const hasImages = block.areas.some((area) => area.image);
-
-  if (hasImages) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
-        {block.areas.map((area, index) => (
-          <a
-            key={index}
-            href="/practice-areas"
-            className="relative min-h-[400px] lg:min-h-[500px] overflow-hidden group"
-            style={{
-              backgroundImage: area.image ? `url(${area.image})` : undefined,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
-            {/* Dark Overlay with Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/70 transition-all duration-500 group-hover:from-[#EC3024]/60 group-hover:via-[#EC3024]/70 group-hover:to-black/90"></div>
-
-            {/* Content */}
-            <div className="relative h-full flex items-end p-4">
-              <h3 className="font-outfit text-[36px] leading-tight text-white font-normal transition-all duration-300 group-hover:text-[#EC3024]">
-                {area.title}
-              </h3>
-            </div>
-          </a>
-        ))}
-      </div>
-    );
-  }
-
-  // Fallback to card-based layout without images
+  // Note: ContentBlock type only supports icon property, not image
+  // Using card-based layout with icons
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 py-8">
       {block.areas.map((area, index) => {
@@ -462,40 +427,41 @@ function PracticeAreasGridBlock({
   );
 }
 
-function GoogleReviewsBlock({
-  block,
-}: {
-  block: Extract<ContentBlock, { type: "google-reviews" }>;
-}) {
-  return (
-    <div className="py-8">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {block.reviews.map((review, index) => (
-          <div key={index} className="border border-gray-200 p-5">
-            <div className="mb-4">
-              <div className="flex mb-2">
-                {[...Array(review.rating)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="h-5 w-5 fill-yellow-400 text-yellow-400"
-                  />
-                ))}
-              </div>
-              <p className="text-gray-700 text-lg mb-4">{review.text}</p>
-              <div className="flex items-center justify-between">
-                <strong className="font-bold text-gray-900">
-                  {review.author}
-                </strong>
-                <img
-                  src="/images/logos/google-icon.png"
-                  alt="Google"
-                  className="h-6"
-                />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+// TODO: Uncomment when google-reviews type is added to ContentBlock
+// function GoogleReviewsBlock({
+//   block,
+// }: {
+//   block: Extract<ContentBlock, { type: "google-reviews" }>;
+// }) {
+//   return (
+//     <div className="py-8">
+//       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+//         {block.reviews.map((review, index) => (
+//           <div key={index} className="border border-gray-200 p-5">
+//             <div className="mb-4">
+//               <div className="flex mb-2">
+//                 {[...Array(review.rating)].map((_, i) => (
+//                   <Star
+//                     key={i}
+//                     className="h-5 w-5 fill-yellow-400 text-yellow-400"
+//                   />
+//                 ))}
+//               </div>
+//               <p className="text-gray-700 text-lg mb-4">{review.text}</p>
+//               <div className="flex items-center justify-between">
+//                 <strong className="font-bold text-gray-900">
+//                   {review.author}
+//                 </strong>
+//                 <img
+//                   src="/images/logos/google-icon.png"
+//                   alt="Google"
+//                   className="h-6"
+//                 />
+//               </div>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
