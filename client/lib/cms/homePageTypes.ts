@@ -16,11 +16,6 @@ export interface AboutFeature {
   description: string;
 }
 
-export interface AboutStat {
-  value: string;
-  label: string;
-}
-
 export interface AboutContent {
   sectionLabel: string;
   heading: string;
@@ -32,7 +27,6 @@ export interface AboutContent {
   attorneyImage: string;
   attorneyImageAlt: string;
   features: AboutFeature[];
-  stats: AboutStat[];
 }
 
 export interface PracticeAreaItem {
@@ -141,12 +135,6 @@ export const defaultHomeContent: HomePageContent = {
       "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1770650324534-about-meeting.webp",
     attorneyImageAlt: "Liberty Law team in a meeting",
     features: [],
-    stats: [
-      { value: "1000+", label: "Trusted Clients Served" },
-      { value: "$50 Million", label: "Recovered in Legal Dispute Settlements" },
-      { value: "98%", label: "Client Satisfaction Rate" },
-      { value: "150+", label: "Legal Professionals Available 24/7" },
-    ],
   },
   practiceAreasIntro: {
     sectionLabel: "– Practice Areas",

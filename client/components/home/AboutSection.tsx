@@ -18,17 +18,10 @@ const defaultContent: AboutContent = {
   attorneyImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1770650324534-about-meeting.webp",
   attorneyImageAlt: "Liberty Law team in a meeting",
   features: [],
-  stats: [
-    { value: "1000+", label: "Trusted Clients Served" },
-    { value: "$50 Million", label: "Recovered in Legal Dispute Settlements" },
-    { value: "98%", label: "Client Satisfaction Rate" },
-    { value: "150+", label: "Legal Professionals Available 24/7" },
-  ],
 };
 
 export default function AboutSection({ content }: AboutSectionProps) {
   const data = content || defaultContent;
-  const stats = data.stats || defaultContent.stats;
 
   return (
     <div className="bg-white pt-[30px] md:pt-[54px]">
@@ -83,25 +76,6 @@ export default function AboutSection({ content }: AboutSectionProps) {
         </div>
       </div>
 
-      {/* Stats Section */}
-      {stats.length > 0 && (
-        <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] py-[20px] md:py-[27px]">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-[3%]">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="max-w-[550px] mx-auto">
-                  <h4 className="font-[Crimson_Pro,Georgia,Times_New_Roman,serif] text-[40px] md:text-[60px] leading-tight md:leading-[60px] text-black pb-[10px]">
-                    {stat.value}
-                  </h4>
-                  <div className="font-outfit text-[16px] md:text-[20px] font-light text-black text-center">
-                    {stat.label}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
