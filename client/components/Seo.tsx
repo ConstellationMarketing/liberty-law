@@ -42,18 +42,22 @@ export default function Seo({
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={fullDescription} />
-      
+
+      {/* Favicon - Using site logo */}
+      <link rel="icon" type="image/png" href={settings.logoUrl} />
+      <link rel="apple-touch-icon" href={settings.logoUrl} />
+
       {shouldNoindex && <meta name="robots" content="noindex, nofollow" />}
-      
+
       {fullCanonical && <link rel="canonical" href={fullCanonical} />}
-      
+
       {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={fullDescription} />
       <meta property="og:type" content="website" />
       {fullCanonical && <meta property="og:url" content={fullCanonical} />}
       {fullImage && <meta property="og:image" content={fullImage} />}
-      
+
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
