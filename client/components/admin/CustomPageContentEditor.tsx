@@ -12,6 +12,14 @@ import {
 import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import type { HomePageContent } from "@site/lib/cms/homePageTypes";
 import { defaultHomeContent } from "@site/lib/cms/homePageTypes";
+import type { AboutPageContent } from "@site/lib/cms/aboutPageTypes";
+import { defaultAboutContent } from "@site/lib/cms/aboutPageTypes";
+import type { ContactPageContent } from "@site/lib/cms/contactPageTypes";
+import { defaultContactContent } from "@site/lib/cms/contactPageTypes";
+import type { PracticeAreasPageContent } from "@site/lib/cms/practiceAreasPageTypes";
+import { defaultPracticeAreasContent } from "@site/lib/cms/practiceAreasPageTypes";
+import ImageUploader from "@/components/admin/ImageUploader";
+import RichTextEditor from "@site/components/admin/RichTextEditor";
 
 interface CustomPageContentEditorProps {
   pageKey: string;
@@ -53,26 +61,26 @@ function Section({
 }
 
 // Deep merge to ensure all properties exist
-function deepMerge(target: HomePageContent, source: Partial<HomePageContent> | null | undefined): HomePageContent {
+function deepMerge<T>(target: T, source: Partial<T> | null | undefined): T {
   if (!source) return target;
-  
+
   const result = { ...target };
-  
+
   for (const key in target) {
-    const targetValue = target[key as keyof HomePageContent];
+    const targetValue = target[key];
     const sourceValue = source[key as keyof typeof source];
-    
+
     if (sourceValue === undefined || sourceValue === null) {
-      result[key as keyof HomePageContent] = targetValue;
+      result[key] = targetValue;
     } else if (Array.isArray(targetValue)) {
-      result[key as keyof HomePageContent] = sourceValue as any;
+      result[key] = sourceValue as any;
     } else if (typeof targetValue === 'object' && targetValue !== null) {
-      result[key as keyof HomePageContent] = { ...targetValue, ...sourceValue as any };
+      result[key] = { ...targetValue, ...sourceValue as any };
     } else {
-      result[key as keyof HomePageContent] = sourceValue as any;
+      result[key] = sourceValue as any;
     }
   }
-  
+
   return result;
 }
 
@@ -107,12 +115,12 @@ function HomePageEditor({
           </div>
           <div>
             <Label>Headline</Label>
-            <Textarea
+            <RichTextEditor
               value={content.hero.headline}
-              onChange={(e) =>
-                update("hero", { ...content.hero, headline: e.target.value })
+              onChange={(value) =>
+                update("hero", { ...content.hero, headline: value })
               }
-              rows={2}
+              placeholder="Enter hero headline..."
             />
           </div>
           <div>
@@ -126,12 +134,12 @@ function HomePageEditor({
           </div>
           <div>
             <Label>Subtext</Label>
-            <Textarea
+            <RichTextEditor
               value={content.hero.subtext}
-              onChange={(e) =>
-                update("hero", { ...content.hero, subtext: e.target.value })
+              onChange={(value) =>
+                update("hero", { ...content.hero, subtext: value })
               }
-              rows={3}
+              placeholder="Enter hero subtext..."
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -180,33 +188,34 @@ function HomePageEditor({
           </div>
           <div>
             <Label>Description</Label>
-            <Textarea
+            <RichTextEditor
               value={content.about.description}
-              onChange={(e) =>
-                update("about", { ...content.about, description: e.target.value })
+              onChange={(value) =>
+                update("about", { ...content.about, description: value })
               }
-              rows={4}
+              placeholder="Enter about description..."
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Attorney Image URL</Label>
-              <Input
-                value={content.about.attorneyImage}
-                onChange={(e) =>
-                  update("about", { ...content.about, attorneyImage: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <Label>Attorney Image Alt</Label>
-              <Input
-                value={content.about.attorneyImageAlt}
-                onChange={(e) =>
-                  update("about", { ...content.about, attorneyImageAlt: e.target.value })
-                }
-              />
-            </div>
+          <div>
+            <Label>Attorney Image</Label>
+            <ImageUploader
+              value={content.about.attorneyImage}
+              onChange={(url) =>
+                update("about", { ...content.about, attorneyImage: url })
+              }
+              folder="about"
+              placeholder="Upload attorney image"
+            />
+          </div>
+          <div>
+            <Label>Attorney Image Alt Text</Label>
+            <Input
+              value={content.about.attorneyImageAlt}
+              onChange={(e) =>
+                update("about", { ...content.about, attorneyImageAlt: e.target.value })
+              }
+              placeholder="Describe the image for accessibility"
+            />
           </div>
         </div>
       </Section>
@@ -234,12 +243,12 @@ function HomePageEditor({
           </div>
           <div>
             <Label>Description</Label>
-            <Textarea
+            <RichTextEditor
               value={content.practiceAreasIntro.description}
-              onChange={(e) =>
-                update("practiceAreasIntro", { ...content.practiceAreasIntro, description: e.target.value })
+              onChange={(value) =>
+                update("practiceAreasIntro", { ...content.practiceAreasIntro, description: value })
               }
-              rows={2}
+              placeholder="Enter practice areas description..."
             />
           </div>
         </div>
@@ -332,7 +341,7 @@ export default function CustomPageContentEditor({
 }: CustomPageContentEditorProps) {
   const urlPath = typeof pageKey === "string" ? pageKey : "";
 
-  // Only handle home page for now
+  // Home page
   if (urlPath === "/" || urlPath === "/home") {
     const homeContent = deepMerge(defaultHomeContent, content as Partial<HomePageContent>);
     return (
@@ -343,7 +352,103 @@ export default function CustomPageContentEditor({
     );
   }
 
-  // Fallback: show raw JSON editor
+  // About page
+  if (urlPath === "/about") {
+    const aboutContent = deepMerge(defaultAboutContent, content as Partial<AboutPageContent>);
+    return (
+      <div className="space-y-4">
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-800">
+            <strong>About Page Editor:</strong> This page uses your project's About content structure.
+            You can edit the content below or use the JSON editor for advanced editing.
+          </p>
+        </div>
+        <Section title="Page Content (JSON)">
+          <Textarea
+            value={JSON.stringify(aboutContent, null, 2)}
+            onChange={(e) => {
+              try {
+                onChange(JSON.parse(e.target.value));
+              } catch {
+                // Invalid JSON, ignore
+              }
+            }}
+            rows={25}
+            className="font-mono text-sm"
+          />
+          <p className="text-xs text-gray-500 mt-2">
+            Tip: Copy this JSON to an editor for easier formatting, then paste it back when done.
+          </p>
+        </Section>
+      </div>
+    );
+  }
+
+  // Contact page
+  if (urlPath === "/contact") {
+    const contactContent = deepMerge(defaultContactContent, content as Partial<ContactPageContent>);
+    return (
+      <div className="space-y-4">
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-800">
+            <strong>Contact Page Editor:</strong> This page uses your project's Contact content structure.
+            You can edit the content below or use the JSON editor for advanced editing.
+          </p>
+        </div>
+        <Section title="Page Content (JSON)">
+          <Textarea
+            value={JSON.stringify(contactContent, null, 2)}
+            onChange={(e) => {
+              try {
+                onChange(JSON.parse(e.target.value));
+              } catch {
+                // Invalid JSON, ignore
+              }
+            }}
+            rows={25}
+            className="font-mono text-sm"
+          />
+          <p className="text-xs text-gray-500 mt-2">
+            Tip: Copy this JSON to an editor for easier formatting, then paste it back when done.
+          </p>
+        </Section>
+      </div>
+    );
+  }
+
+  // Practice Areas page
+  if (urlPath === "/practice-areas") {
+    const practiceContent = deepMerge(defaultPracticeAreasContent, content as Partial<PracticeAreasPageContent>);
+    return (
+      <div className="space-y-4">
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-800">
+            <strong>Practice Areas Page Editor:</strong> This page uses your project's Practice Areas content structure.
+            You can edit the content below or use the JSON editor for advanced editing.
+          </p>
+        </div>
+        <Section title="Page Content (JSON)">
+          <Textarea
+            value={JSON.stringify(practiceContent, null, 2)}
+            onChange={(e) => {
+              try {
+                onChange(JSON.parse(e.target.value));
+              } catch {
+                // Invalid JSON, ignore
+              }
+            }}
+            rows={25}
+            className="font-mono text-sm"
+          />
+          <p className="text-xs text-gray-500 mt-2">
+            Tip: Copy this JSON to an editor for easier formatting, then paste it back when done.
+          </p>
+        </Section>
+      </div>
+    );
+  }
+
+  // Fallback: show raw JSON editor for other pages
   return (
     <Section title="Page Content (JSON)">
       <Textarea
