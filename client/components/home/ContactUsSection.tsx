@@ -156,7 +156,7 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
                 <div className="relative">
                   <Button
                     type="submit"
-                    className="w-full bg-law-accent text-white font-outfit text-[22px] h-[50px] hover:bg-law-accent/90 transition-all duration-500 rounded-none"
+                    className="w-full bg-red-600 text-white font-outfit text-[22px] h-[50px] hover:bg-blue-900 transition-all duration-500 rounded-none"
                   >
                     SUBMIT
                   </Button>
