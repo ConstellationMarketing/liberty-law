@@ -13,6 +13,7 @@ import ContactUsSection from "@site/components/home/ContactUsSection";
 import { useHomeContent } from "@site/hooks/useHomeContent";
 import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
 
+
 export default function Index() {
   const { content, seoMeta, isLoading } = useHomeContent();
   const { phoneDisplay, phoneLabel } = useGlobalPhone();
