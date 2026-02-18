@@ -50,13 +50,13 @@ export default function PracticeAreaCard({
           <h3 className="font-playfair text-[28px] md:text-[32px] leading-tight text-white pb-[15px] transition-all duration-300 group-hover:text-law-accent">
             {title}
           </h3>
-          <p className="font-outfit text-[14px] md:text-[16px] leading-[22px] md:leading-[24px] text-white/90 mb-[15px]">
+          <p className="font-outfit text-[20px] leading-[30px] text-white/90 mb-[15px]">
             {description}
           </p>
 
           {/* Learn More Link */}
           <div className="flex items-center gap-2 text-law-accent group-hover:text-white transition-colors duration-300">
-            <span className="font-outfit text-[14px] md:text-[16px]">
+            <span className="font-outfit text-[20px]">
               Learn More
             </span>
             <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />

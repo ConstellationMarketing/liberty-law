@@ -40,7 +40,7 @@ export default function PracticeAreaCard({ area, Icon }: PracticeAreaCardProps) 
 
         {/* Description */}
         {area.description && (
-          <p className="font-outfit text-[14px] leading-relaxed text-white/75">
+          <p className="font-outfit text-[20px] leading-[30px] text-white/75">
             {area.description}
           </p>
         )}

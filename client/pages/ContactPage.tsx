@@ -99,7 +99,7 @@ export default function ContactPage() {
                   <p className="font-outfit text-[20px] text-white mb-[8px]">
                     {method.detail}
                   </p>
-                  <p className="font-outfit text-[14px] md:text-[16px] text-white/70">
+                  <p className="font-outfit text-[20px] text-white/70">
                     {method.subdDetail}
                   </p>
                 </div>
@@ -160,7 +160,7 @@ export default function ContactPage() {
                 </div>
                 {content.officeHours.note && (
                   <div className="mt-[25px] pt-[25px] border-t border-law-border/50">
-                    <p className="font-outfit text-[14px] md:text-[16px] text-white/70 leading-[22px] md:leading-[24px]">
+                    <p className="font-outfit text-[20px] text-white/70 leading-[30px]">
                       {content.officeHours.note}
                     </p>
                   </div>
@@ -219,7 +219,7 @@ export default function ContactPage() {
                 <h3 className="font-playfair text-[22px] md:text-[26px] leading-tight text-black pb-[12px]">
                   {item.title}
                 </h3>
-                <p className="font-outfit text-[14px] md:text-[16px] leading-[22px] md:leading-[24px] text-black/80">
+                <p className="font-outfit text-[20px] leading-[30px] text-black/80">
                   {item.description}
                 </p>
               </div>

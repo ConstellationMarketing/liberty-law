@@ -41,7 +41,7 @@ export default function TeamSection({ content }: TeamSectionProps) {
             </h2>
 
             {/* Intro Paragraph */}
-            <p className="font-outfit text-[16px] md:text-[18px] leading-[26px] md:leading-[30px] text-white/80 mb-[25px] md:mb-[30px]">
+            <p className="font-outfit text-[20px] leading-[30px] text-white/80 mb-[25px] md:mb-[30px]">
               {content?.intro ||
                 "David Liberty is a dedicated advocate who brings a unique perspective to every case he handles. With a background that spans both criminal defense and prosecution as well as complex real estate and business transactions, David offers his clients the legal expertise needed to navigate high-stakes situations."}
             </p>
@@ -50,12 +50,12 @@ export default function TeamSection({ content }: TeamSectionProps) {
             <h3 className="font-playfair text-[22px] md:text-[26px] leading-tight text-white font-semibold">
               {member?.name || "David Liberty"}
             </h3>
-            <p className="font-outfit text-[16px] md:text-[18px] text-white/60 mb-[20px] md:mb-[25px]">
+            <p className="font-outfit text-[20px] text-white/60 mb-[20px] md:mb-[25px]">
               {member?.title || "Founder & Managing Attorney"}
             </p>
 
             {/* Bio Paragraph */}
-            <p className="font-outfit text-[15px] md:text-[17px] leading-[24px] md:leading-[28px] text-white/80 mb-[30px] md:mb-[40px]">
+            <p className="font-outfit text-[20px] leading-[30px] text-white/80 mb-[30px] md:mb-[40px]">
               {member?.bio ||
                 'David earned his Juris Doctor from the Chicago-Kent College of Law in 2014, where he was inducted into the Bar and Gavel Society for his outstanding service to the legal community. Before founding Liberty Law, P.C., he served as a Prosecutor for the City of Joliet. This experience gave him invaluable insight into how the "other side" operates—knowledge he now uses to build aggressive and effective defense strategies for his clients. David started his legal career as a legal intern for the Homicide Task Force of the Cook County Public Defender\'s Office, where he worked on some of the most serious cases in the state.'}
             </p>

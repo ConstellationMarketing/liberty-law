@@ -29,7 +29,7 @@ export default function ValueCard({
           <h3 className="font-playfair text-[24px] md:text-[32px] leading-tight text-white pb-[10px] md:pb-[15px]">
             {title}
           </h3>
-          <p className="font-outfit text-[14px] md:text-[16px] leading-[22px] md:leading-[26px] text-white/80">
+          <p className="font-outfit text-[20px] leading-[30px] text-white/80">
             {description}
           </p>
         </div>

@@ -96,7 +96,7 @@ export default function FaqSection({ content }: FaqSectionProps) {
                 />
               </button>
               {openIndex === index && (
-                <div className="font-outfit text-[22px] leading-[33px] font-light px-[20px] pb-[20px] pt-[20px] text-white">
+                <div className="font-outfit text-[20px] leading-[30px] font-light px-[20px] pb-[20px] pt-[20px] text-white">
                   {faq.answer}
                 </div>
               )}
