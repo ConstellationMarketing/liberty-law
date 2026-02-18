@@ -3,7 +3,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
 const contactFormSchema = z.object({
@@ -128,13 +127,13 @@ export default function ContactForm() {
 
         {/* Submit Button */}
         <div>
-          <Button
+          <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-law-accent-dark text-white font-outfit text-[22px] h-[50px] hover:bg-black transition-colors duration-300"
+            className="w-full bg-law-accent-dark text-white font-outfit text-[22px] h-[50px] hover:bg-black transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isSubmitting ? 'SUBMITTING...' : 'SUBMIT'}
-          </Button>
+          </button>
         </div>
       </form>
     </div>
