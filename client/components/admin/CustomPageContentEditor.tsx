@@ -20,6 +20,11 @@ import type { PracticeAreasPageContent } from "@site/lib/cms/practiceAreasPageTy
 import { defaultPracticeAreasContent } from "@site/lib/cms/practiceAreasPageTypes";
 import ImageUploader from "@/components/admin/ImageUploader";
 import RichTextEditor from "@site/components/admin/RichTextEditor";
+import {
+  AboutPageEditor,
+  ContactPageEditor,
+  PracticeAreasPageEditor,
+} from "@site/components/admin/CompletePageEditors";
 
 interface CustomPageContentEditorProps {
   pageKey: string;
@@ -31,7 +36,7 @@ interface CustomPageContentEditorProps {
 function Section({
   title,
   children,
-  defaultOpen = true,
+  defaultOpen = false,
 }: {
   title: string;
   children: React.ReactNode;
@@ -63,13 +68,13 @@ function Section({
 // Deep merge to ensure all properties exist
 function deepMerge<T>(target: T, source: Partial<T> | null | undefined): T {
   if (!source) return target;
-
+  
   const result = { ...target };
-
+  
   for (const key in target) {
     const targetValue = target[key];
     const sourceValue = source[key as keyof typeof source];
-
+    
     if (sourceValue === undefined || sourceValue === null) {
       result[key] = targetValue;
     } else if (Array.isArray(targetValue)) {
@@ -80,11 +85,11 @@ function deepMerge<T>(target: T, source: Partial<T> | null | undefined): T {
       result[key] = sourceValue as any;
     }
   }
-
+  
   return result;
 }
 
-// Home Page Editor matching your actual content structure
+// Home Page Editor
 function HomePageEditor({
   content,
   onChange,
@@ -334,529 +339,6 @@ function HomePageEditor({
   );
 }
 
-// About Page Editor
-function AboutPageEditor({
-  content,
-  onChange,
-}: {
-  content: AboutPageContent;
-  onChange: (c: AboutPageContent) => void;
-}) {
-  const update = <K extends keyof AboutPageContent>(
-    key: K,
-    value: AboutPageContent[K],
-  ) => {
-    onChange({ ...content, [key]: value });
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Hero Section */}
-      <Section title="Hero Section">
-        <div className="grid gap-4">
-          <div>
-            <Label>Section Label</Label>
-            <Input
-              value={content.hero.sectionLabel}
-              onChange={(e) =>
-                update("hero", { ...content.hero, sectionLabel: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Tagline</Label>
-            <Input
-              value={content.hero.tagline}
-              onChange={(e) =>
-                update("hero", { ...content.hero, tagline: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Description</Label>
-            <RichTextEditor
-              value={content.hero.description}
-              onChange={(value) =>
-                update("hero", { ...content.hero, description: value })
-              }
-              placeholder="Enter hero description..."
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Phone</Label>
-              <Input
-                value={content.hero.phone}
-                onChange={(e) =>
-                  update("hero", { ...content.hero, phone: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <Label>Phone Label</Label>
-              <Input
-                value={content.hero.phoneLabel}
-                onChange={(e) =>
-                  update("hero", { ...content.hero, phoneLabel: e.target.value })
-                }
-              />
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* Story Section */}
-      <Section title="Story Section" defaultOpen={false}>
-        <div className="grid gap-4">
-          <div>
-            <Label>Section Label</Label>
-            <Input
-              value={content.story.sectionLabel}
-              onChange={(e) =>
-                update("story", { ...content.story, sectionLabel: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content.story.heading}
-              onChange={(e) =>
-                update("story", { ...content.story, heading: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Story Image</Label>
-            <ImageUploader
-              value={content.story.image}
-              onChange={(url) =>
-                update("story", { ...content.story, image: url })
-              }
-              folder="about"
-              placeholder="Upload story image"
-            />
-          </div>
-          <div>
-            <Label>Image Alt Text</Label>
-            <Input
-              value={content.story.imageAlt}
-              onChange={(e) =>
-                update("story", { ...content.story, imageAlt: e.target.value })
-              }
-            />
-          </div>
-        </div>
-      </Section>
-
-      {/* Why Choose Us Section */}
-      <Section title="Why Choose Us" defaultOpen={false}>
-        <div className="grid gap-4">
-          <div>
-            <Label>Section Label</Label>
-            <Input
-              value={content.whyChooseUs.sectionLabel}
-              onChange={(e) =>
-                update("whyChooseUs", { ...content.whyChooseUs, sectionLabel: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content.whyChooseUs.heading}
-              onChange={(e) =>
-                update("whyChooseUs", { ...content.whyChooseUs, heading: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Description</Label>
-            <RichTextEditor
-              value={content.whyChooseUs.description}
-              onChange={(value) =>
-                update("whyChooseUs", { ...content.whyChooseUs, description: value })
-              }
-              placeholder="Enter description..."
-            />
-          </div>
-          <div>
-            <Label>Image</Label>
-            <ImageUploader
-              value={content.whyChooseUs.image}
-              onChange={(url) =>
-                update("whyChooseUs", { ...content.whyChooseUs, image: url })
-              }
-              folder="about"
-              placeholder="Upload why choose us image"
-            />
-          </div>
-          <div>
-            <Label>Image Alt Text</Label>
-            <Input
-              value={content.whyChooseUs.imageAlt}
-              onChange={(e) =>
-                update("whyChooseUs", { ...content.whyChooseUs, imageAlt: e.target.value })
-              }
-            />
-          </div>
-        </div>
-      </Section>
-
-      {/* CTA Section */}
-      <Section title="CTA Section" defaultOpen={false}>
-        <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content.cta.heading}
-              onChange={(e) =>
-                update("cta", { ...content.cta, heading: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Description</Label>
-            <RichTextEditor
-              value={content.cta.description}
-              onChange={(value) =>
-                update("cta", { ...content.cta, description: value })
-              }
-              placeholder="Enter CTA description..."
-            />
-          </div>
-        </div>
-      </Section>
-    </div>
-  );
-}
-
-// Contact Page Editor
-function ContactPageEditor({
-  content,
-  onChange,
-}: {
-  content: ContactPageContent;
-  onChange: (c: ContactPageContent) => void;
-}) {
-  const update = <K extends keyof ContactPageContent>(
-    key: K,
-    value: ContactPageContent[K],
-  ) => {
-    onChange({ ...content, [key]: value });
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Hero Section */}
-      <Section title="Hero Section">
-        <div className="grid gap-4">
-          <div>
-            <Label>Section Label</Label>
-            <Input
-              value={content.hero.sectionLabel}
-              onChange={(e) =>
-                update("hero", { ...content.hero, sectionLabel: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Tagline</Label>
-            <Input
-              value={content.hero.tagline}
-              onChange={(e) =>
-                update("hero", { ...content.hero, tagline: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Description</Label>
-            <RichTextEditor
-              value={content.hero.description}
-              onChange={(value) =>
-                update("hero", { ...content.hero, description: value })
-              }
-              placeholder="Enter hero description..."
-            />
-          </div>
-        </div>
-      </Section>
-
-      {/* Contact Form Section */}
-      <Section title="Contact Form" defaultOpen={false}>
-        <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content.form.heading}
-              onChange={(e) =>
-                update("form", { ...content.form, heading: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Subtext</Label>
-            <RichTextEditor
-              value={content.form.subtext}
-              onChange={(value) =>
-                update("form", { ...content.form, subtext: value })
-              }
-              placeholder="Enter form subtext..."
-            />
-          </div>
-        </div>
-      </Section>
-
-      {/* Visit Office Section */}
-      <Section title="Visit Office" defaultOpen={false}>
-        <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content.visitOffice.heading}
-              onChange={(e) =>
-                update("visitOffice", { ...content.visitOffice, heading: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Subtext</Label>
-            <RichTextEditor
-              value={content.visitOffice.subtext}
-              onChange={(value) =>
-                update("visitOffice", { ...content.visitOffice, subtext: value })
-              }
-              placeholder="Enter office visit description..."
-            />
-          </div>
-          <div>
-            <Label>Map Embed URL</Label>
-            <Input
-              value={content.visitOffice.mapEmbedUrl}
-              onChange={(e) =>
-                update("visitOffice", { ...content.visitOffice, mapEmbedUrl: e.target.value })
-              }
-              placeholder="https://www.google.com/maps/embed?..."
-            />
-          </div>
-        </div>
-      </Section>
-
-      {/* CTA Section */}
-      <Section title="CTA Section" defaultOpen={false}>
-        <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content.cta.heading}
-              onChange={(e) =>
-                update("cta", { ...content.cta, heading: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Description</Label>
-            <RichTextEditor
-              value={content.cta.description}
-              onChange={(value) =>
-                update("cta", { ...content.cta, description: value })
-              }
-              placeholder="Enter CTA description..."
-            />
-          </div>
-        </div>
-      </Section>
-    </div>
-  );
-}
-
-// Practice Areas Page Editor
-function PracticeAreasPageEditor({
-  content,
-  onChange,
-}: {
-  content: PracticeAreasPageContent;
-  onChange: (c: PracticeAreasPageContent) => void;
-}) {
-  const update = <K extends keyof PracticeAreasPageContent>(
-    key: K,
-    value: PracticeAreasPageContent[K],
-  ) => {
-    onChange({ ...content, [key]: value });
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Hero Section */}
-      <Section title="Hero Section">
-        <div className="grid gap-4">
-          <div>
-            <Label>Section Label</Label>
-            <Input
-              value={content.hero.sectionLabel}
-              onChange={(e) =>
-                update("hero", { ...content.hero, sectionLabel: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Tagline</Label>
-            <Input
-              value={content.hero.tagline}
-              onChange={(e) =>
-                update("hero", { ...content.hero, tagline: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Description</Label>
-            <RichTextEditor
-              value={content.hero.description}
-              onChange={(value) =>
-                update("hero", { ...content.hero, description: value })
-              }
-              placeholder="Enter hero description..."
-            />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Phone</Label>
-              <Input
-                value={content.hero.phone}
-                onChange={(e) =>
-                  update("hero", { ...content.hero, phone: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <Label>Phone Label</Label>
-              <Input
-                value={content.hero.phoneLabel}
-                onChange={(e) =>
-                  update("hero", { ...content.hero, phoneLabel: e.target.value })
-                }
-              />
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* Practice Areas Grid Section */}
-      <Section title="Practice Areas Grid" defaultOpen={false}>
-        <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content.grid.heading}
-              onChange={(e) =>
-                update("grid", { ...content.grid, heading: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Description</Label>
-            <RichTextEditor
-              value={content.grid.description}
-              onChange={(value) =>
-                update("grid", { ...content.grid, description: value })
-              }
-              placeholder="Enter grid description..."
-            />
-          </div>
-        </div>
-      </Section>
-
-      {/* Why Choose Us Section */}
-      <Section title="Why Choose Us" defaultOpen={false}>
-        <div className="grid gap-4">
-          <div>
-            <Label>Section Label</Label>
-            <Input
-              value={content.whyChoose.sectionLabel}
-              onChange={(e) =>
-                update("whyChoose", { ...content.whyChoose, sectionLabel: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content.whyChoose.heading}
-              onChange={(e) =>
-                update("whyChoose", { ...content.whyChoose, heading: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Subtitle</Label>
-            <Input
-              value={content.whyChoose.subtitle}
-              onChange={(e) =>
-                update("whyChoose", { ...content.whyChoose, subtitle: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Description</Label>
-            <RichTextEditor
-              value={content.whyChoose.description}
-              onChange={(value) =>
-                update("whyChoose", { ...content.whyChoose, description: value })
-              }
-              placeholder="Enter description..."
-            />
-          </div>
-          <div>
-            <Label>Image</Label>
-            <ImageUploader
-              value={content.whyChoose.image}
-              onChange={(url) =>
-                update("whyChoose", { ...content.whyChoose, image: url })
-              }
-              folder="practice-areas"
-              placeholder="Upload why choose us image"
-            />
-          </div>
-          <div>
-            <Label>Image Alt Text</Label>
-            <Input
-              value={content.whyChoose.imageAlt}
-              onChange={(e) =>
-                update("whyChoose", { ...content.whyChoose, imageAlt: e.target.value })
-              }
-            />
-          </div>
-        </div>
-      </Section>
-
-      {/* CTA Section */}
-      <Section title="CTA Section" defaultOpen={false}>
-        <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content.cta.heading}
-              onChange={(e) =>
-                update("cta", { ...content.cta, heading: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Description</Label>
-            <RichTextEditor
-              value={content.cta.description}
-              onChange={(value) =>
-                update("cta", { ...content.cta, description: value })
-              }
-              placeholder="Enter CTA description..."
-            />
-          </div>
-        </div>
-      </Section>
-    </div>
-  );
-}
-
 export default function CustomPageContentEditor({
   pageKey,
   content,
@@ -875,19 +357,19 @@ export default function CustomPageContentEditor({
     );
   }
 
-  // About page
+  // About page - Use complete editor
   if (urlPath === "/about") {
     const aboutContent = deepMerge(defaultAboutContent, content as Partial<AboutPageContent>);
     return <AboutPageEditor content={aboutContent} onChange={onChange} />;
   }
 
-  // Contact page
+  // Contact page - Use complete editor
   if (urlPath === "/contact") {
     const contactContent = deepMerge(defaultContactContent, content as Partial<ContactPageContent>);
     return <ContactPageEditor content={contactContent} onChange={onChange} />;
   }
 
-  // Practice Areas page
+  // Practice Areas page - Use complete editor
   if (urlPath === "/practice-areas") {
     const practiceContent = deepMerge(defaultPracticeAreasContent, content as Partial<PracticeAreasPageContent>);
     return <PracticeAreasPageEditor content={practiceContent} onChange={onChange} />;
