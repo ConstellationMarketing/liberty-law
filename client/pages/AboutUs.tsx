@@ -68,7 +68,7 @@ export default function AboutUs() {
                   }}
                 />
               </p>
-              <p className="font-outfit text-[16px] md:text-[20px] leading-[24px] md:leading-[30px] text-white/90">
+              <p className="font-outfit text-[20px] leading-[30px] text-white/90">
                 {content.hero.description}
               </p>
             </div>
@@ -103,7 +103,7 @@ export default function AboutUs() {
                 {content.story.paragraphs.map((paragraph, index) => (
                   <p
                     key={index}
-                    className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-black"
+                    className="font-outfit text-[20px] leading-[30px] text-black"
                   >
                     {paragraph}
                   </p>
@@ -139,7 +139,7 @@ export default function AboutUs() {
               <h2 className="font-playfair text-[32px] md:text-[40px] leading-tight text-law-accent pb-[15px] md:pb-[20px]">
                 {content.missionVision.mission.heading}
               </h2>
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[26px] md:leading-[30px] text-white">
+              <p className="font-outfit text-[20px] leading-[30px] text-white">
                 {content.missionVision.mission.text}
               </p>
             </div>
@@ -149,7 +149,7 @@ export default function AboutUs() {
               <h2 className="font-playfair text-[32px] md:text-[40px] leading-tight text-law-accent pb-[15px] md:pb-[20px]">
                 {content.missionVision.vision.heading}
               </h2>
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[26px] md:leading-[30px] text-white">
+              <p className="font-outfit text-[20px] leading-[30px] text-white">
                 {content.missionVision.vision.text}
               </p>
             </div>
@@ -201,7 +201,7 @@ export default function AboutUs() {
               {content.values.heading}
             </h2>
             {content.values.subtitle && (
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-white/80 mt-[15px]">
+              <p className="font-outfit text-[20px] leading-[30px] text-white/80 mt-[15px]">
                 {content.values.subtitle}
               </p>
             )}
@@ -229,7 +229,7 @@ export default function AboutUs() {
               <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-black pb-[20px]">
                 {content.whyChooseUs.heading}
               </h2>
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-black mb-[30px]">
+              <p className="font-outfit text-[20px] leading-[30px] text-black mb-[30px]">
                 {content.whyChooseUs.description}
               </p>
               {/* Attorney image */}
@@ -251,7 +251,7 @@ export default function AboutUs() {
                     <h3 className="font-outfit text-[22px] md:text-[28px] leading-tight md:leading-[28px] text-black pb-[10px]">
                       {feature.number}. {feature.title}
                     </h3>
-                    <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-black">
+                    <p className="font-outfit text-[20px] leading-[30px] text-black">
                       {feature.description}
                     </p>
                   </div>
@@ -272,7 +272,7 @@ export default function AboutUs() {
             <h2 className="font-playfair text-[36px] md:text-[48px] lg:text-[60px] leading-tight text-white pb-[15px]">
               {content.cta.heading}
             </h2>
-            <p className="font-outfit text-[18px] md:text-[22px] leading-[26px] md:leading-[32px] text-white/80">
+            <p className="font-outfit text-[20px] leading-[30px] text-white/80">
               {content.cta.description}
             </p>
           </div>

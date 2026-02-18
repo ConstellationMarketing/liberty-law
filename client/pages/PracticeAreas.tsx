@@ -82,7 +82,7 @@ export default function PracticeAreas() {
                   }}
                 />
               </p>
-              <p className="font-outfit text-[16px] md:text-[20px] leading-[24px] md:leading-[30px] text-white/90">
+              <p className="font-outfit text-[20px] leading-[30px] text-white/90">
                 {content.hero.description}
               </p>
             </div>
@@ -106,7 +106,7 @@ export default function PracticeAreas() {
             <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-black">
               {content.grid.heading}
             </h2>
-            <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-black/80 mt-[15px] max-w-[800px] mx-auto">
+            <p className="font-outfit text-[20px] leading-[30px] text-black/80 mt-[15px] max-w-[800px] mx-auto">
               {content.grid.description}
             </p>
           </div>
@@ -134,11 +134,11 @@ export default function PracticeAreas() {
                 {content.whyChoose.heading}
               </h2>
               {content.whyChoose.subtitle && (
-                <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-white/80 pb-[15px]">
+                <p className="font-outfit text-[20px] leading-[30px] text-white/80 pb-[15px]">
                   {content.whyChoose.subtitle}
                 </p>
               )}
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-white/90 mb-[30px]">
+              <p className="font-outfit text-[20px] leading-[30px] text-white/90 mb-[30px]">
                 {content.whyChoose.description}
               </p>
               {/* Attorney image */}
@@ -160,7 +160,7 @@ export default function PracticeAreas() {
                     <h3 className="font-outfit text-[22px] md:text-[28px] leading-tight md:leading-[28px] text-white pb-[10px]">
                       {feature.number}. {feature.title}
                     </h3>
-                    <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-white/80">
+                    <p className="font-outfit text-[20px] leading-[30px] text-white/80">
                       {feature.description}
                     </p>
                   </div>
@@ -181,7 +181,7 @@ export default function PracticeAreas() {
             <h2 className="font-playfair text-[36px] md:text-[48px] lg:text-[60px] leading-tight text-white pb-[15px]">
               {content.cta.heading}
             </h2>
-            <p className="font-outfit text-[18px] md:text-[22px] leading-[26px] md:leading-[32px] text-white/80">
+            <p className="font-outfit text-[20px] leading-[30px] text-white/80">
               {content.cta.description}
             </p>
           </div>

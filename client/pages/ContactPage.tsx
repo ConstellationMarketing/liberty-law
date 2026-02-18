@@ -67,7 +67,7 @@ export default function ContactPage() {
                 }}
               />
             </p>
-            <p className="font-outfit text-[16px] md:text-[20px] leading-[24px] md:leading-[30px] text-white/90">
+            <p className="font-outfit text-[20px] leading-[30px] text-white/90">
               {content.hero.description}
             </p>
           </div>
@@ -96,7 +96,7 @@ export default function ContactPage() {
                   <h3 className="font-playfair text-[24px] md:text-[28px] leading-tight text-law-accent mb-[15px]">
                     {method.title}
                   </h3>
-                  <p className="font-outfit text-[18px] md:text-[20px] text-white mb-[8px]">
+                  <p className="font-outfit text-[20px] text-white mb-[8px]">
                     {method.detail}
                   </p>
                   <p className="font-outfit text-[14px] md:text-[16px] text-white/70">
@@ -120,7 +120,7 @@ export default function ContactPage() {
                   {content.form.heading}
                 </h2>
                 {content.form.subtext && (
-                  <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-white/80">
+                  <p className="font-outfit text-[20px] leading-[30px] text-white/80">
                     {content.form.subtext}
                   </p>
                 )}
@@ -149,10 +149,10 @@ export default function ContactPage() {
                       key={index}
                       className="flex justify-between items-center pb-[15px] border-b border-law-border/50 last:border-0 last:pb-0"
                     >
-                      <span className="font-outfit text-[16px] md:text-[18px] text-white/80">
+                      <span className="font-outfit text-[20px] text-white/80">
                         {item.day}
                       </span>
-                      <span className="font-outfit text-[16px] md:text-[18px] text-law-accent font-medium">
+                      <span className="font-outfit text-[20px] text-law-accent font-medium">
                         {item.hours}
                       </span>
                     </div>
@@ -200,7 +200,7 @@ export default function ContactPage() {
               {content.process.heading}
             </h2>
             {content.process.subtitle && (
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-black/80 mt-[15px]">
+              <p className="font-outfit text-[20px] leading-[30px] text-black/80 mt-[15px]">
                 {content.process.subtitle}
               </p>
             )}
@@ -236,7 +236,7 @@ export default function ContactPage() {
               {content.visitOffice.heading}
             </h2>
             {content.visitOffice.subtext && (
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-white/80">
+              <p className="font-outfit text-[20px] leading-[30px] text-white/80">
                 {content.visitOffice.subtext}
               </p>
             )}

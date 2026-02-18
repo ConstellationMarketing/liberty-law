@@ -78,7 +78,7 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
                       {data.formHeading}
                     </h4>
                     <div>
-                      <p className="font-outfit text-[16px] md:text-[20px] leading-[24px] md:leading-[28px] text-white font-light">
+                      <p className="font-outfit text-[20px] leading-[28px] text-white font-light">
                         {data.availabilityText}
                       </p>
                     </div>

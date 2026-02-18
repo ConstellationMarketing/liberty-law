@@ -60,7 +60,7 @@ export default function Index() {
               </p>
 
               {/* Subtext */}
-              <p className="font-outfit text-[16px] md:text-[20px] font-light leading-[24px] md:leading-[30px] text-white/80 mt-[15px] md:mt-[20px]">
+              <p className="font-outfit text-[20px] font-light leading-[30px] text-white/80 mt-[15px] md:mt-[20px]">
                 {heroContent?.subtext ||
                   "We provide expert representation for Criminal Defense, DUI, Real Estate, and Business Law matters across DuPage, Kane, Kendall, Will, and Grundy Counties."}
               </p>

@@ -18,7 +18,7 @@ export default function PracticeAreasSection({
             <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-white pb-[10px]">
               {content?.heading || "Practice Areas"}
             </h2>
-            <p className="font-outfit text-[16px] md:text-[20px] leading-[24px] md:leading-[30px] text-white/80">
+            <p className="font-outfit text-[20px] leading-[30px] text-white/80">
               {content?.description ||
                 "At Liberty Law, P. C., we provide the following legal services"}
             </p>
