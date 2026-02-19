@@ -1,7 +1,22 @@
-import type {
-  GoogleReviewsContent,
-  GoogleReviewItem,
-} from "@/lib/homePageTypes";
+// TODO: These types don't exist in homePageTypes yet - add them if needed
+// import type {
+//   GoogleReviewsContent,
+//   GoogleReviewItem,
+// } from "@site/lib/cms/homePageTypes";
+
+// Temporary local types
+interface GoogleReviewItem {
+  text: string;
+  author: string;
+  ratingImage: string;
+}
+
+interface GoogleReviewsContent {
+  sectionLabel: string;
+  heading: string;
+  description: string;
+  reviews: GoogleReviewItem[];
+}
 
 interface GoogleReviewsSectionProps {
   content?: GoogleReviewsContent;
@@ -65,13 +80,13 @@ export default function GoogleReviewsSection({
         <div className="text-center mb-[10px]">
           <p
             className="font-outfit text-[24px] leading-[36px]"
-            style={{ color: "#6b8d0c" }}
+            style={{ color: "#EC3024" }}
           >
             {data.sectionLabel}
           </p>
         </div>
         <div className="text-center">
-          <h2 className="font-playfair text-[28px] md:text-[40px] lg:text-[54px] leading-tight md:leading-[54px] text-black pb-[10px]">
+          <h2 className="font-playfair text-[28px] md:text-[40px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark pb-[10px]">
             {data.heading}
           </h2>
           <p className="font-outfit text-[24px] leading-[36px] text-black text-center">

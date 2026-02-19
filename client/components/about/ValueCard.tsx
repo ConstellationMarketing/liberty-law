@@ -18,7 +18,7 @@ export default function ValueCard({
         <div className="mb-[20px] md:mb-[30px]">
           <div className="bg-law-accent p-[20px] md:p-[25px] inline-block transition-all duration-300 group-hover:bg-white group-hover:scale-110">
             <Icon
-              className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] text-black transition-colors duration-300"
+              className="w-[40px] h-[40px] md:w-[50px] md:h-[50px] text-white group-hover:text-black transition-colors duration-300"
               strokeWidth={1.5}
             />
           </div>
@@ -29,7 +29,7 @@ export default function ValueCard({
           <h3 className="font-playfair text-[24px] md:text-[32px] leading-tight text-white pb-[10px] md:pb-[15px]">
             {title}
           </h3>
-          <p className="font-outfit text-[14px] md:text-[16px] leading-[22px] md:leading-[26px] text-white/80">
+          <p className="font-outfit text-[20px] leading-[30px] text-white/80">
             {description}
           </p>
         </div>

@@ -2,6 +2,10 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import { handleSeedHomepage } from "./routes/seed-homepage";
+import { handleRestoreHomepage } from "./routes/restore-homepage";
+import { handleSyncHomepage } from "./routes/sync-homepage";
+import { handleHealthCheck } from "./routes/health-check";
 
 export function createServer() {
   const app = express();
@@ -18,6 +22,14 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Health check endpoint
+  app.get("/api/health", handleHealthCheck);
+
+  // CMS setup routes
+  app.post("/api/seed-homepage", handleSeedHomepage);
+  app.post("/api/restore-homepage", handleRestoreHomepage);
+  app.post("/api/sync-homepage", handleSyncHomepage);
 
   return app;
 }

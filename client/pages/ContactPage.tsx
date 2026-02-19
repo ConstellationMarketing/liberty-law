@@ -22,16 +22,18 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export default function ContactPage() {
-  const { content } = useContactContent();
+  const { content, seoMeta } = useContactContent();
   const { phoneDisplay, phoneLabel } = useGlobalPhone();
 
-  // Map contact methods from CMS content with icon components
-  const contactMethods = content.contactMethods.methods.map((method) => ({
-    icon: iconMap[method.icon] || Phone,
-    title: method.title,
-    detail: method.detail,
-    subdDetail: method.subDetail,
-  }));
+  // Map contact methods from CMS content with icon components, excluding email
+  const contactMethods = content.contactMethods.methods
+    .filter((method) => method.icon !== "Mail")
+    .map((method) => ({
+      icon: iconMap[method.icon] || Phone,
+      title: method.title,
+      detail: method.detail,
+      subdDetail: method.subDetail,
+    }));
 
   // Map office hours from CMS content
   const officeHours = content.officeHours.items;
@@ -42,8 +44,11 @@ export default function ContactPage() {
   return (
     <Layout>
       <Seo
-        title="Contact Us"
-        description="Get in touch with our experienced legal team. Free consultation available 24/7. We're here to help with your legal needs."
+        title={seoMeta.metaTitle || seoMeta.ogTitle || "Contact Us"}
+        description={seoMeta.metaDescription || seoMeta.ogDescription || "Get in touch with our experienced legal team. Free consultation available 24/7. We're here to help with your legal needs."}
+        canonical={seoMeta.canonicalUrl || undefined}
+        image={seoMeta.ogImage || undefined}
+        noindex={seoMeta.noindex}
       />
 
       {/* Hero Section */}
@@ -65,7 +70,7 @@ export default function ContactPage() {
                 }}
               />
             </p>
-            <p className="font-outfit text-[16px] md:text-[20px] leading-[24px] md:leading-[30px] text-white/90">
+            <p className="font-outfit text-[20px] leading-[30px] text-white/90">
               {content.hero.description}
             </p>
           </div>
@@ -75,7 +80,7 @@ export default function ContactPage() {
       {/* Contact Methods Section */}
       <div className="bg-white py-[40px] md:py-[60px]">
         <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[85%]">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-[900px] mx-auto">
             {contactMethods.map((method, index) => {
               const Icon = method.icon;
               return (
@@ -86,7 +91,7 @@ export default function ContactPage() {
                   <div className="flex justify-center mb-[20px]">
                     <div className="bg-law-accent p-[20px] inline-block transition-all duration-300 group-hover:bg-white group-hover:scale-110">
                       <Icon
-                        className="w-[35px] h-[35px] md:w-[40px] md:h-[40px] text-black"
+                        className="w-[35px] h-[35px] md:w-[40px] md:h-[40px] text-white group-hover:text-black transition-colors duration-300"
                         strokeWidth={1.5}
                       />
                     </div>
@@ -94,10 +99,10 @@ export default function ContactPage() {
                   <h3 className="font-playfair text-[24px] md:text-[28px] leading-tight text-law-accent mb-[15px]">
                     {method.title}
                   </h3>
-                  <p className="font-outfit text-[18px] md:text-[20px] text-white mb-[8px]">
+                  <p className="font-outfit text-[20px] text-white mb-[8px]">
                     {method.detail}
                   </p>
-                  <p className="font-outfit text-[14px] md:text-[16px] text-white/70">
+                  <p className="font-outfit text-[20px] text-white/70">
                     {method.subdDetail}
                   </p>
                 </div>
@@ -118,7 +123,7 @@ export default function ContactPage() {
                   {content.form.heading}
                 </h2>
                 {content.form.subtext && (
-                  <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-white/80">
+                  <p className="font-outfit text-[20px] leading-[30px] text-white/80">
                     {content.form.subtext}
                   </p>
                 )}
@@ -133,7 +138,7 @@ export default function ContactPage() {
                 <div className="flex items-center gap-3 mb-[20px]">
                   <div className="bg-law-accent p-[15px]">
                     <Clock
-                      className="w-[30px] h-[30px] text-black"
+                      className="w-[30px] h-[30px] text-white"
                       strokeWidth={1.5}
                     />
                   </div>
@@ -147,10 +152,10 @@ export default function ContactPage() {
                       key={index}
                       className="flex justify-between items-center pb-[15px] border-b border-law-border/50 last:border-0 last:pb-0"
                     >
-                      <span className="font-outfit text-[16px] md:text-[18px] text-white/80">
+                      <span className="font-outfit text-[20px] text-white/80">
                         {item.day}
                       </span>
-                      <span className="font-outfit text-[16px] md:text-[18px] text-law-accent font-medium">
+                      <span className="font-outfit text-[20px] text-law-accent font-medium">
                         {item.hours}
                       </span>
                     </div>
@@ -158,7 +163,7 @@ export default function ContactPage() {
                 </div>
                 {content.officeHours.note && (
                   <div className="mt-[25px] pt-[25px] border-t border-law-border/50">
-                    <p className="font-outfit text-[14px] md:text-[16px] text-white/70 leading-[22px] md:leading-[24px]">
+                    <p className="font-outfit text-[20px] text-white/70 leading-[30px]">
                       {content.officeHours.note}
                     </p>
                   </div>
@@ -198,7 +203,7 @@ export default function ContactPage() {
               {content.process.heading}
             </h2>
             {content.process.subtitle && (
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-black/80 mt-[15px]">
+              <p className="font-outfit text-[20px] leading-[30px] text-black/80 mt-[15px]">
                 {content.process.subtitle}
               </p>
             )}
@@ -209,7 +214,7 @@ export default function ContactPage() {
               <div key={index} className="text-center">
                 <div className="mb-[20px] flex justify-center">
                   <div className="w-[60px] h-[60px] md:w-[70px] md:h-[70px] bg-law-accent flex items-center justify-center">
-                    <span className="font-playfair text-[32px] md:text-[40px] text-black font-bold">
+                    <span className="font-playfair text-[32px] md:text-[40px] text-white font-bold">
                       {item.number}
                     </span>
                   </div>
@@ -217,7 +222,7 @@ export default function ContactPage() {
                 <h3 className="font-playfair text-[22px] md:text-[26px] leading-tight text-black pb-[12px]">
                   {item.title}
                 </h3>
-                <p className="font-outfit text-[14px] md:text-[16px] leading-[22px] md:leading-[24px] text-black/80">
+                <p className="font-outfit text-[20px] leading-[30px] text-black/80">
                   {item.description}
                 </p>
               </div>
@@ -234,7 +239,7 @@ export default function ContactPage() {
               {content.visitOffice.heading}
             </h2>
             {content.visitOffice.subtext && (
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-white/80">
+              <p className="font-outfit text-[20px] leading-[30px] text-white/80">
                 {content.visitOffice.subtext}
               </p>
             )}

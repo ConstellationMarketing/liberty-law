@@ -18,12 +18,9 @@ export default function CallBox({
   className = "",
   variant = "light",
 }: CallBoxProps) {
-  // Text colors based on variant - only affects text, not icons
-  const textColor = variant === "dark" ? "text-white" : "text-black";
-  const textHoverColor =
-    variant === "dark"
-      ? ""
-      : "group-hover:text-white transition-colors duration-300";
+  // Text colors based on variant - white text on red accent bg
+  const textColor = "text-white";
+  const textHoverColor = "transition-colors duration-300";
 
   const content = (
     <div

@@ -1,7 +1,7 @@
 import Seo from "@site/components/Seo";
 import Layout from "@site/components/layout/Layout";
 import CallBox from "@site/components/shared/CallBox";
-import StatsGrid from "@site/components/shared/StatsGrid";
+import WhyChooseUsSection from "@site/components/shared/WhyChooseUsSection";
 import TeamMemberCard from "@site/components/about/TeamMemberCard";
 import ValueCard from "@site/components/about/ValueCard";
 import {
@@ -16,6 +16,7 @@ import {
 import { useAboutContent } from "@site/hooks/useAboutContent";
 import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
 
+
 // Icon mapping for values section
 const iconMap: Record<string, LucideIcon> = {
   Scale,
@@ -25,7 +26,7 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 export default function AboutUs() {
-  const { content } = useAboutContent();
+  const { content, seoMeta } = useAboutContent();
   const { phoneDisplay, phoneLabel } = useGlobalPhone();
 
   // Map team members from CMS content
@@ -38,17 +39,17 @@ export default function AboutUs() {
     description: item.description,
   }));
 
-  // Map stats from CMS content
-  const stats = content.stats.stats;
-
   // Map why choose us from CMS content
   const whyChooseUs = content.whyChooseUs.items;
 
   return (
     <Layout>
       <Seo
-        title="About Us"
-        description="Learn about our law firm's mission, values, and experienced legal team dedicated to protecting your rights."
+        title={seoMeta.metaTitle || seoMeta.ogTitle || "About Us"}
+        description={seoMeta.metaDescription || seoMeta.ogDescription || "Learn about our law firm's mission, values, and experienced legal team dedicated to protecting your rights."}
+        canonical={seoMeta.canonicalUrl || undefined}
+        image={seoMeta.ogImage || undefined}
+        noindex={seoMeta.noindex}
       />
 
       {/* Hero Section */}
@@ -72,7 +73,7 @@ export default function AboutUs() {
                   }}
                 />
               </p>
-              <p className="font-outfit text-[16px] md:text-[20px] leading-[24px] md:leading-[30px] text-white/90">
+              <p className="font-outfit text-[20px] leading-[30px] text-white/90">
                 {content.hero.description}
               </p>
             </div>
@@ -96,7 +97,7 @@ export default function AboutUs() {
             {/* Left Side - Content */}
             <div>
               <div className="mb-[10px]">
-                <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-[rgb(107,141,12)]">
+                <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-law-accent">
                   {content.story.sectionLabel}
                 </p>
               </div>
@@ -107,7 +108,7 @@ export default function AboutUs() {
                 {content.story.paragraphs.map((paragraph, index) => (
                   <p
                     key={index}
-                    className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-black"
+                    className="font-outfit text-[20px] leading-[30px] text-black"
                   >
                     {paragraph}
                   </p>
@@ -143,7 +144,7 @@ export default function AboutUs() {
               <h2 className="font-playfair text-[32px] md:text-[40px] leading-tight text-law-accent pb-[15px] md:pb-[20px]">
                 {content.missionVision.mission.heading}
               </h2>
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[26px] md:leading-[30px] text-white">
+              <p className="font-outfit text-[20px] leading-[30px] text-white">
                 {content.missionVision.mission.text}
               </p>
             </div>
@@ -153,7 +154,7 @@ export default function AboutUs() {
               <h2 className="font-playfair text-[32px] md:text-[40px] leading-tight text-law-accent pb-[15px] md:pb-[20px]">
                 {content.missionVision.vision.heading}
               </h2>
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[26px] md:leading-[30px] text-white">
+              <p className="font-outfit text-[20px] leading-[30px] text-white">
                 {content.missionVision.vision.text}
               </p>
             </div>
@@ -166,7 +167,7 @@ export default function AboutUs() {
         <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[85%]">
           <div className="text-center mb-[30px] md:mb-[50px]">
             <div className="mb-[10px]">
-              <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-[rgb(107,141,12)]">
+              <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-law-accent">
                 {content.team.sectionLabel}
               </p>
             </div>
@@ -182,10 +183,12 @@ export default function AboutUs() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {teamMembers.map((member, index) => (
-              <TeamMemberCard key={index} {...member} />
-            ))}
+          <div className="flex justify-center">
+            <div className="w-full max-w-[500px]">
+              {teamMembers.map((member, index) => (
+                <TeamMemberCard key={index} {...member} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -203,7 +206,7 @@ export default function AboutUs() {
               {content.values.heading}
             </h2>
             {content.values.subtitle && (
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-white/80 mt-[15px]">
+              <p className="font-outfit text-[20px] leading-[30px] text-white/80 mt-[15px]">
                 {content.values.subtitle}
               </p>
             )}
@@ -217,71 +220,17 @@ export default function AboutUs() {
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="bg-white py-[30px] md:py-[40px]">
-        <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%]">
-          <StatsGrid stats={stats} />
-        </div>
-      </div>
-
       {/* Why Choose Us Section */}
-      <div className="bg-white pt-[30px] md:pt-[40px] pb-[40px] md:pb-[60px]">
-        <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[80%]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[8%]">
-            {/* Left Side - Heading + Image */}
-            <div>
-              <div className="mb-[10px]">
-                <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-[rgb(107,141,12)]">
-                  {content.whyChooseUs.sectionLabel}
-                </p>
-              </div>
-              <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-black pb-[20px]">
-                {content.whyChooseUs.heading}
-              </h2>
-              <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-black mb-[30px]">
-                {content.whyChooseUs.description}
-              </p>
-              {/* Stock image */}
-              <div className="hidden lg:block">
-                <img
-                  src="/images/stock/law-firm-team.jpg"
-                  alt="Classic law office with gavel and Lady Justice"
-                  className="w-full max-w-[400px] h-auto object-cover"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-
-            {/* Right Side - Features List */}
-            <div className="space-y-[20px] md:space-y-[30px]">
-              {whyChooseUs.map((feature, index) => (
-                <div key={index}>
-                  <div className="mb-[15px] md:mb-[20px]">
-                    <h3 className="font-outfit text-[22px] md:text-[28px] leading-tight md:leading-[28px] text-black pb-[10px]">
-                      {feature.number}. {feature.title}
-                    </h3>
-                    <p className="font-outfit text-[16px] md:text-[18px] leading-[24px] md:leading-[28px] text-black">
-                      {feature.description}
-                    </p>
-                  </div>
-                  {index < whyChooseUs.length - 1 && (
-                    <div className="h-[1px] bg-law-border/30"></div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
+      <WhyChooseUsSection content={content.whyChooseUs} variant="light" />
 
       {/* Call to Action Section */}
       <div className="bg-law-accent py-[40px] md:py-[60px]">
         <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[80%]">
           <div className="text-center mb-[30px] md:mb-[40px]">
-            <h2 className="font-playfair text-[36px] md:text-[48px] lg:text-[60px] leading-tight text-black pb-[15px]">
+            <h2 className="font-playfair text-[36px] md:text-[48px] lg:text-[60px] leading-tight text-white pb-[15px]">
               {content.cta.heading}
             </h2>
-            <p className="font-outfit text-[18px] md:text-[22px] leading-[26px] md:leading-[32px] text-black/80">
+            <p className="font-outfit text-[20px] leading-[30px] text-white/80">
               {content.cta.description}
             </p>
           </div>

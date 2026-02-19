@@ -31,10 +31,10 @@ export default function TeamMemberCard({
         <h3 className="font-playfair text-[24px] md:text-[28px] leading-tight text-white pb-[5px]">
           {name}
         </h3>
-        <p className="font-outfit text-[16px] md:text-[18px] text-law-accent pb-[10px]">
+        <p className="font-outfit text-[20px] text-law-accent pb-[10px]">
           {title}
         </p>
-        <p className="font-outfit text-[14px] md:text-[16px] leading-[22px] md:leading-[24px] text-white/80">
+        <p className="font-outfit text-[20px] leading-[30px] text-white/80">
           {bio}
         </p>
 

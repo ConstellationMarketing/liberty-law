@@ -1,4 +1,19 @@
-import type { ProcessContent, ProcessStep } from "@/lib/homePageTypes";
+// TODO: These types don't exist in homePageTypes yet - add them if needed
+// import type { ProcessContent, ProcessStep } from "@site/lib/cms/homePageTypes";
+
+// Temporary local types
+interface ProcessStep {
+  number: string;
+  title: string;
+  description: string;
+}
+
+interface ProcessContent {
+  sectionLabel: string;
+  headingLine1: string;
+  headingLine2: string;
+  steps: ProcessStep[];
+}
 
 interface ProcessSectionProps {
   content?: ProcessContent;
@@ -41,7 +56,7 @@ export default function ProcessSection({ content }: ProcessSectionProps) {
         <div className="text-center mb-[10px]">
           <p
             className="font-outfit text-[24px] leading-[36px]"
-            style={{ color: "rgb(186, 234, 160)" }}
+            style={{ color: "#EC3024" }}
           >
             {data.sectionLabel}
           </p>
@@ -61,7 +76,7 @@ export default function ProcessSection({ content }: ProcessSectionProps) {
         {steps.map((step, index) => (
           <div
             key={index}
-            className={`md:w-[31.3333%] bg-[rgb(30,50,49)] p-[20px] ${
+            className={`md:w-[31.3333%] bg-[#083C5A] p-[20px] ${
               index < steps.length - 1 ? "mb-4 md:mb-0" : ""
             }`}
           >
@@ -69,7 +84,7 @@ export default function ProcessSection({ content }: ProcessSectionProps) {
             <div className="mb-[20px]">
               <p
                 className="font-outfit text-[24px] leading-[36px]"
-                style={{ color: "rgb(186, 234, 160)" }}
+                style={{ color: "#EC3024" }}
               >
                 {step.number}
               </p>

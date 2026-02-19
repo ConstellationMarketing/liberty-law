@@ -5,24 +5,15 @@ export interface HeroContent {
   h1Title: string; // H1 title text (all caps, ~20px) between headline and phone button
   headline: string;
   highlightedText: string;
+  subtext: string;
   phone: string;
   phoneLabel: string;
-}
-
-export interface PartnerLogo {
-  src: string;
-  alt: string;
 }
 
 export interface AboutFeature {
   number: string;
   title: string;
   description: string;
-}
-
-export interface AboutStat {
-  value: string;
-  label: string;
 }
 
 export interface AboutContent {
@@ -36,11 +27,12 @@ export interface AboutContent {
   attorneyImage: string;
   attorneyImageAlt: string;
   features: AboutFeature[];
-  stats: AboutStat[];
 }
 
 export interface PracticeAreaItem {
   title: string;
+  description: string;
+  icon: string;
   image: string;
   link: string;
 }
@@ -51,11 +43,25 @@ export interface PracticeAreasIntroContent {
   description: string;
 }
 
-export interface AwardsContent {
+export interface CtaContent {
+  heading: string;
+  buttonText: string;
+  buttonLink: string;
+}
+
+export interface TeamMember {
+  name: string;
+  title: string;
+  bio: string;
+  image: string;
+  imageAlt: string;
+}
+
+export interface TeamContent {
   sectionLabel: string;
   heading: string;
-  description: string;
-  logos: Array<{ src: string; alt: string }>;
+  intro: string;
+  members: TeamMember[];
 }
 
 export interface TestimonialItem {
@@ -69,32 +75,6 @@ export interface TestimonialsContent {
   heading: string;
   backgroundImage: string;
   items: TestimonialItem[];
-}
-
-export interface ProcessStep {
-  number: string;
-  title: string;
-  description: string;
-}
-
-export interface ProcessContent {
-  sectionLabel: string;
-  headingLine1: string;
-  headingLine2: string;
-  steps: ProcessStep[];
-}
-
-export interface GoogleReviewItem {
-  text: string;
-  author: string;
-  ratingImage: string;
-}
-
-export interface GoogleReviewsContent {
-  sectionLabel: string;
-  heading: string;
-  description: string;
-  reviews: GoogleReviewItem[];
 }
 
 export interface FaqItem {
@@ -113,24 +93,19 @@ export interface FaqContent {
 export interface ContactContent {
   sectionLabel: string;
   heading: string;
-  description: string;
-  phone: string;
-  phoneLabel: string;
-  address: string;
+  availabilityText: string;
   formHeading: string;
 }
 
 // Complete homepage content structure
 export interface HomePageContent {
   hero: HeroContent;
-  partnerLogos: PartnerLogo[];
   about: AboutContent;
   practiceAreasIntro: PracticeAreasIntroContent;
   practiceAreas: PracticeAreaItem[];
-  awards: AwardsContent;
+  cta: CtaContent;
   testimonials: TestimonialsContent;
-  process: ProcessContent;
-  googleReviews: GoogleReviewsContent;
+  team: TeamContent;
   faq: FaqContent;
   contact: ContactContent;
 }
@@ -138,104 +113,124 @@ export interface HomePageContent {
 // Default content - used as fallback when CMS content is not available
 export const defaultHomeContent: HomePageContent = {
   hero: {
-    h1Title: "ATLANTA PERSONAL INJURY LAWYERS",
-    headline: "with integrity, experience, and relentless advocacy.",
-    highlightedText: "Protecting your rights",
-    phone: "404-555-5555",
+    h1Title: "Naperville's Trusted Criminal Defense & Real Estate Attorney",
+    headline:
+      "Committed to achieving the best possible outcome for your situation.",
+    highlightedText: "the best possible outcome",
+    subtext:
+      "We provide expert representation for Criminal Defense, DUI, Real Estate, and Business Law matters across DuPage, Kane, Kendall, Will, and Grundy Counties.",
+    phone: "630-449-4800",
     phoneLabel: "Call Us 24/7",
   },
-  partnerLogos: [
-    { src: "/images/logos/google-rating.png", alt: "Google Rating" },
-    {
-      src: "/images/logos/atlanta-law-firm-marketing.png",
-      alt: "Atlanta Law Firm Marketing 2023",
-    },
-    { src: "/images/logos/award-badge-1.png", alt: "Award Badge" },
-    { src: "/images/logos/legal-talk-network.png", alt: "Legal Talk Network" },
-    { src: "/images/logos/award-badge-2.png", alt: "Award Badge" },
-    { src: "/images/logos/award-badge-3.png", alt: "Award Badge" },
-  ],
   about: {
-    sectionLabel: "– About Us",
-    heading: "A Leading Lawyer for an Atlanta Law Firm",
+    sectionLabel: "— Criminal Defense Lawyer",
+    heading: "About Liberty Law, P. C.",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi",
-    phone: "404-555-5555",
+      "Liberty Law is dedicated to answering your questions and providing personalized legal representation. We believe that experience is the cornerstone of a thriving law practice, and we pride ourselves on giving each new case the attention it deserves.",
+    phone: "630-449-4800",
     phoneLabel: "Call Us 24/7",
     contactLabel: "Contact Us",
     contactText: "For a Free Consultation",
-    attorneyImage: "/images/team/attorney-1.png",
-    attorneyImageAlt: "Attorney",
-    features: [
-      {
-        number: "1",
-        title: "Nationwide Representation",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget augue tincidunt, rhoncus lacus a, congue diam.",
-      },
-      {
-        number: "2",
-        title: "Understanding Your Case",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget augue tincidunt, rhoncus lacus a, congue diam.",
-      },
-      {
-        number: "3",
-        title: "Seeking Compensation",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget augue tincidunt, rhoncus lacus a, congue diam.",
-      },
-    ],
-    stats: [
-      { value: "1000+", label: "Trusted Clients Served" },
-      { value: "$50 Million", label: "Recovered in Legal Dispute Settlements" },
-      { value: "98%", label: "Client Satisfaction Rate" },
-      { value: "150+", label: "Legal Professionals Available 24/7" },
-    ],
+    attorneyImage:
+      "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1770650324534-about-meeting.webp",
+    attorneyImageAlt: "Liberty Law team in a meeting",
+    features: [],
   },
   practiceAreasIntro: {
     sectionLabel: "– Practice Areas",
-    heading: "Legal Cases We Handle",
+    heading: "Practice Areas",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "At Liberty Law, P. C., we provide the following legal services",
   },
   practiceAreas: [
     {
-      title: "Practice Area",
+      title: "DUI",
+      description:
+        "Schedule a consultation if you have been charged with Driving Under the Influence. We will review your case, discuss potential defenses, and explain the next steps for your court, legal, and driver's license status.",
+      icon: "Car",
       image: "/images/practice-areas/personal-injury.jpg",
       link: "/practice-areas",
     },
     {
-      title: "Practice Area",
-      image: "/images/practice-areas/medical-malpractice.jpg",
+      title: "Felony",
+      description:
+        "For serious criminal charges including drug offenses, battery, or theft. We provide a confidential review of your charges to build an aggressive defense strategy to protect your rights and freedom.",
+      icon: "Lock",
+      image:
+        "https://images.pexels.com/photos/5668484/pexels-photo-5668484.jpeg",
       link: "/practice-areas",
     },
     {
-      title: "Practice Area",
-      image: "/images/practice-areas/workers-compensation.jpg",
+      title: "Misdemeanor",
+      description:
+        "Legal assistance for misdemeanor charges. We help you understand the potential consequences and work toward the best possible resolution for your case.",
+      icon: "Scale",
+      image:
+        "https://images.pexels.com/photos/7714896/pexels-photo-7714896.jpeg",
       link: "/practice-areas",
     },
     {
-      title: "Practice Area",
-      image: "/images/practice-areas/wrongful-death.jpg",
+      title: "Traffic",
+      description:
+        "Defense for speeding tickets, driving while suspended/revoked, and other moving violations. We aim to protect your driving record and minimize fines or insurance impacts.",
+      icon: "CircleAlert",
+      image:
+        "https://images.pexels.com/photos/7715101/pexels-photo-7715101.jpeg",
+      link: "/practice-areas",
+    },
+    {
+      title: "Real Estate - Buy",
+      description:
+        "Legal representation for home buyers. We review contracts, handle title work, and guide you through the closing process to ensure a smooth purchase.",
+      icon: "Home",
+      image: "/images/practice-areas/premises-liability.jpg",
+      link: "/practice-areas",
+    },
+    {
+      title: "Real Estate - Sale",
+      description:
+        "Legal representation for home sellers. We assist with contract negotiation, title clearance, and closing documents to protect your interests during the sale.",
+      icon: "Building",
+      image: "/images/practice-areas/product-liability.jpg",
+      link: "/practice-areas",
+    },
+    {
+      title: "Sealing/Expungement",
+      description:
+        "Discuss your eligibility to have past criminal records expunged or sealed. We help remove barriers to employment and housing by clearing your record.",
+      icon: "FileX",
+      image: "/images/practice-areas/civil-litigation.jpg",
+      link: "/practice-areas",
+    },
+    {
+      title: "SOS - License Reinstatement",
+      description:
+        "Assistance with formal and informal hearings to reinstate your driver's license after a revocation or suspension.",
+      icon: "CreditCard",
+      image: "/images/practice-areas/insurance-claims.jpg",
+      link: "/practice-areas",
+    },
+    {
+      title: "Evictions and Landlord/Tenant",
+      description:
+        "Representation for landlords and tenants in residential and commercial lease disputes. We handle eviction proceedings, lease violations, security deposit issues, and other property management legal matters to ensure your rights are protected under Illinois law.",
+      icon: "Building2",
+      image: "/images/practice-areas/class-action.jpg",
+      link: "/practice-areas",
+    },
+    {
+      title: "Business Law and Consulting",
+      description:
+        "General legal counsel for small business formation, contract disputes, or other civil legal matters.",
+      icon: "Briefcase",
+      image: "/images/practice-areas/employment-law.jpg",
       link: "/practice-areas",
     },
   ],
-  awards: {
-    sectionLabel: "– Achievements",
-    heading: "Awards & Membership",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi",
-    logos: [
-      { src: "/images/awards/award-1.png", alt: "Award Logo" },
-      { src: "/images/awards/award-2.png", alt: "Award Logo" },
-      { src: "/images/awards/award-3.png", alt: "Award Logo" },
-      { src: "/images/awards/award-4.png", alt: "Award Logo" },
-      { src: "/images/awards/award-5.png", alt: "Award Logo" },
-      { src: "/images/awards/award-6.png", alt: "Award Logo" },
-      { src: "/images/awards/forbes.png", alt: "Forbes" },
-      { src: "/images/awards/lc-logo.png", alt: "LC Logo" },
-    ],
+  cta: {
+    heading: "We are ready to help you. Connect with us.",
+    buttonText: "Contact Us",
+    buttonLink: "/contact",
   },
   testimonials: {
     sectionLabel: "– Testimonials",
@@ -259,72 +254,19 @@ export const defaultHomeContent: HomePageContent = {
       },
     ],
   },
-  process: {
-    sectionLabel: "– Process",
-    headingLine1: "Get Started Easily.",
-    headingLine2: "Take a Look at The Steps",
-    steps: [
+  team: {
+    sectionLabel: "— Criminal Defense Legal Team",
+    heading: "Meet Our Team",
+    intro:
+      "David Liberty is a dedicated advocate who brings a unique perspective to every case he handles. With a background that spans both criminal defense and prosecution as well as complex real estate and business transactions, David offers his clients the legal expertise needed to navigate high-stakes situations.",
+    members: [
       {
-        number: "01",
-        title: "Step 1",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.",
-      },
-      {
-        number: "02",
-        title: "Step 2",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.",
-      },
-      {
-        number: "03",
-        title: "Step 3",
-        description:
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut.",
-      },
-    ],
-  },
-  googleReviews: {
-    sectionLabel: "– Google Reviews",
-    heading: "Real Voices, Real Trust: Our Google Reviews",
-    description:
-      "Our clients share their stories and insights about working with us. Dive into their experiences to understand how we prioritize your legal success.",
-    reviews: [
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
-      },
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
-      },
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
-      },
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
-      },
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
-      },
-      {
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-        author: "Lorem Ipsum",
-        ratingImage:
-          "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
+        name: "David Liberty",
+        title: "Founder & Managing Attorney",
+        bio: 'David earned his Juris Doctor from the Chicago-Kent College of Law in 2014, where he was inducted into the Bar and Gavel Society for his outstanding service to the legal community. Before founding Liberty Law, P.C., he served as a Prosecutor for the City of Joliet. This experience gave him invaluable insight into how the "other side" operates—knowledge he now uses to build aggressive and effective defense strategies for his clients. David started his legal career as a legal intern for the Homicide Task Force of the Cook County Public Defender\'s Office, where he worked on some of the most serious cases in the state.',
+        image:
+          "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f",
+        imageAlt: "David Liberty, Founder & Managing Attorney",
       },
     ],
   },
@@ -361,10 +303,8 @@ export const defaultHomeContent: HomePageContent = {
   contact: {
     sectionLabel: "– Contact",
     heading: "Get in Touch",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    phone: "404-555-5555",
-    phoneLabel: "Call Us 24/7",
-    address: "4120 Presidential Parkway, Suite 200, Atlanta, GA 30340",
+    availabilityText:
+      "Our intake team is available 24 hours a day, seven days a week",
     formHeading: "Send Us a Message",
   },
 };

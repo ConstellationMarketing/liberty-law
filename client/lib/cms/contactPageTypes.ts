@@ -81,46 +81,46 @@ export interface ContactPageContent {
 // Default content - used as fallback when CMS content is not available
 export const defaultContactContent: ContactPageContent = {
   hero: {
-    sectionLabel: "– Contact Us",
-    tagline: "Let's Talk About Your Case",
+    sectionLabel: "– Contact",
+    tagline: "Get in Touch",
     description:
-      "Our team is ready to listen, answer your questions, and provide the expert legal guidance you need. Contact us today for a free consultation.",
+      "Contact us for a free consultation. Available 24/7.",
   },
   contactMethods: {
     methods: [
       {
         icon: "Phone",
-        title: "Phone",
-        detail: "404-555-5555",
+        title: "Call Us",
+        detail: "630-449-4800",
         subDetail: "Available 24/7",
       },
       {
         icon: "Mail",
         title: "Email",
-        detail: "contact@constellationlaw.com",
+        detail: "contact@libertylawpc.com",
         subDetail: "We respond within 24 hours",
       },
       {
         icon: "MapPin",
-        title: "Office",
-        detail: "123 Legal Street",
-        subDetail: "Atlanta, GA 30303",
+        title: "Visit",
+        detail: "1700 Park St., Suite 212",
+        subDetail: "Naperville, IL 60563",
       },
     ],
   },
   form: {
     heading: "Send Us a Message",
     subtext:
-      "Fill out the form below and we'll get back to you as soon as possible.",
+      "We'll get back to you within 24 hours",
   },
   officeHours: {
     heading: "Office Hours",
     items: [
-      { day: "Monday - Friday", hours: "24/7 Available" },
-      { day: "Saturday - Sunday", hours: "24/7 Available" },
-      { day: "Holidays", hours: "24/7 Available" },
+      { day: "Monday - Friday", hours: "9:00 AM - 5:00 PM" },
+      { day: "Saturday", hours: "By Appointment" },
+      { day: "Sunday", hours: "Closed" },
     ],
-    note: "Our intake team is available 24 hours a day, seven days a week. We understand that legal emergencies don't follow a schedule.",
+    note: "24/7 Emergency Hotline Available",
   },
   process: {
     sectionLabel: "– The Process",
@@ -149,27 +149,27 @@ export const defaultContactContent: ContactPageContent = {
         number: "4",
         title: "Take Action",
         description:
-          "Once you decide to work with us, we immediately begin building your case and fighting for the compensation you deserve.",
+          "Once you decide to work with us, we immediately begin building your case and fighting for the best outcome you deserve.",
       },
     ],
   },
   visitOffice: {
     heading: "Visit Our Office",
     subtext:
-      "Located in the heart of Atlanta, our office is easily accessible.",
+      "Located in Naperville, our office is easily accessible.",
     mapEmbedUrl:
-      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d212271.35861186526!2d-84.42020704999999!3d33.7673845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88f5045d6993098d%3A0x66fede2f990b630b!2sAtlanta%2C%20GA%2C%20USA!5e0!3m2!1sen!2srs!4v1750395791543!5m2!1sen!2srs",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2974.0715477515755!2d-88.16382492346725!3d41.77044597124044!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880e572f44b8e735%3A0x352b6b14e2db8b7a!2s1700%20Park%20St%20%23212%2C%20Naperville%2C%20IL%2060563%2C%20USA!5e0!3m2!1sen!2srs!4v1738952839214!5m2!1sen!2srs",
   },
   cta: {
-    heading: "Ready to Discuss Your Case?",
-    description: "Our experienced legal team is standing by to help you.",
+    heading: "We are ready to help you. Connect with us.",
+    description: "Committed to achieving the best possible outcome for your situation.",
     primaryButton: {
-      label: "Call Us Now",
-      phone: "404-555-5555",
+      label: "Call Us 24/7",
+      phone: "630-449-4800",
     },
     secondaryButton: {
-      label: "Schedule Consultation",
-      sublabel: "Free Case Review",
+      label: "Contact Us",
+      sublabel: "Free Consultation",
       link: "/contact",
     },
   },

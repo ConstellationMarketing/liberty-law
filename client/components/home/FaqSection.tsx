@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import type { FaqContent, FaqItem } from "@/lib/homePageTypes";
+import type { FaqContent, FaqItem } from "@site/lib/cms/homePageTypes";
 
 interface FaqSectionProps {
   content?: FaqContent;
@@ -52,10 +52,10 @@ export default function FaqSection({ content }: FaqSectionProps) {
       {/* Header Section */}
       <div className="max-w-[1080px] mx-auto w-[95%] md:w-[85%] lg:w-[80%] py-[20px] md:py-[27px]">
         <div className="text-center">
-          <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-black pb-[10px]">
+          <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark pb-[10px]">
             {data.heading}
           </h2>
-          <p className="font-outfit text-[16px] md:text-[24px] leading-[24px] md:leading-[36px] text-black text-center">
+          <p className="font-outfit text-[20px] leading-[30px] text-black text-center">
             {data.description}
           </p>
         </div>
@@ -96,7 +96,7 @@ export default function FaqSection({ content }: FaqSectionProps) {
                 />
               </button>
               {openIndex === index && (
-                <div className="font-outfit text-[22px] leading-[33px] font-light px-[20px] pb-[20px] pt-[20px] text-white">
+                <div className="font-outfit text-[20px] leading-[30px] font-light px-[20px] pb-[20px] pt-[20px] text-white">
                   {faq.answer}
                 </div>
               )}

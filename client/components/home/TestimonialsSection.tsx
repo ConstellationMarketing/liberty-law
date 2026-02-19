@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { TestimonialsContent, TestimonialItem } from "@/lib/homePageTypes";
+import type { TestimonialsContent, TestimonialItem } from "@site/lib/cms/homePageTypes";
 
 interface TestimonialsSectionProps {
   content?: TestimonialsContent;
@@ -57,13 +57,13 @@ export default function TestimonialsSection({
         <div className="text-center mb-[10px]">
           <p
             className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px]"
-            style={{ color: "#6b8d0c" }}
+            style={{ color: "#EC3024" }}
           >
             {data.sectionLabel}
           </p>
         </div>
         <div className="text-center">
-          <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-black pb-[10px]">
+          <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark pb-[10px]">
             {data.heading}
           </h2>
         </div>

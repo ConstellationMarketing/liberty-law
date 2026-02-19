@@ -28,31 +28,121 @@ interface SiteSettings {
   siteNoindex: boolean;
 }
 
-// Default values
+// localStorage key for settings persistence
+const SETTINGS_STORAGE_KEY = "liberty-law-site-settings";
+
+/**
+ * Load settings from localStorage
+ * Returns null if not found or if parsing fails
+ */
+function loadSettingsFromStorage(): SiteSettings | null {
+  try {
+    const stored = localStorage.getItem(SETTINGS_STORAGE_KEY);
+    if (stored) {
+      return JSON.parse(stored) as SiteSettings;
+    }
+  } catch (err) {
+    console.warn(
+      "[SiteSettingsContext] Failed to load from localStorage:",
+      err,
+    );
+  }
+  return null;
+}
+
+/**
+ * Save settings to localStorage
+ * Silently fails if localStorage is unavailable
+ */
+function saveSettingsToStorage(settings: SiteSettings): void {
+  try {
+    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+  } catch (err) {
+    console.warn(
+      "[SiteSettingsContext] Failed to save to localStorage:",
+      err,
+    );
+  }
+}
+
+// Default values - Using actual Liberty Law branding as fallback
 const DEFAULT_SETTINGS: SiteSettings = {
-  siteName: "Constellation Law Firm",
-  logoUrl: "/images/logos/firm-logo.png",
-  logoAlt: "Constellation Law Firm",
-  phoneNumber: "4045555555",
-  phoneDisplay: "404-555-5555",
+  siteName: "Liberty Law, P.C.",
+  logoUrl:
+    "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1770648915970-g754g8.png",
+  logoAlt: "Liberty Law, P.C. Logo",
+  phoneNumber: "6304494800",
+  phoneDisplay: "630-449-4800",
   phoneAvailability: "Call Us 24/7",
   applyPhoneGlobally: true,
   headerCtaText: "Contact Us",
   headerCtaUrl: "/contact",
   navigationItems: [
-    { label: "Home", href: "/", order: 1 },
-    { label: "About Us", href: "/about", order: 2 },
-    { label: "Practice Areas", href: "/practice-areas", order: 3 },
-    { label: "Contact", href: "/contact", order: 4 },
+    { label: "Practice Areas", href: "/practice-areas", order: 1 },
+    { label: "Meet The Team", href: "/about", order: 2 },
+    {
+      label: "Client Login",
+      href: "https://clients.clio.com/",
+      order: 4,
+    },
+    {
+      label: "Make Payment",
+      href: "https://app.clio.com/link/v2/2/2/94a600cdd34ea72ef588277a1f71dbc0?hmac=be9cf55fbe33fe3f8a62ce700fa3b79432a80b3bed294b7097ca626806427d36",
+      order: 5,
+    },
   ],
-  footerAboutLinks: [],
-  footerPracticeLinks: [],
-  addressLine1: "",
-  addressLine2: "",
-  mapEmbedUrl: "",
-  socialLinks: [],
-  copyrightText: `Copyright © ${new Date().getFullYear()} | All Rights Reserved`,
-  siteNoindex: false,
+  footerAboutLinks: [
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
+    { label: "Client Login", href: "https://clients.clio.com/" },
+    {
+      label: "Make Payment",
+      href: "https://app.clio.com/link/v2/2/2/94a600cdd34ea72ef588277a1f71dbc0?hmac=be9cf55fbe33fe3f8a62ce700fa3b79432a80b3bed294b7097ca626806427d36",
+    },
+  ],
+  footerPracticeLinks: [
+    { label: "DUI", href: "/practice-areas/dui" },
+    { label: "Felony", href: "/practice-areas/felony" },
+    { label: "Misdemeanor", href: "/practice-areas/misdemeanor" },
+    { label: "Traffic", href: "/practice-areas/traffic" },
+    { label: "Real Estate - Buy", href: "/practice-areas/real-estate-buy" },
+    { label: "Real Estate - Sale", href: "/practice-areas/real-estate-sale" },
+    {
+      label: "Sealing/Expungement",
+      href: "/practice-areas/sealing-expungement",
+    },
+    {
+      label: "SOS - License Reinstatement",
+      href: "/practice-areas/sos-license-reinstatement",
+    },
+    {
+      label: "Evictions and Landlord/Tenant",
+      href: "/practice-areas/evictions-landlord-tenant",
+    },
+    {
+      label: "Business Law and Consulting",
+      href: "/practice-areas/business-law-consulting",
+    },
+  ],
+  addressLine1: "1700 Park St., Suite 203",
+  addressLine2: "Naperville, IL 60563",
+  mapEmbedUrl:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2974.3774586045606!2d-88.15066062391948!3d41.7986284712506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x880e56475a155555%3A0x63d6f81d38938ae!2s1700%20Park%20St%20%23203%2C%20Naperville%2C%20IL%2060563%2C%20USA!5e0!3m2!1sen!2srs!4v1770654074227!5m2!1sen!2srs",
+  socialLinks: [
+    {
+      platform: "facebook",
+      url: "https://www.facebook.com/libertylawpc",
+      enabled: true,
+    },
+    {
+      platform: "instagram",
+      url: "https://www.linkedin.com/company/liberty-law-p-c/",
+      enabled: true,
+    },
+  ],
+  copyrightText: "Copyright © 2026 Liberty Law P.C. All Rights Reserved.",
+  siteNoindex: true,
 };
 
 interface SiteSettingsContextValue {
@@ -71,6 +161,36 @@ const SiteSettingsContext = createContext<SiteSettingsContextValue | null>(
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
+// Validate environment variables at startup
+function validateEnvironment() {
+  const errors: string[] = [];
+
+  if (!SUPABASE_URL) {
+    errors.push("VITE_SUPABASE_URL is not set");
+  }
+  if (!SUPABASE_ANON_KEY) {
+    errors.push("VITE_SUPABASE_ANON_KEY is not set");
+  }
+
+  if (errors.length > 0) {
+    console.error(
+      "[SiteSettingsContext] Missing required environment variables:",
+    );
+    errors.forEach((err) => console.error(`  - ${err}`));
+    console.error(
+      "[SiteSettingsContext] Please check your .env.local file or environment configuration.",
+    );
+    console.warn(
+      "[SiteSettingsContext] Falling back to default settings. Header/Footer/Admin may not work correctly.",
+    );
+  }
+
+  return errors.length === 0;
+}
+
+// Run validation at module load
+const hasValidEnvironment = validateEnvironment();
+
 // Global cache
 let settingsCache: SiteSettings | null = null;
 
@@ -79,19 +199,35 @@ interface SiteSettingsProviderProps {
 }
 
 export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
+  // Try to load from localStorage first, then in-memory cache, then defaults
+  const cachedSettings = loadSettingsFromStorage();
   const [settings, setSettings] = useState<SiteSettings>(
-    settingsCache || DEFAULT_SETTINGS,
+    cachedSettings || settingsCache || DEFAULT_SETTINGS,
   );
-  const [isLoading, setIsLoading] = useState(!settingsCache);
+  const [isLoading, setIsLoading] = useState(!cachedSettings && !settingsCache);
 
   useEffect(() => {
-    if (settingsCache) {
-      setSettings(settingsCache);
+    // If we have either localStorage cache or in-memory cache, use it and skip fetch
+    if (cachedSettings || settingsCache) {
+      if (settingsCache && !cachedSettings) {
+        // We have in-memory cache but not localStorage - save to localStorage
+        saveSettingsToStorage(settingsCache);
+      }
+      setSettings(cachedSettings || settingsCache!);
       setIsLoading(false);
       return;
     }
 
     async function fetchSettings() {
+      // Skip fetch if environment is invalid
+      if (!hasValidEnvironment) {
+        console.warn(
+          "[SiteSettingsContext] Skipping settings fetch due to invalid environment configuration",
+        );
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const response = await fetch(
           `${SUPABASE_URL}/rest/v1/site_settings_public?settings_key=eq.global&select=*`,
@@ -104,7 +240,40 @@ export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
         );
 
         if (!response.ok) {
-          throw new Error(`HTTP error: ${response.status}`);
+          const errorDetails = await response
+            .text()
+            .catch(() => "Unable to read error details");
+
+          if (response.status === 401 || response.status === 403) {
+            console.error(
+              "[SiteSettingsContext] Authentication failed - invalid or expired credentials",
+            );
+            console.error(
+              `[SiteSettingsContext] HTTP ${response.status}: ${errorDetails}`,
+            );
+            console.warn(
+              "[SiteSettingsContext] Please verify your VITE_SUPABASE_ANON_KEY is correct",
+            );
+          } else if (response.status === 404) {
+            console.error(
+              "[SiteSettingsContext] Site settings table not found or query failed",
+            );
+            console.error(
+              `[SiteSettingsContext] HTTP ${response.status}: ${errorDetails}`,
+            );
+            console.warn(
+              "[SiteSettingsContext] Database may not be properly initialized",
+            );
+          } else {
+            console.error(
+              `[SiteSettingsContext] HTTP error ${response.status}: ${errorDetails}`,
+            );
+          }
+
+          console.warn(
+            "[SiteSettingsContext] Falling back to default settings",
+          );
+          return;
         }
 
         const data = await response.json();
@@ -141,9 +310,34 @@ export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
 
           settingsCache = loadedSettings;
           setSettings(loadedSettings);
+          saveSettingsToStorage(loadedSettings);
+          console.log(
+            "[SiteSettingsContext] Settings loaded successfully from database and saved to localStorage",
+          );
+        } else {
+          console.warn(
+            "[SiteSettingsContext] No settings found in database - using defaults",
+          );
+          console.warn(
+            "[SiteSettingsContext] You may need to configure site settings in the admin panel",
+          );
         }
       } catch (err) {
-        console.error("[SiteSettingsContext] Error loading settings:", err);
+        if (err instanceof TypeError && err.message.includes("fetch")) {
+          console.error(
+            "[SiteSettingsContext] Network error - unable to connect to Supabase",
+          );
+          console.error(
+            "[SiteSettingsContext] Please verify VITE_SUPABASE_URL is correct:",
+            SUPABASE_URL,
+          );
+        } else {
+          console.error(
+            "[SiteSettingsContext] Unexpected error loading settings:",
+            err,
+          );
+        }
+        console.warn("[SiteSettingsContext] Falling back to default settings");
         // Keep defaults on error
       } finally {
         setIsLoading(false);

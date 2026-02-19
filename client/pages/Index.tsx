@@ -5,28 +5,30 @@ import ContactForm from "@site/components/home/ContactForm";
 import AboutSection from "@site/components/home/AboutSection";
 import PracticeAreasSection from "@site/components/home/PracticeAreasSection";
 import PracticeAreasGrid from "@site/components/home/PracticeAreasGrid";
-import AwardsSection from "@site/components/home/AwardsSection";
+import CtaSection from "@site/components/home/CtaSection";
 import TestimonialsSection from "@site/components/home/TestimonialsSection";
-import ProcessSection from "@site/components/home/ProcessSection";
-import GoogleReviewsSection from "@site/components/home/GoogleReviewsSection";
+import TeamSection from "@site/components/home/TeamSection";
 import FaqSection from "@site/components/home/FaqSection";
 import ContactUsSection from "@site/components/home/ContactUsSection";
 import { useHomeContent } from "@site/hooks/useHomeContent";
 import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
 
+
 export default function Index() {
-  const { content, isLoading } = useHomeContent();
+  const { content, seoMeta, isLoading } = useHomeContent();
   const { phoneDisplay, phoneLabel } = useGlobalPhone();
 
   // Use CMS content for hero and partner logos
   const heroContent = content.hero;
-  const partnerLogos = content.partnerLogos;
 
   return (
     <Layout>
       <Seo
-        title="Home"
-        description="Protecting your rights with integrity, experience, and relentless advocacy."
+        title={seoMeta.metaTitle || seoMeta.ogTitle || "Home"}
+        description={seoMeta.metaDescription || seoMeta.ogDescription || "Protecting your rights with integrity, experience, and relentless advocacy."}
+        canonical={seoMeta.canonicalUrl || undefined}
+        image={seoMeta.ogImage || undefined}
+        noindex={seoMeta.noindex}
       />
 
       {/* Hero and Contact Form Section */}
@@ -35,21 +37,37 @@ export default function Index() {
           {/* Left Side: Headline and Call Box */}
           <div className="lg:w-[65.667%]">
             <div className="mb-[30px] md:mb-[40px]">
-              <div className="relative">
-                <p className="font-playfair text-[clamp(2.5rem,7vw,68.8px)] font-light leading-[1.2] text-white text-left">
-                  <span className="text-law-accent">
-                    {heroContent.highlightedText}
-                  </span>
-                  <br />
-                  {heroContent.headline}
-                </p>
-              </div>
-              {/* H1 Title - All caps, positioned between headline and phone button */}
-              {heroContent.h1Title && (
-                <h1 className="font-outfit text-[18px] md:text-[20px] font-medium tracking-wider uppercase text-white mt-[20px] md:mt-[30px]">
-                  {heroContent.h1Title}
-                </h1>
-              )}
+              {/* H1 Title */}
+              <h1 className="font-outfit text-[18px] md:text-[20px] font-medium tracking-wider uppercase text-white">
+                {heroContent?.h1Title ||
+                  "Naperville's Trusted Criminal Defense & Real Estate Attorney"}
+              </h1>
+
+              {/* Tagline - Large decorative text */}
+              <p className="font-playfair text-[clamp(2.5rem,7vw,68.8px)] font-light leading-[1.2] text-white text-left mt-[20px] md:mt-[30px]">
+                {heroContent?.headline
+                  ?.split(heroContent.highlightedText || "")
+                  .map((part, idx, arr) =>
+                    idx === 0 ? (
+                      <span key={idx}>
+                        {part}
+                        {idx < arr.length - 1 && (
+                          <span className="text-law-accent">
+                            {heroContent.highlightedText}
+                          </span>
+                        )}
+                      </span>
+                    ) : (
+                      <span key={idx}>{part}</span>
+                    ),
+                  )}
+              </p>
+
+              {/* Subtext */}
+              <p className="font-outfit text-[20px] font-light leading-[30px] text-white/80 mt-[15px] md:mt-[20px]">
+                {heroContent?.subtext ||
+                  "We provide expert representation for Criminal Defense, DUI, Real Estate, and Business Law matters across DuPage, Kane, Kendall, Will, and Grundy Counties."}
+              </p>
             </div>
 
             {/* Call Box */}
@@ -65,10 +83,10 @@ export default function Index() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-black pb-[10px] font-normal group-hover:text-white transition-colors duration-300">
+                  <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-white pb-[10px] font-normal transition-colors duration-300">
                     {phoneLabel}
                   </h4>
-                  <p className="font-outfit text-[clamp(1.75rem,5vw,40px)] text-black leading-tight group-hover:text-white transition-colors duration-300">
+                  <p className="font-outfit text-[clamp(1.75rem,5vw,40px)] text-white leading-tight transition-colors duration-300">
                     {phoneDisplay}
                   </p>
                 </div>
@@ -83,51 +101,23 @@ export default function Index() {
         </div>
       </div>
 
-      {/* Partner Badges Section - Bottom of Hero */}
-      <div className="bg-law-dark py-[20px] md:py-[30px]">
-        <div className="max-w-[2560px] mx-auto w-[95%]">
-          <div className="bg-law-card border border-law-border py-[10px] px-0 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 md:gap-0">
-            {partnerLogos.map((logo, index) => (
-              <div
-                key={index}
-                className="px-[15px] md:px-[30px] flex items-center justify-center"
-              >
-                <div className="text-center">
-                  <img
-                    src={logo.src}
-                    alt={logo.alt}
-                    className="w-[120px] md:w-[190px] max-w-full inline-block"
-                    width={190}
-                    height={123}
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* About Us Section */}
       <AboutSection content={content.about} />
 
       {/* Practice Areas Section */}
-      <PracticeAreasSection />
+      <PracticeAreasSection content={content.practiceAreasIntro} />
 
       {/* Practice Areas Grid */}
       <PracticeAreasGrid areas={content.practiceAreas} />
 
-      {/* Awards & Membership Section */}
-      <AwardsSection content={content.awards} />
+      {/* CTA Section */}
+      <CtaSection content={content.cta} />
 
       {/* Testimonials Section */}
       <TestimonialsSection content={content.testimonials} />
 
-      {/* Process Section */}
-      <ProcessSection content={content.process} />
-
-      {/* Google Reviews Section */}
-      <GoogleReviewsSection content={content.googleReviews} />
+      {/* Meet Our Team Section */}
+      <TeamSection content={content.team} />
 
       {/* FAQ Section */}
       <FaqSection content={content.faq} />

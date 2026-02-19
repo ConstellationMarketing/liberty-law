@@ -1,66 +1,59 @@
-import { Link } from "react-router-dom";
-import type { PracticeAreaItem } from "@/lib/homePageTypes";
+import type { PracticeAreaItem } from "@site/lib/cms/homePageTypes";
+import {
+  Car,
+  Lock,
+  Scale,
+  CircleAlert,
+  Home,
+  Building,
+  FileX,
+  CreditCard,
+  Building2,
+  Briefcase,
+  type LucideIcon,
+} from "lucide-react";
+import PracticeAreaCard from "./PracticeAreaCard";
+
+const iconMap: Record<string, LucideIcon> = {
+  Car,
+  Lock,
+  Scale,
+  CircleAlert,
+  Home,
+  Building,
+  FileX,
+  CreditCard,
+  Building2,
+  Briefcase,
+};
 
 interface PracticeAreasGridProps {
   areas?: PracticeAreaItem[];
 }
 
-const defaultAreas: PracticeAreaItem[] = [
-  {
-    title: "Practice Area",
-    image: "/images/practice-areas/personal-injury.jpg",
-    link: "/practice-areas",
-  },
-  {
-    title: "Practice Area",
-    image: "/images/practice-areas/medical-malpractice.jpg",
-    link: "/practice-areas",
-  },
-  {
-    title: "Practice Area",
-    image: "/images/practice-areas/workers-compensation.jpg",
-    link: "/practice-areas",
-  },
-  {
-    title: "Practice Area",
-    image: "/images/practice-areas/wrongful-death.jpg",
-    link: "/practice-areas",
-  },
-];
-
 export default function PracticeAreasGrid({ areas }: PracticeAreasGridProps) {
-  const practiceAreas = areas || defaultAreas;
+  const practiceAreas = areas || [];
 
   return (
     <div className="bg-white">
-      {" "}
-      {/* Removed py-[40px] */}
       <div className="w-full">
-        {" "}
-        {/* Removed max-w-[2560px], mx-auto, w-[90%] */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-0">
           {practiceAreas.map((area, index) => (
-            <Link
+            <PracticeAreaCard
               key={index}
-              to={area.link}
-              className="relative min-h-[400px] lg:min-h-[500px] overflow-hidden group"
-              style={{
-                backgroundImage: `url(${area.image})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            >
-              {/* Dark Overlay with Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/70 transition-all duration-500 group-hover:from-law-accent-dark/60 group-hover:via-law-accent-dark/70 group-hover:to-law-dark/90"></div>
-
-              {/* Content */}
-              <div className="relative h-full flex items-end p-4">
-                <h3 className="font-outfit text-[36px] leading-tight text-white font-normal transition-all duration-300 group-hover:text-law-accent">
-                  {area.title}
-                </h3>
-              </div>
-            </Link>
+              area={area}
+              Icon={iconMap[area.icon]}
+            />
           ))}
+
+          {/* Branding filler for remaining grid space */}
+          <div className="relative min-h-[400px] lg:min-h-[480px] sm:col-span-2 lg:col-span-2 bg-law-dark flex items-center justify-center overflow-hidden">
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2Fa1ea6dfbbf1843f0a81b4a7860758155?format=webp&width=800"
+              alt="Liberty Law"
+              className="w-[70%] max-w-[500px] opacity-20 object-contain"
+            />
+          </div>
         </div>
       </div>
     </div>

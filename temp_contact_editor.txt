@@ -1,0 +1,375 @@
+function ContactPageEditor({
+  content,
+  onChange,
+}: {
+  content: ContactPageContent;
+  onChange: (c: ContactPageContent) => void;
+}) {
+  const update = <K extends keyof ContactPageContent>(
+    key: K,
+    value: ContactPageContent[K],
+  ) => {
+    onChange({ ...content, [key]: value });
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Hero Section */}
+      <Section title="Hero Section">
+        <div className="grid gap-4">
+          <div>
+            <Label>Section Label</Label>
+            <Input
+              value={content.hero.sectionLabel}
+              onChange={(e) =>
+                update("hero", { ...content.hero, sectionLabel: e.target.value })
+              }
+              placeholder="– Contact"
+            />
+          </div>
+          <div>
+            <Label>Tagline</Label>
+            <Input
+              value={content.hero.tagline}
+              onChange={(e) =>
+                update("hero", { ...content.hero, tagline: e.target.value })
+              }
+              placeholder="Get in Touch"
+            />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Textarea
+              value={content.hero.description}
+              onChange={(e) =>
+                update("hero", { ...content.hero, description: e.target.value })
+              }
+              rows={2}
+            />
+          </div>
+        </div>
+      </Section>
+
+      {/* Contact Methods */}
+      <Section title="Contact Methods" defaultOpen={false}>
+        <ArrayEditor
+          items={content.contactMethods.methods}
+          onChange={(items) => update("contactMethods", { methods: items })}
+          itemLabel="Contact Method"
+          newItem={() => ({ icon: "Phone", title: "", detail: "", subDetail: "" })}
+          renderItem={(item, _, updateItem) => (
+            <div className="grid gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label>Icon (Lucide name)</Label>
+                  <Input
+                    value={item.icon}
+                    onChange={(e) => updateItem({ ...item, icon: e.target.value })}
+                    placeholder="Phone, Mail, MapPin..."
+                  />
+                </div>
+                <div>
+                  <Label>Title</Label>
+                  <Input
+                    value={item.title}
+                    onChange={(e) => updateItem({ ...item, title: e.target.value })}
+                    placeholder="Call Us"
+                  />
+                </div>
+              </div>
+              <div>
+                <Label>Detail (main info)</Label>
+                <Input
+                  value={item.detail}
+                  onChange={(e) => updateItem({ ...item, detail: e.target.value })}
+                  placeholder="630-449-4800 or 1700 Park St..."
+                />
+              </div>
+              <div>
+                <Label>Sub Detail (additional info)</Label>
+                <Input
+                  value={item.subDetail}
+                  onChange={(e) => updateItem({ ...item, subDetail: e.target.value })}
+                  placeholder="Available 24/7"
+                />
+              </div>
+            </div>
+          )}
+        />
+      </Section>
+
+      {/* Contact Form Section */}
+      <Section title="Contact Form" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div>
+            <Label>Heading</Label>
+            <Input
+              value={content.form.heading}
+              onChange={(e) =>
+                update("form", { ...content.form, heading: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Subtext</Label>
+            <Input
+              value={content.form.subtext}
+              onChange={(e) =>
+                update("form", { ...content.form, subtext: e.target.value })
+              }
+            />
+          </div>
+        </div>
+      </Section>
+
+      {/* Office Hours */}
+      <Section title="Office Hours" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div>
+            <Label>Heading</Label>
+            <Input
+              value={content.officeHours.heading}
+              onChange={(e) =>
+                update("officeHours", { ...content.officeHours, heading: e.target.value })
+              }
+            />
+          </div>
+          <div className="mt-4">
+            <Label className="text-base font-semibold">Hours Items</Label>
+            <ArrayEditor
+              items={content.officeHours.items}
+              onChange={(items) => update("officeHours", { ...content.officeHours, items })}
+              itemLabel="Hours Entry"
+              newItem={() => ({ day: "", hours: "" })}
+              renderItem={(item, _, updateItem) => (
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label>Day</Label>
+                    <Input
+                      value={item.day}
+                      onChange={(e) => updateItem({ ...item, day: e.target.value })}
+                      placeholder="Monday - Friday"
+                    />
+                  </div>
+                  <div>
+                    <Label>Hours</Label>
+                    <Input
+                      value={item.hours}
+                      onChange={(e) => updateItem({ ...item, hours: e.target.value })}
+                      placeholder="9:00 AM - 5:00 PM"
+                    />
+                  </div>
+                </div>
+              )}
+            />
+          </div>
+          <div>
+            <Label>Note</Label>
+            <Input
+              value={content.officeHours.note}
+              onChange={(e) =>
+                update("officeHours", { ...content.officeHours, note: e.target.value })
+              }
+              placeholder="24/7 Emergency Hotline Available"
+            />
+          </div>
+        </div>
+      </Section>
+
+      {/* Process Section */}
+      <Section title="What to Expect / Process" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div>
+            <Label>Section Label</Label>
+            <Input
+              value={content.process.sectionLabel}
+              onChange={(e) =>
+                update("process", { ...content.process, sectionLabel: e.target.value })
+              }
+              placeholder="– The Process"
+            />
+          </div>
+          <div>
+            <Label>Heading</Label>
+            <Input
+              value={content.process.heading}
+              onChange={(e) =>
+                update("process", { ...content.process, heading: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Subtitle</Label>
+            <Input
+              value={content.process.subtitle}
+              onChange={(e) =>
+                update("process", { ...content.process, subtitle: e.target.value })
+              }
+            />
+          </div>
+          <div className="mt-4">
+            <Label className="text-base font-semibold">Process Steps</Label>
+            <ArrayEditor
+              items={content.process.steps}
+              onChange={(items) => update("process", { ...content.process, steps: items })}
+              itemLabel="Step"
+              newItem={() => ({ number: "", title: "", description: "" })}
+              renderItem={(item, _, updateItem) => (
+                <div className="grid gap-3">
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <Label>Number</Label>
+                      <Input
+                        value={item.number}
+                        onChange={(e) => updateItem({ ...item, number: e.target.value })}
+                        placeholder="1"
+                      />
+                    </div>
+                    <div className="col-span-2">
+                      <Label>Title</Label>
+                      <Input
+                        value={item.title}
+                        onChange={(e) => updateItem({ ...item, title: e.target.value })}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <Label>Description</Label>
+                    <Textarea
+                      value={item.description}
+                      onChange={(e) => updateItem({ ...item, description: e.target.value })}
+                      rows={2}
+                    />
+                  </div>
+                </div>
+              )}
+            />
+          </div>
+        </div>
+      </Section>
+
+      {/* Visit Office Section */}
+      <Section title="Visit Our Office / Map" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div>
+            <Label>Heading</Label>
+            <Input
+              value={content.visitOffice.heading}
+              onChange={(e) =>
+                update("visitOffice", { ...content.visitOffice, heading: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Subtext</Label>
+            <Input
+              value={content.visitOffice.subtext}
+              onChange={(e) =>
+                update("visitOffice", { ...content.visitOffice, subtext: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Google Maps Embed URL</Label>
+            <Input
+              value={content.visitOffice.mapEmbedUrl}
+              onChange={(e) =>
+                update("visitOffice", { ...content.visitOffice, mapEmbedUrl: e.target.value })
+              }
+              placeholder="https://www.google.com/maps/embed?pb=..."
+            />
+          </div>
+        </div>
+      </Section>
+
+      {/* CTA Section */}
+      <Section title="Call-to-Action" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div>
+            <Label>Heading</Label>
+            <Input
+              value={content.cta.heading}
+              onChange={(e) =>
+                update("cta", { ...content.cta, heading: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Textarea
+              value={content.cta.description}
+              onChange={(e) =>
+                update("cta", { ...content.cta, description: e.target.value })
+              }
+              rows={2}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Primary Button Label</Label>
+              <Input
+                value={content.cta.primaryButton.label}
+                onChange={(e) =>
+                  update("cta", {
+                    ...content.cta,
+                    primaryButton: { ...content.cta.primaryButton, label: e.target.value },
+                  })
+                }
+              />
+            </div>
+            <div>
+              <Label>Primary Button Phone</Label>
+              <Input
+                value={content.cta.primaryButton.phone}
+                onChange={(e) =>
+                  update("cta", {
+                    ...content.cta,
+                    primaryButton: { ...content.cta.primaryButton, phone: e.target.value },
+                  })
+                }
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <Label>Secondary Button Label</Label>
+              <Input
+                value={content.cta.secondaryButton.label}
+                onChange={(e) =>
+                  update("cta", {
+                    ...content.cta,
+                    secondaryButton: { ...content.cta.secondaryButton, label: e.target.value },
+                  })
+                }
+              />
+            </div>
+            <div>
+              <Label>Secondary Button Sublabel</Label>
+              <Input
+                value={content.cta.secondaryButton.sublabel}
+                onChange={(e) =>
+                  update("cta", {
+                    ...content.cta,
+                    secondaryButton: { ...content.cta.secondaryButton, sublabel: e.target.value },
+                  })
+                }
+              />
+            </div>
+            <div>
+              <Label>Secondary Button Link</Label>
+              <Input
+                value={content.cta.secondaryButton.link}
+                onChange={(e) =>
+                  update("cta", {
+                    ...content.cta,
+                    secondaryButton: { ...content.cta.secondaryButton, link: e.target.value },
+                  })
+                }
+              />
+            </div>
+          </div>
+        </div>
+      </Section>
+    </div>
+  );
+}
