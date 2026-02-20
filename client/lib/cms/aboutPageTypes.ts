@@ -135,7 +135,7 @@ export const defaultAboutContent: AboutPageContent = {
         title: "Founder & Managing Attorney",
         bio: 'David earned his Juris Doctor from the Chicago-Kent College of Law in 2014, where he was inducted into the Bar and Gavel Society for his outstanding service to the legal community. Before founding Liberty Law, P.C., he served as a Prosecutor for the City of Joliet. This experience gave him invaluable insight into how the "other side" operates—knowledge he now uses to build aggressive and effective defense strategies for his clients. David started his legal career as a legal intern for the Homicide Task Force of the Cook County Public Defender\'s Office, where he worked on some of the most serious cases in the state.',
         image:
-          "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f?format=webp&width=800&height=1200",
+          "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601116584-05cw5m-assets-2f50bd0f2438824f8ea1271cf7dd2c508e-2f6158905777fa45c48b2b782b558c080f",
         specialties: [
           "Criminal Defense",
           "DUI Defense",

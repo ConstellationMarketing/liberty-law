@@ -1,4 +1,5 @@
 import { LucideIcon } from "lucide-react";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
@@ -50,9 +51,10 @@ export default function PracticeAreaCard({
           <h3 className="font-playfair text-[28px] md:text-[32px] leading-tight text-white pb-[15px] transition-all duration-300 group-hover:text-law-accent">
             {title}
           </h3>
-          <p className="font-outfit text-[20px] leading-[30px] text-white/90 mb-[15px]">
-            {description}
-          </p>
+          <SafeHtml
+            html={description}
+            className="font-outfit text-[20px] leading-[30px] text-white/90 mb-[15px]"
+          />
 
           {/* Learn More Link */}
           <div className="flex items-center gap-2 text-law-accent group-hover:text-white transition-colors duration-300">

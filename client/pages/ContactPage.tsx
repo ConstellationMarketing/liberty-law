@@ -1,4 +1,5 @@
 import Seo from "@site/components/Seo";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
 import Layout from "@site/components/layout/Layout";
 import ContactForm from "@site/components/home/ContactForm";
 import CallBox from "@site/components/shared/CallBox";
@@ -70,9 +71,10 @@ export default function ContactPage() {
                 }}
               />
             </p>
-            <p className="font-outfit text-[20px] leading-[30px] text-white/90">
-              {content.hero.description}
-            </p>
+            <SafeHtml
+              html={content.hero.description}
+              className="font-outfit text-[20px] leading-[30px] text-white/90"
+            />
           </div>
         </div>
       </div>
@@ -123,9 +125,10 @@ export default function ContactPage() {
                   {content.form.heading}
                 </h2>
                 {content.form.subtext && (
-                  <p className="font-outfit text-[20px] leading-[30px] text-white/80">
-                    {content.form.subtext}
-                  </p>
+                  <SafeHtml
+                    html={content.form.subtext}
+                    className="font-outfit text-[20px] leading-[30px] text-white/80"
+                  />
                 )}
               </div>
               <ContactForm />
@@ -222,9 +225,10 @@ export default function ContactPage() {
                 <h3 className="font-playfair text-[22px] md:text-[26px] leading-tight text-black pb-[12px]">
                   {item.title}
                 </h3>
-                <p className="font-outfit text-[20px] leading-[30px] text-black/80">
-                  {item.description}
-                </p>
+                <SafeHtml
+                  html={item.description}
+                  className="font-outfit text-[20px] leading-[30px] text-black/80"
+                />
               </div>
             ))}
           </div>
@@ -239,9 +243,10 @@ export default function ContactPage() {
               {content.visitOffice.heading}
             </h2>
             {content.visitOffice.subtext && (
-              <p className="font-outfit text-[20px] leading-[30px] text-white/80">
-                {content.visitOffice.subtext}
-              </p>
+              <SafeHtml
+                html={content.visitOffice.subtext}
+                className="font-outfit text-[20px] leading-[30px] text-white/80"
+              />
             )}
           </div>
 

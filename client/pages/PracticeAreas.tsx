@@ -1,4 +1,5 @@
 import Seo from "@site/components/Seo";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
 import Layout from "@site/components/layout/Layout";
 import PracticeAreaCard from "@site/components/practice/PracticeAreaCard";
 import CallBox from "@site/components/shared/CallBox";
@@ -86,9 +87,10 @@ export default function PracticeAreas() {
                   }}
                 />
               </p>
-              <p className="font-outfit text-[20px] leading-[30px] text-white/90">
-                {content.hero.description}
-              </p>
+              <SafeHtml
+                html={content.hero.description}
+                className="font-outfit text-[20px] leading-[30px] text-white/90"
+              />
             </div>
 
             {/* Right Side - CallBox */}
@@ -110,9 +112,10 @@ export default function PracticeAreas() {
             <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-black">
               {content.grid.heading}
             </h2>
-            <p className="font-outfit text-[20px] leading-[30px] text-black/80 mt-[15px] max-w-[800px] mx-auto">
-              {content.grid.description}
-            </p>
+            <SafeHtml
+              html={content.grid.description}
+              className="font-outfit text-[20px] leading-[30px] text-black/80 mt-[15px] max-w-[800px] mx-auto"
+            />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -133,9 +136,10 @@ export default function PracticeAreas() {
             <h2 className="font-playfair text-[36px] md:text-[48px] lg:text-[60px] leading-tight text-white pb-[15px]">
               {content.cta.heading}
             </h2>
-            <p className="font-outfit text-[20px] leading-[30px] text-white/80">
-              {content.cta.description}
-            </p>
+            <SafeHtml
+              html={content.cta.description}
+              className="font-outfit text-[20px] leading-[30px] text-white/80"
+            />
           </div>
 
           <div className="flex flex-col md:flex-row gap-6 md:gap-8 justify-center items-center md:items-start">

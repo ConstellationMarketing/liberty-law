@@ -148,7 +148,7 @@ export const defaultHomeContent: HomePageContent = {
       description:
         "Schedule a consultation if you have been charged with Driving Under the Influence. We will review your case, discuss potential defenses, and explain the next steps for your court, legal, and driver's license status.",
       icon: "Car",
-      image: "/images/practice-areas/personal-injury.jpg",
+      image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601057393-khhynw-personal-injury.jpg",
       link: "/practice-areas",
     },
     {
@@ -157,7 +157,7 @@ export const defaultHomeContent: HomePageContent = {
         "For serious criminal charges including drug offenses, battery, or theft. We provide a confidential review of your charges to build an aggressive defense strategy to protect your rights and freedom.",
       icon: "Lock",
       image:
-        "https://images.pexels.com/photos/5668484/pexels-photo-5668484.jpeg",
+        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601053163-z7au68-pexels-photo-5668484.jpeg",
       link: "/practice-areas",
     },
     {
@@ -166,7 +166,7 @@ export const defaultHomeContent: HomePageContent = {
         "Legal assistance for misdemeanor charges. We help you understand the potential consequences and work toward the best possible resolution for your case.",
       icon: "Scale",
       image:
-        "https://images.pexels.com/photos/7714896/pexels-photo-7714896.jpeg",
+        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601055107-cej9xh-pexels-photo-7714896.jpeg",
       link: "/practice-areas",
     },
     {
@@ -175,7 +175,7 @@ export const defaultHomeContent: HomePageContent = {
         "Defense for speeding tickets, driving while suspended/revoked, and other moving violations. We aim to protect your driving record and minimize fines or insurance impacts.",
       icon: "CircleAlert",
       image:
-        "https://images.pexels.com/photos/7715101/pexels-photo-7715101.jpeg",
+        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601058148-5pgrb6-pexels-photo-7715101.jpeg",
       link: "/practice-areas",
     },
     {
@@ -183,7 +183,7 @@ export const defaultHomeContent: HomePageContent = {
       description:
         "Legal representation for home buyers. We review contracts, handle title work, and guide you through the closing process to ensure a smooth purchase.",
       icon: "Home",
-      image: "/images/practice-areas/premises-liability.jpg",
+      image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601058873-l63tmn-premises-liability.jpg",
       link: "/practice-areas",
     },
     {
@@ -191,7 +191,7 @@ export const defaultHomeContent: HomePageContent = {
       description:
         "Legal representation for home sellers. We assist with contract negotiation, title clearance, and closing documents to protect your interests during the sale.",
       icon: "Building",
-      image: "/images/practice-areas/product-liability.jpg",
+      image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601059377-rskt2i-product-liability.jpg",
       link: "/practice-areas",
     },
     {
@@ -199,7 +199,7 @@ export const defaultHomeContent: HomePageContent = {
       description:
         "Discuss your eligibility to have past criminal records expunged or sealed. We help remove barriers to employment and housing by clearing your record.",
       icon: "FileX",
-      image: "/images/practice-areas/civil-litigation.jpg",
+      image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601059880-kow9l3-civil-litigation.jpg",
       link: "/practice-areas",
     },
     {
@@ -207,7 +207,7 @@ export const defaultHomeContent: HomePageContent = {
       description:
         "Assistance with formal and informal hearings to reinstate your driver's license after a revocation or suspension.",
       icon: "CreditCard",
-      image: "/images/practice-areas/insurance-claims.jpg",
+      image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601060221-ci16fq-insurance-claims.jpg",
       link: "/practice-areas",
     },
     {
@@ -215,7 +215,7 @@ export const defaultHomeContent: HomePageContent = {
       description:
         "Representation for landlords and tenants in residential and commercial lease disputes. We handle eviction proceedings, lease violations, security deposit issues, and other property management legal matters to ensure your rights are protected under Illinois law.",
       icon: "Building2",
-      image: "/images/practice-areas/class-action.jpg",
+      image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601060610-x1yxu7-class-action.jpg",
       link: "/practice-areas",
     },
     {
@@ -223,7 +223,7 @@ export const defaultHomeContent: HomePageContent = {
       description:
         "General legal counsel for small business formation, contract disputes, or other civil legal matters.",
       icon: "Briefcase",
-      image: "/images/practice-areas/employment-law.jpg",
+      image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601060992-6fablo-employment-law.jpg",
       link: "/practice-areas",
     },
   ],
@@ -235,22 +235,22 @@ export const defaultHomeContent: HomePageContent = {
   testimonials: {
     sectionLabel: "– Testimonials",
     heading: "Inspiring client success stories that drive change.",
-    backgroundImage: "/images/backgrounds/testimonials-bg.jpg",
+    backgroundImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052715-pve0xy-testimonials-bg.jpg",
     items: [
       {
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
         author: "Sharon",
-        ratingImage: "/images/logos/rating-stars.png",
+        ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052367-tr8ks9-rating-stars.png",
       },
       {
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
         author: "Sharon",
-        ratingImage: "/images/logos/rating-stars.png",
+        ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052367-tr8ks9-rating-stars.png",
       },
       {
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
         author: "Sharon",
-        ratingImage: "/images/logos/rating-stars.png",
+        ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052367-tr8ks9-rating-stars.png",
       },
     ],
   },
@@ -265,7 +265,7 @@ export const defaultHomeContent: HomePageContent = {
         title: "Founder & Managing Attorney",
         bio: 'David earned his Juris Doctor from the Chicago-Kent College of Law in 2014, where he was inducted into the Bar and Gavel Society for his outstanding service to the legal community. Before founding Liberty Law, P.C., he served as a Prosecutor for the City of Joliet. This experience gave him invaluable insight into how the "other side" operates—knowledge he now uses to build aggressive and effective defense strategies for his clients. David started his legal career as a legal intern for the Homicide Task Force of the Cook County Public Defender\'s Office, where he worked on some of the most serious cases in the state.',
         image:
-          "https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2F6158905777fa45c48b2b782b558c080f",
+          "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601116584-05cw5m-assets-2f50bd0f2438824f8ea1271cf7dd2c508e-2f6158905777fa45c48b2b782b558c080f",
         imageAlt: "David Liberty, Founder & Managing Attorney",
       },
     ],
@@ -274,7 +274,7 @@ export const defaultHomeContent: HomePageContent = {
     heading: "Frequently Asked Questions",
     description:
       "Aenean porta erat id urna porttitor scelerisque. Aliquam vitae auctor nunc.",
-    videoThumbnail: "/images/backgrounds/faq-bg.jpg",
+    videoThumbnail: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601051516-vu938q-faq-bg.jpg",
     videoUrl:
       "https://www.youtube.com/embed/FkQuawiGWUw?autoplay=1&feature=oembed",
     items: [

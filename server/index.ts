@@ -9,6 +9,7 @@ import { handleHealthCheck } from "./routes/health-check";
 import { handleSeedAbout } from "./routes/seed-about";
 import { handleSeedContact } from "./routes/seed-contact";
 import { handleSeedPracticeAreas } from "./routes/seed-practice-areas";
+import { handleMigrateMedia } from "./routes/migrate-media";
 
 export function createServer() {
   const app = express();
@@ -36,6 +37,7 @@ export function createServer() {
   app.post("/api/seed-about", handleSeedAbout);
   app.post("/api/seed-contact", handleSeedContact);
   app.post("/api/seed-practice-areas", handleSeedPracticeAreas);
+  app.post("/api/migrate-media", handleMigrateMedia);
 
   return app;
 }

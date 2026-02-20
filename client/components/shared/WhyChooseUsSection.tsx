@@ -1,3 +1,5 @@
+import { SafeHtml } from "@site/components/ui/SafeHtml";
+
 interface WhyChooseUsItem {
   number: string;
   title: string;
@@ -52,9 +54,10 @@ export default function WhyChooseUsSection({
                 {content.subtitle}
               </p>
             )}
-            <p className={`font-outfit text-[20px] leading-[30px] ${textColorSecondary} mb-[30px]`}>
-              {content.description}
-            </p>
+            <SafeHtml
+              html={content.description}
+              className={`font-outfit text-[20px] leading-[30px] ${textColorSecondary} mb-[30px]`}
+            />
             {/* Attorney image */}
             <div className="hidden lg:block">
               <img
@@ -75,9 +78,10 @@ export default function WhyChooseUsSection({
                     <h3 className={`font-outfit text-[22px] md:text-[28px] leading-tight md:leading-[28px] ${textColor} pb-[10px]`}>
                       {feature.number}. {feature.title}
                     </h3>
-                    <p className={`font-outfit text-[20px] leading-[30px] ${textColorSecondary}`}>
-                      {feature.description}
-                    </p>
+                    <SafeHtml
+                      html={feature.description}
+                      className={`font-outfit text-[20px] leading-[30px] ${textColorSecondary}`}
+                    />
                   </div>
                   {index < content.items.length - 1 && (
                     <div className={`h-[1px] ${borderColor}`}></div>

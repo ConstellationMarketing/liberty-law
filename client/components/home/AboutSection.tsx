@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
 import { Link } from "react-router-dom";
 import type { AboutContent } from "@site/lib/cms/homePageTypes";
 
@@ -42,9 +43,10 @@ export default function AboutSection({ content }: AboutSectionProps) {
               <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark pb-[10px]">
                 {data.heading}
               </h2>
-              <p className="font-outfit text-[20px] leading-[30px] text-black">
-                {data.description}
-              </p>
+              <SafeHtml
+                html={data.description}
+                className="font-outfit text-[20px] leading-[30px] text-black"
+              />
             </div>
 
             {/* Contact Us CTA */}

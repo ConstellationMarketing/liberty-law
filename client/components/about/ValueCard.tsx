@@ -1,4 +1,5 @@
 import { LucideIcon } from "lucide-react";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
 
 interface ValueCardProps {
   icon: LucideIcon;
@@ -29,9 +30,10 @@ export default function ValueCard({
           <h3 className="font-playfair text-[24px] md:text-[32px] leading-tight text-white pb-[10px] md:pb-[15px]">
             {title}
           </h3>
-          <p className="font-outfit text-[20px] leading-[30px] text-white/80">
-            {description}
-          </p>
+          <SafeHtml
+            html={description}
+            className="font-outfit text-[20px] leading-[30px] text-white/80"
+          />
         </div>
       </div>
     </div>

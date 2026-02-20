@@ -9,22 +9,22 @@ interface TestimonialsSectionProps {
 const defaultContent: TestimonialsContent = {
   sectionLabel: "– Testimonials",
   heading: "Inspiring client success stories that drive change.",
-  backgroundImage: "/images/backgrounds/testimonials-bg.jpg",
+  backgroundImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052715-pve0xy-testimonials-bg.jpg",
   items: [
     {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Sharon",
-      ratingImage: "/images/logos/rating-stars.png",
+      ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052367-tr8ks9-rating-stars.png",
     },
     {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Sharon",
-      ratingImage: "/images/logos/rating-stars.png",
+      ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052367-tr8ks9-rating-stars.png",
     },
     {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Sharon",
-      ratingImage: "/images/logos/rating-stars.png",
+      ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052367-tr8ks9-rating-stars.png",
     },
   ],
 };

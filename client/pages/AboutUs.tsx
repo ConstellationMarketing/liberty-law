@@ -1,4 +1,5 @@
 import Seo from "@site/components/Seo";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
 import Layout from "@site/components/layout/Layout";
 import CallBox from "@site/components/shared/CallBox";
 import WhyChooseUsSection from "@site/components/shared/WhyChooseUsSection";
@@ -73,9 +74,10 @@ export default function AboutUs() {
                   }}
                 />
               </p>
-              <p className="font-outfit text-[20px] leading-[30px] text-white/90">
-                {content.hero.description}
-              </p>
+              <SafeHtml
+                html={content.hero.description}
+                className="font-outfit text-[20px] leading-[30px] text-white/90"
+              />
             </div>
 
             {/* Right Side - CallBox */}
@@ -144,9 +146,10 @@ export default function AboutUs() {
               <h2 className="font-playfair text-[32px] md:text-[40px] leading-tight text-law-accent pb-[15px] md:pb-[20px]">
                 {content.missionVision.mission.heading}
               </h2>
-              <p className="font-outfit text-[20px] leading-[30px] text-white">
-                {content.missionVision.mission.text}
-              </p>
+              <SafeHtml
+                html={content.missionVision.mission.text}
+                className="font-outfit text-[20px] leading-[30px] text-white"
+              />
             </div>
 
             {/* Vision */}
@@ -154,9 +157,10 @@ export default function AboutUs() {
               <h2 className="font-playfair text-[32px] md:text-[40px] leading-tight text-law-accent pb-[15px] md:pb-[20px]">
                 {content.missionVision.vision.heading}
               </h2>
-              <p className="font-outfit text-[20px] leading-[30px] text-white">
-                {content.missionVision.vision.text}
-              </p>
+              <SafeHtml
+                html={content.missionVision.vision.text}
+                className="font-outfit text-[20px] leading-[30px] text-white"
+              />
             </div>
           </div>
         </div>
@@ -230,9 +234,10 @@ export default function AboutUs() {
             <h2 className="font-playfair text-[36px] md:text-[48px] lg:text-[60px] leading-tight text-white pb-[15px]">
               {content.cta.heading}
             </h2>
-            <p className="font-outfit text-[20px] leading-[30px] text-white/80">
-              {content.cta.description}
-            </p>
+            <SafeHtml
+              html={content.cta.description}
+              className="font-outfit text-[20px] leading-[30px] text-white/80"
+            />
           </div>
 
           <div className="flex flex-col md:flex-row gap-6 md:gap-8 justify-center items-center md:items-start">

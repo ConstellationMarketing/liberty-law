@@ -1,3 +1,5 @@
+import { SafeHtml } from "@site/components/ui/SafeHtml";
+
 interface TeamMemberCardProps {
   name: string;
   title: string;
@@ -34,9 +36,10 @@ export default function TeamMemberCard({
         <p className="font-outfit text-[20px] text-law-accent pb-[10px]">
           {title}
         </p>
-        <p className="font-outfit text-[20px] leading-[30px] text-white/80">
-          {bio}
-        </p>
+        <SafeHtml
+          html={bio}
+          className="font-outfit text-[20px] leading-[30px] text-white/80"
+        />
 
         {specialties && specialties.length > 0 && (
           <div className="mt-[15px] flex flex-wrap gap-2">

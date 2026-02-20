@@ -10,7 +10,7 @@ const defaultContent: FaqContent = {
   heading: "Frequently Asked Questions",
   description:
     "Aenean porta erat id urna porttitor scelerisque. Aliquam vitae auctor nunc.",
-  videoThumbnail: "/images/backgrounds/faq-bg.jpg",
+  videoThumbnail: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601051516-vu938q-faq-bg.jpg",
   videoUrl:
     "https://www.youtube.com/embed/FkQuawiGWUw?autoplay=1&feature=oembed",
   items: [

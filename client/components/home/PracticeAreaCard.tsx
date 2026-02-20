@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
 import type { PracticeAreaItem } from "@site/lib/cms/homePageTypes";
 import type { LucideIcon } from "lucide-react";
 
@@ -40,9 +41,10 @@ export default function PracticeAreaCard({ area, Icon }: PracticeAreaCardProps) 
 
         {/* Description */}
         {area.description && (
-          <p className="font-outfit text-[20px] leading-[30px] text-white/75">
-            {area.description}
-          </p>
+          <SafeHtml
+            html={area.description}
+            className="font-outfit text-[20px] leading-[30px] text-white/75"
+          />
         )}
       </div>
     </Link>
