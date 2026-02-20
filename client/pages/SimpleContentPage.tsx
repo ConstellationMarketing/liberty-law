@@ -1,5 +1,5 @@
 import Layout from "@site/components/layout/Layout";
-import { Seo } from "@site/components/Seo";
+import Seo from "@site/components/Seo";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import type { SimplePageContent } from "@site/lib/cms/simplePageTypes";
 
