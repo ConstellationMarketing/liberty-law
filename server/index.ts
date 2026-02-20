@@ -6,6 +6,9 @@ import { handleSeedHomepage } from "./routes/seed-homepage";
 import { handleRestoreHomepage } from "./routes/restore-homepage";
 import { handleSyncHomepage } from "./routes/sync-homepage";
 import { handleHealthCheck } from "./routes/health-check";
+import { handleSeedAbout } from "./routes/seed-about";
+import { handleSeedContact } from "./routes/seed-contact";
+import { handleSeedPracticeAreas } from "./routes/seed-practice-areas";
 
 export function createServer() {
   const app = express();
@@ -30,6 +33,9 @@ export function createServer() {
   app.post("/api/seed-homepage", handleSeedHomepage);
   app.post("/api/restore-homepage", handleRestoreHomepage);
   app.post("/api/sync-homepage", handleSyncHomepage);
+  app.post("/api/seed-about", handleSeedAbout);
+  app.post("/api/seed-contact", handleSeedContact);
+  app.post("/api/seed-practice-areas", handleSeedPracticeAreas);
 
   return app;
 }
