@@ -193,41 +193,48 @@ const hasValidEnvironment = validateEnvironment();
 
 // Global cache
 let settingsCache: SiteSettings | null = null;
+type SettingsListener = () => void;
+const settingsListeners = new Set<SettingsListener>();
+
+// Called by window event when admin saves (clears all caches and triggers re-fetch)
+function invalidateFrontendCache() {
+  settingsCache = null;
+  try { localStorage.removeItem(SETTINGS_STORAGE_KEY); } catch (_) {}
+  settingsListeners.forEach((fn) => fn());
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("site-settings-invalidated", invalidateFrontendCache);
+}
 
 interface SiteSettingsProviderProps {
   children: ReactNode;
 }
 
 export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
-  // Try to load from localStorage first, then in-memory cache, then defaults
-  const cachedSettings = loadSettingsFromStorage();
-  const [settings, setSettings] = useState<SiteSettings>(
-    cachedSettings || settingsCache || DEFAULT_SETTINGS,
-  );
-  const [isLoading, setIsLoading] = useState(!cachedSettings && !settingsCache);
+  const initial = loadSettingsFromStorage() || settingsCache || DEFAULT_SETTINGS;
+  const [settings, setSettings] = useState<SiteSettings>(initial);
+  const [isLoading, setIsLoading] = useState(initial === DEFAULT_SETTINGS);
 
   useEffect(() => {
-    // If we have either localStorage cache or in-memory cache, use it and skip fetch
-    if (cachedSettings || settingsCache) {
-      if (settingsCache && !cachedSettings) {
-        // We have in-memory cache but not localStorage - save to localStorage
-        saveSettingsToStorage(settingsCache);
-      }
-      setSettings(cachedSettings || settingsCache!);
-      setIsLoading(false);
-      return;
-    }
+    let isMounted = true;
 
     async function fetchSettings() {
-      // Skip fetch if environment is invalid
-      if (!hasValidEnvironment) {
-        console.warn(
-          "[SiteSettingsContext] Skipping settings fetch due to invalid environment configuration",
-        );
-        setIsLoading(false);
+      // Use in-memory cache if available (and localStorage already populated on init)
+      if (settingsCache) {
+        if (isMounted) {
+          setSettings(settingsCache);
+          setIsLoading(false);
+        }
         return;
       }
 
+      if (!hasValidEnvironment) {
+        if (isMounted) setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
       try {
         const response = await fetch(
           `${SUPABASE_URL}/rest/v1/site_settings_public?settings_key=eq.global&select=*`,
@@ -240,39 +247,7 @@ export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
         );
 
         if (!response.ok) {
-          const errorDetails = await response
-            .text()
-            .catch(() => "Unable to read error details");
-
-          if (response.status === 401 || response.status === 403) {
-            console.error(
-              "[SiteSettingsContext] Authentication failed - invalid or expired credentials",
-            );
-            console.error(
-              `[SiteSettingsContext] HTTP ${response.status}: ${errorDetails}`,
-            );
-            console.warn(
-              "[SiteSettingsContext] Please verify your VITE_SUPABASE_ANON_KEY is correct",
-            );
-          } else if (response.status === 404) {
-            console.error(
-              "[SiteSettingsContext] Site settings table not found or query failed",
-            );
-            console.error(
-              `[SiteSettingsContext] HTTP ${response.status}: ${errorDetails}`,
-            );
-            console.warn(
-              "[SiteSettingsContext] Database may not be properly initialized",
-            );
-          } else {
-            console.error(
-              `[SiteSettingsContext] HTTP error ${response.status}: ${errorDetails}`,
-            );
-          }
-
-          console.warn(
-            "[SiteSettingsContext] Falling back to default settings",
-          );
+          console.error(`[SiteSettingsContext] HTTP error ${response.status}`);
           return;
         }
 
@@ -309,42 +284,25 @@ export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
           };
 
           settingsCache = loadedSettings;
-          setSettings(loadedSettings);
+          if (isMounted) setSettings(loadedSettings);
           saveSettingsToStorage(loadedSettings);
-          console.log(
-            "[SiteSettingsContext] Settings loaded successfully from database and saved to localStorage",
-          );
-        } else {
-          console.warn(
-            "[SiteSettingsContext] No settings found in database - using defaults",
-          );
-          console.warn(
-            "[SiteSettingsContext] You may need to configure site settings in the admin panel",
-          );
         }
       } catch (err) {
-        if (err instanceof TypeError && err.message.includes("fetch")) {
-          console.error(
-            "[SiteSettingsContext] Network error - unable to connect to Supabase",
-          );
-          console.error(
-            "[SiteSettingsContext] Please verify VITE_SUPABASE_URL is correct:",
-            SUPABASE_URL,
-          );
-        } else {
-          console.error(
-            "[SiteSettingsContext] Unexpected error loading settings:",
-            err,
-          );
-        }
-        console.warn("[SiteSettingsContext] Falling back to default settings");
-        // Keep defaults on error
+        console.error("[SiteSettingsContext] Error loading settings:", err);
       } finally {
-        setIsLoading(false);
+        if (isMounted) setIsLoading(false);
       }
     }
 
     fetchSettings();
+
+    // Subscribe to invalidation triggered by admin saves
+    settingsListeners.add(fetchSettings);
+
+    return () => {
+      isMounted = false;
+      settingsListeners.delete(fetchSettings);
+    };
   }, []);
 
   const value: SiteSettingsContextValue = {
