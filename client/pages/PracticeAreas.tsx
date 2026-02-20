@@ -42,7 +42,7 @@ const iconMap: Record<string, LucideIcon> = {
 
 export default function PracticeAreas() {
   const { content, seoMeta } = usePracticeAreasContent();
-  const { phoneDisplay, phoneLabel } = useGlobalPhone();
+  const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
 
   // Map practice areas from CMS content with icon components
   const practiceAreas = content.grid.areas.map((area) => ({
@@ -99,6 +99,7 @@ export default function PracticeAreas() {
                 icon={Phone}
                 title={phoneLabel}
                 subtitle={phoneDisplay}
+                href={`tel:${phoneNumber}`}
               />
             </div>
           </div>
@@ -147,6 +148,7 @@ export default function PracticeAreas() {
               icon={Phone}
               title={phoneLabel}
               subtitle={phoneDisplay}
+              href={`tel:${phoneNumber}`}
               className="bg-law-accent-dark hover:bg-black"
               variant="dark"
             />

@@ -20,6 +20,7 @@ const SOCIAL_ICONS: Record<string, typeof Facebook> = {
 
 export default function Footer() {
   const { settings, phoneDisplay, phoneLabel, isLoading } = useSiteSettings();
+  const phoneNumber = settings.phoneNumber;
 
   // Build resources links: use footerAboutLinks from CMS, fall back to navigationItems
   const resourceLinks =
@@ -59,6 +60,7 @@ export default function Footer() {
 
         {/* Right: Call Us Box */}
         <div className="lg:w-[25%]">
+          <a href={`tel:${phoneNumber}`} className="block">
           <div className="bg-law-accent p-[8px] w-full ml-auto cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
             <div className="table w-full mx-auto max-w-full flex-row-reverse">
               <div className="table-cell w-[32px] leading-[0] mb-[30px]">
@@ -83,6 +85,7 @@ export default function Footer() {
               </div>
             </div>
           </div>
+          </a>
         </div>
       </div>
 

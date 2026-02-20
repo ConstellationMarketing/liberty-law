@@ -16,7 +16,7 @@ import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
 
 export default function Index() {
   const { content, seoMeta, isLoading } = useHomeContent();
-  const { phoneDisplay, phoneLabel } = useGlobalPhone();
+  const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
 
   // Use CMS content for hero and partner logos
   const heroContent = content.hero;
@@ -71,7 +71,8 @@ export default function Index() {
             </div>
 
             {/* Call Box */}
-            <div className="bg-law-accent p-[8px] w-full max-w-[400px] cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
+            <a href={`tel:${phoneNumber}`} className="block w-full max-w-[400px]">
+            <div className="bg-law-accent p-[8px] w-full cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
               <div className="flex items-start gap-4">
                 <div className="bg-white p-[15px] mt-1 flex items-center justify-center group-hover:bg-black transition-colors duration-300">
                   <svg
@@ -92,6 +93,7 @@ export default function Index() {
                 </div>
               </div>
             </div>
+            </a>
           </div>
 
           {/* Right Side: Contact Form */}

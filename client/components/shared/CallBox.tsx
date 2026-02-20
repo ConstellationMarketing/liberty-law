@@ -5,7 +5,8 @@ interface CallBoxProps {
   icon: LucideIcon;
   title: string;
   subtitle: string;
-  link?: string;
+  link?: string;  // internal route (react-router)
+  href?: string;  // external link, e.g. tel: or mailto:
   className?: string;
   variant?: "light" | "dark"; // light = black text on light bg, dark = white text on dark bg
 }
@@ -15,6 +16,7 @@ export default function CallBox({
   title,
   subtitle,
   link,
+  href,
   className = "",
   variant = "light",
 }: CallBoxProps) {
@@ -48,6 +50,10 @@ export default function CallBox({
       </div>
     </div>
   );
+
+  if (href) {
+    return <a href={href}>{content}</a>;
+  }
 
   if (link) {
     return <Link to={link}>{content}</Link>;

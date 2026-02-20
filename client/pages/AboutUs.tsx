@@ -28,7 +28,7 @@ const iconMap: Record<string, LucideIcon> = {
 
 export default function AboutUs() {
   const { content, seoMeta } = useAboutContent();
-  const { phoneDisplay, phoneLabel } = useGlobalPhone();
+  const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
 
   // Map team members from CMS content
   const teamMembers = content.team.members;
@@ -86,6 +86,7 @@ export default function AboutUs() {
                 icon={Phone}
                 title={phoneLabel}
                 subtitle={phoneDisplay}
+                href={`tel:${phoneNumber}`}
               />
             </div>
           </div>
@@ -245,6 +246,7 @@ export default function AboutUs() {
               icon={Phone}
               title={phoneLabel}
               subtitle={phoneDisplay}
+              href={`tel:${phoneNumber}`}
               className="bg-law-accent-dark hover:bg-black"
               variant="dark"
             />

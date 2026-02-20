@@ -24,7 +24,7 @@ const iconMap: Record<string, LucideIcon> = {
 
 export default function ContactPage() {
   const { content, seoMeta } = useContactContent();
-  const { phoneDisplay, phoneLabel } = useGlobalPhone();
+  const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
 
   // Map contact methods from CMS content with icon components, excluding email
   const contactMethods = content.contactMethods.methods
@@ -101,9 +101,18 @@ export default function ContactPage() {
                   <h3 className="font-playfair text-[24px] md:text-[28px] leading-tight text-law-accent mb-[15px]">
                     {method.title}
                   </h3>
-                  <p className="font-outfit text-[20px] text-white mb-[8px]">
-                    {method.detail}
-                  </p>
+                  {method.icon === Phone ? (
+                    <a
+                      href={`tel:${method.detail.replace(/\D/g, "")}`}
+                      className="font-outfit text-[20px] text-white mb-[8px] hover:underline block"
+                    >
+                      {method.detail}
+                    </a>
+                  ) : (
+                    <p className="font-outfit text-[20px] text-white mb-[8px]">
+                      {method.detail}
+                    </p>
+                  )}
                   <p className="font-outfit text-[20px] text-white/70">
                     {method.subdDetail}
                   </p>
@@ -179,6 +188,7 @@ export default function ContactPage() {
                   icon={Phone}
                   title={phoneLabel}
                   subtitle={phoneDisplay}
+                  href={`tel:${phoneNumber}`}
                   className="w-full max-w-none"
                 />
                 <CallBox

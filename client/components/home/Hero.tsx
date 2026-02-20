@@ -2,7 +2,7 @@ import { Phone } from "lucide-react";
 import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
 
 export default function Hero() {
-  const { phoneDisplay, phoneLabel } = useGlobalPhone();
+  const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
 
   return (
     <div className="max-w-[2560px] mx-auto w-[95%] py-[27px] my-[40px]">
@@ -20,7 +20,8 @@ export default function Hero() {
           </div>
 
           {/* Call Box */}
-          <div className="bg-law-accent p-[8px] w-full max-w-[400px] cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
+          <a href={`tel:${phoneNumber}`} className="block w-full max-w-[400px]">
+          <div className="bg-law-accent p-[8px] w-full cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
             <div className="flex items-start gap-4">
               <div className="bg-white p-[15px] mt-1 flex items-center justify-center group-hover:bg-black transition-colors duration-300">
                 <Phone
@@ -38,6 +39,7 @@ export default function Hero() {
               </div>
             </div>
           </div>
+          </a>
         </div>
 
         {/* Spacer for form (will be added separately) */}

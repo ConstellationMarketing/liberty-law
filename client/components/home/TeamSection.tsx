@@ -7,7 +7,7 @@ interface TeamSectionProps {
 }
 
 export default function TeamSection({ content }: TeamSectionProps) {
-  const { phoneDisplay, phoneLabel } = useGlobalPhone();
+  const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
 
   // Get first team member (for single-column display)
   const member = content?.members?.[0];
@@ -64,7 +64,8 @@ export default function TeamSection({ content }: TeamSectionProps) {
             />
 
             {/* Call Box */}
-            <div className="bg-law-accent p-[8px] w-full max-w-[400px] cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
+            <a href={`tel:${phoneNumber}`} className="block w-full max-w-[400px]">
+            <div className="bg-law-accent p-[8px] w-full cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
               <div className="flex items-start gap-4">
                 <div className="bg-white p-[15px] mt-1 flex items-center justify-center group-hover:bg-black transition-colors duration-300">
                   <svg
@@ -85,6 +86,7 @@ export default function TeamSection({ content }: TeamSectionProps) {
                 </div>
               </div>
             </div>
+            </a>
           </div>
         </div>
       </div>
