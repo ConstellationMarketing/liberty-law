@@ -14,6 +14,9 @@ import ContactPage from "./pages/ContactPage";
 import NotFound from "./pages/NotFound";
 import AdminRoutes from "./pages/AdminRoutes";
 import ScrollToTop from "./components/ScrollToTop";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsPage from "./pages/TermsPage";
+import ComplaintsPage from "./pages/ComplaintsPage";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +35,9 @@ const App = () => (
               <Route path="/practice-areas" element={<PracticeAreas />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/admin/*" element={<AdminRoutes />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms-and-conditions" element={<TermsPage />} />
+              <Route path="/complaints-process" element={<ComplaintsPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

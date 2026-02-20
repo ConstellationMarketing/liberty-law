@@ -205,11 +205,31 @@ export default function Footer() {
         </div>
       )}
 
-      {/* Copyright Section */}
+      {/* Copyright + Legal Links Section */}
       <div className="border-t border-[#838383] max-w-[2560px] mx-auto w-full py-[10px] px-[30px]">
         <div className="w-full mx-auto my-auto">
           <div className="font-outfit text-[18px] font-light leading-[27px] text-white text-center">
             <p>{settings.copyrightText}</p>
+          </div>
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 mt-[6px]">
+            <Link
+              to="/privacy-policy"
+              className="font-outfit text-[14px] text-white/60 hover:text-white transition-colors"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              to="/terms-and-conditions"
+              className="font-outfit text-[14px] text-white/60 hover:text-white transition-colors"
+            >
+              Terms &amp; Conditions
+            </Link>
+            <Link
+              to="/complaints-process"
+              className="font-outfit text-[14px] text-white/60 hover:text-white transition-colors"
+            >
+              Complaints Process
+            </Link>
           </div>
         </div>
       </div>

@@ -18,6 +18,12 @@ import type { ContactPageContent } from "@site/lib/cms/contactPageTypes";
 import { defaultContactContent } from "@site/lib/cms/contactPageTypes";
 import type { PracticeAreasPageContent } from "@site/lib/cms/practiceAreasPageTypes";
 import { defaultPracticeAreasContent } from "@site/lib/cms/practiceAreasPageTypes";
+import type { SimplePageContent } from "@site/lib/cms/simplePageTypes";
+import {
+  defaultPrivacyPolicyContent,
+  defaultTermsContent,
+  defaultComplaintsContent,
+} from "@site/lib/cms/simplePageTypes";
 import ImageUploader from "@/components/admin/ImageUploader";
 import RichTextEditor from "@site/components/admin/RichTextEditor";
 import {
@@ -373,6 +379,44 @@ export default function CustomPageContentEditor({
   if (urlPath === "/practice-areas") {
     const practiceContent = deepMerge(defaultPracticeAreasContent, content as Partial<PracticeAreasPageContent>);
     return <PracticeAreasPageEditor content={practiceContent} onChange={onChange} />;
+  }
+
+  // Simple content pages
+  const simplePageDefaults: Record<string, SimplePageContent> = {
+    "/privacy-policy": defaultPrivacyPolicyContent,
+    "/terms-and-conditions": defaultTermsContent,
+    "/complaints-process": defaultComplaintsContent,
+  };
+
+  if (simplePageDefaults[urlPath]) {
+    const def = simplePageDefaults[urlPath];
+    const simpleContent: SimplePageContent = {
+      title: (content as Partial<SimplePageContent>)?.title || def.title,
+      body: (content as Partial<SimplePageContent>)?.body || def.body,
+    };
+    return (
+      <div className="space-y-6">
+        <Section title="Page Content" defaultOpen={true}>
+          <div className="grid gap-4">
+            <div>
+              <Label>Title</Label>
+              <Input
+                value={simpleContent.title}
+                onChange={(e) => onChange({ ...simpleContent, title: e.target.value })}
+              />
+            </div>
+            <div>
+              <Label>Content</Label>
+              <RichTextEditor
+                value={simpleContent.body}
+                onChange={(value) => onChange({ ...simpleContent, body: value })}
+                placeholder="Enter page content..."
+              />
+            </div>
+          </div>
+        </Section>
+      </div>
+    );
   }
 
   // Fallback: show raw JSON editor for other pages
