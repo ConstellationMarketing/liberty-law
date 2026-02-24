@@ -17,7 +17,7 @@ interface SiteSettings {
   applyPhoneGlobally: boolean;
   headerCtaText: string;
   headerCtaUrl: string;
-  navigationItems: { label: string; href: string; order?: number }[];
+  navigationItems: { label: string; href: string; order?: number; openInNewTab?: boolean; children?: { label: string; href: string; openInNewTab?: boolean }[] }[];
   footerAboutLinks: { label: string; href?: string }[];
   footerPracticeLinks: { label: string; href?: string }[];
   addressLine1: string;
