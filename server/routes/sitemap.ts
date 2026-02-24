@@ -7,9 +7,9 @@ const SITE_URL =
 // Static routes always included in the sitemap
 const STATIC_ROUTES = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
-  { path: "/about", changefreq: "monthly", priority: "0.8" },
-  { path: "/practice-areas", changefreq: "monthly", priority: "0.9" },
-  { path: "/contact", changefreq: "monthly", priority: "0.7" },
+  { path: "/about/", changefreq: "monthly", priority: "0.8" },
+  { path: "/practice-areas/", changefreq: "monthly", priority: "0.9" },
+  { path: "/contact/", changefreq: "monthly", priority: "0.7" },
 ];
 
 function escapeXml(str: string): string {
@@ -65,8 +65,9 @@ export const handleSitemap: RequestHandler = async (_req, res) => {
         for (const page of pages) {
           if (seenPaths.has(page.url_path)) continue;
           seenPaths.add(page.url_path);
+          const normalizedPath = page.url_path === "/" ? "/" : page.url_path.replace(/\/?$/, "/");
           urls.push({
-            loc: `${SITE_URL}${page.url_path}`,
+            loc: `${SITE_URL}${normalizedPath}`,
             lastmod: page.updated_at
               ? new Date(page.updated_at).toISOString().split("T")[0]
               : undefined,
