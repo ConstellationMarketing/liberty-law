@@ -1,6 +1,7 @@
 import { LucideIcon } from "lucide-react";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import { Link } from "react-router-dom";
+import { withTrailingSlash } from "@site/lib/withTrailingSlash";
 import { ArrowRight } from "lucide-react";
 
 interface PracticeAreaCardProps {
@@ -20,7 +21,7 @@ export default function PracticeAreaCard({
 }: PracticeAreaCardProps) {
   return (
     <Link
-      to={link}
+      to={withTrailingSlash(link)}
       className="relative min-h-[450px] overflow-hidden group bg-law-card border border-law-border transition-all duration-300 hover:border-law-accent"
     >
       {/* Background Image */}

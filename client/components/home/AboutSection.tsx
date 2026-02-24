@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import { Link } from "react-router-dom";
+import { withTrailingSlash } from "@site/lib/withTrailingSlash";
 import type { AboutContent } from "@site/lib/cms/homePageTypes";
 
 interface AboutSectionProps {
@@ -50,7 +51,7 @@ export default function AboutSection({ content }: AboutSectionProps) {
             </div>
 
             {/* Contact Us CTA */}
-            <Link to="/contact">
+            <Link to={withTrailingSlash("/contact")}>
               <div className="bg-law-accent p-[8px] w-full max-w-[300px] cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
                 <div className="flex items-center gap-4">
                   <div className="flex-1 pl-[10px]">

@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSiteSettings } from "@site/contexts/SiteSettingsContext";
+import { withTrailingSlash } from "@site/lib/withTrailingSlash";
 
 const SOCIAL_ICONS: Record<string, typeof Facebook> = {
   facebook: Facebook,
@@ -120,7 +121,7 @@ export default function Footer() {
             {resourceLinks.map((link) => (
               <li key={link.label}>
                 <Link
-                  to={link.href || "#"}
+                  to={withTrailingSlash(link.href || "#")}
                   className="hover:text-law-accent transition-colors"
                 >
                   {link.label}
@@ -140,7 +141,7 @@ export default function Footer() {
               {settings.footerPracticeLinks.map((link) => (
                 <li key={link.label}>
                   <Link
-                    to={link.href || "/practice-areas"}
+                    to={withTrailingSlash(link.href || "/practice-areas")}
                     className="hover:text-law-accent transition-colors"
                   >
                     {link.label}
@@ -213,19 +214,19 @@ export default function Footer() {
           </div>
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-1 mt-[6px]">
             <Link
-              to="/privacy-policy"
+              to="/privacy-policy/"
               className="font-outfit text-[14px] text-white/60 hover:text-white transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
-              to="/terms-and-conditions"
+              to="/terms-and-conditions/"
               className="font-outfit text-[14px] text-white/60 hover:text-white transition-colors"
             >
               Terms &amp; Conditions
             </Link>
             <Link
-              to="/complaints-process"
+              to="/complaints-process/"
               className="font-outfit text-[14px] text-white/60 hover:text-white transition-colors"
             >
               Complaints Process

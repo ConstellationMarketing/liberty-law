@@ -1,5 +1,6 @@
 import { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { withTrailingSlash } from "@site/lib/withTrailingSlash";
 
 interface CallBoxProps {
   icon: LucideIcon;
@@ -56,7 +57,7 @@ export default function CallBox({
   }
 
   if (link) {
-    return <Link to={link}>{content}</Link>;
+    return <Link to={withTrailingSlash(link)}>{content}</Link>;
   }
 
   return content;

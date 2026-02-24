@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { withTrailingSlash } from "@site/lib/withTrailingSlash";
 import { Button } from "@/components/ui/button";
 import { Menu, ArrowRight, ChevronDown } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -48,7 +49,7 @@ function NavLink({
     );
   }
   return (
-    <Link to={href} className={className} onClick={onClick}>
+    <Link to={withTrailingSlash(href)} className={className} onClick={onClick}>
       {label}
     </Link>
   );
@@ -160,7 +161,7 @@ export default function Header() {
 
             {/* Contact CTA Button - Desktop */}
             <div className="hidden md:block w-[280px]">
-              <Link to={settings.headerCtaUrl}>
+              <Link to={withTrailingSlash(settings.headerCtaUrl)}>
                 <Button className="bg-white text-black font-outfit text-[22px] py-[25px] px-[15.4px] h-auto w-[200px] hover:bg-law-accent hover:text-white transition-all duration-300 flex items-center justify-center gap-2">
                   {settings.headerCtaText}
                   <ArrowRight className="w-5 h-5" />

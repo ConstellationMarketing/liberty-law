@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
+import { withTrailingSlash } from "@site/lib/withTrailingSlash";
 import type { PracticeAreaItem } from "@site/lib/cms/homePageTypes";
 import type { LucideIcon } from "lucide-react";
 
@@ -11,7 +12,7 @@ interface PracticeAreaCardProps {
 export default function PracticeAreaCard({ area, Icon }: PracticeAreaCardProps) {
   return (
     <Link
-      to={area.link}
+      to={withTrailingSlash(area.link)}
       className="relative min-h-[400px] lg:min-h-[480px] overflow-hidden group flex"
     >
       {/* Background image */}

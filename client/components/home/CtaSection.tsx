@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { withTrailingSlash } from "@site/lib/withTrailingSlash";
 import { CtaContent } from "@site/lib/cms/homePageTypes";
 
 interface CtaSectionProps {
@@ -30,7 +31,7 @@ export default function CtaSection({ content }: CtaSectionProps) {
             ))}
           </h2>
           <Link
-            to={buttonLink}
+            to={withTrailingSlash(buttonLink)}
             className="bg-law-accent p-[8px] max-w-[300px] cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group"
           >
             <div className="flex items-center gap-4">
