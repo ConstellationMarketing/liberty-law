@@ -88,6 +88,38 @@ function addUnique(
 }
 
 // ---------------------------------------------------------------------------
+// Stamp SSG meta tags with data-rh="true" for Helmet hydration deduplication
+// ---------------------------------------------------------------------------
+
+/**
+ * react-helmet-async only removes tags it previously managed, identified by
+ * the data-rh="true" attribute it stamps on every tag it injects. Tags without
+ * that attribute (e.g. those injected by the SSG build script) are left alone,
+ * causing duplicates when Helmet adds its own versions on hydration.
+ *
+ * This function adds data-rh="true" to the specific SEO tags that ssg-generate
+ * injects so Helmet will adopt them instead of duplicating them.
+ */
+function stampRhAttribute(html: string): string {
+  // Skip if already processed
+  if (html.includes('data-rh="true"')) return html;
+
+  const rh = 'data-rh="true" ';
+
+  return html
+    // <meta name="description" ...>
+    .replace(/<meta name="description"/g, `<meta ${rh}name="description"`)
+    // <meta name="robots" ...>
+    .replace(/<meta name="robots"/g, `<meta ${rh}name="robots"`)
+    // <meta name="twitter:* ...>
+    .replace(/<meta name="(twitter:[^"]+)"/g, `<meta ${rh}name="$1"`)
+    // <meta property="og:* ...>
+    .replace(/<meta property="(og:[^"]+)"/g, `<meta ${rh}property="$1"`)
+    // <link rel="canonical" ...>
+    .replace(/<link rel="canonical"/g, `<link ${rh}rel="canonical"`);
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
@@ -193,6 +225,13 @@ async function main() {
   for (const file of htmlFiles) {
     let html = fs.readFileSync(file, "utf-8");
     if (html.includes("data-seo-links")) continue; // already injected
+
+    // Stamp SSG-injected SEO meta/link tags with data-rh="true" so that
+    // react-helmet-async adopts them on hydration instead of appending
+    // duplicates alongside them. Without this, every page gets two
+    // <meta name="description"> tags — one from SSG and one from Helmet.
+    html = stampRhAttribute(html);
+
     html = html.replace("</body>", `${injection}\n</body>`);
     fs.writeFileSync(file, html);
     count++;
