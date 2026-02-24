@@ -17,10 +17,5 @@
 [[plugins]]
   package = "netlify-plugin-prerender-spa"
 
-  [plugins.inputs]
-    renderPaths = [
-      "/",
-      "/about",
-      "/contact",
-      "/practice-areas"
-    ]
+[plugins.inputs]
+  source = "dist/spa"
