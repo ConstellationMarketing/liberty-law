@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useSiteSettings } from "@site/contexts/SiteSettingsContext";
+import { refreshWhatConverts } from "@site/lib/whatconverts-spa";
 
 /**
  * Parses an HTML string and injects any <script> and other tags
@@ -40,23 +41,6 @@ function injectHtml(html: string, target: HTMLElement): () => void {
   };
 }
 
-/**
- * Tells WhatConverts to re-scan the DOM for phone numbers.
- * Uses a delay to allow external scripts time to download and initialize.
- */
-function triggerWhatConvertsRescan() {
-  setTimeout(() => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const w = window as any;
-      if (w._wci) w._wci.run();
-      if (w.WhatConverts) w.WhatConverts.track();
-    } catch (_) {
-      // Silently ignore if WhatConverts is not loaded
-    }
-  }, 500);
-}
-
 export default function GlobalScripts() {
   const { settings } = useSiteSettings();
   const location = useLocation();
@@ -69,8 +53,8 @@ export default function GlobalScripts() {
     prevHead.current = settings.headScripts;
     const cleanup = injectHtml(settings.headScripts, document.head);
     // After injecting head scripts (which may include WhatConverts),
-    // trigger a re-scan so the number swap runs even after DOMContentLoaded/load have fired.
-    triggerWhatConvertsRescan();
+    // trigger a refresh so DNI runs even after DOMContentLoaded/load have already fired.
+    refreshWhatConverts(location.pathname, location.search);
     return cleanup;
   }, [settings.headScripts]);
 
@@ -105,11 +89,11 @@ export default function GlobalScripts() {
     document.head.appendChild(configScript);
   }, [settings.ga4MeasurementId]);
 
-  // WhatConverts: re-scan on every SPA route change so phone numbers are swapped
-  // on each page navigation without a full browser reload.
+  // WhatConverts: DNI refresh on every SPA route change.
+  // DNI should swap on initial load and when navigating between pages without reload.
   useEffect(() => {
-    triggerWhatConvertsRescan();
-  }, [location.pathname]);
+    refreshWhatConverts(location.pathname, location.search);
+  }, [location.pathname, location.search]);
 
   return null;
 }
