@@ -12,23 +12,37 @@
  * AFTER WC's initial scan window, leaving its number un-swapped. No reliable
  * global WC API exists to re-trigger the scan.
  *
+ * STRUCTURE ASSUMED
+ * -----------------
+ * Primary (hero):
+ *   <a data-dni-phone="primary" href="tel:NUMBER">NUMBER_TEXT</a>
+ *   — single text node; WC reliably swaps both href and textContent.
+ *
+ * Footer:
+ *   <a data-dni-phone="footer" href="tel:NUMBER">
+ *     <span>Call Us 24/7</span>   ← label span (must NOT be touched)
+ *     <span>NUMBER_TEXT</span>    ← phone span (second child; synced here)
+ *   </a>
+ *   The footer anchor's full textContent includes the label, so we target
+ *   only its last <span> child (the phone span) for text updates.
+ *
  * HOW IT WORKS
  * ------------
- * 1. The hero call-box phone link is a simple <a data-dni-phone="primary">
- *    whose textContent is ONLY the phone number — WC reliably swaps it.
- * 2. The footer phone link is a simple <a data-dni-phone="footer"> with the
- *    same structure.
- * 3. This module polls every 250 ms (up to 10 s) waiting for WC to have
- *    swapped the primary element (detected when primary.textContent differs
- *    from footer.textContent OR primary.href differs from footer.href). Once
- *    a mismatch is detected the footer is synced and the loop stops.
- * 4. If WC swapped both elements itself, the values will always be equal and
- *    the loop simply times out after 10 s — zero DOM writes, zero side effects.
+ * Polls every 250 ms for up to 10 s. On each tick:
+ *   1. Finds primary and footer anchors.
+ *   2. Reads primary.textContent (the swapped number) and primary.href.
+ *   3. Compares primary.href with footer.href.
+ *   4. If they differ (WC swapped primary but missed footer), syncs:
+ *        - footer phone span textContent ← primary.textContent
+ *        - footer.href                  ← primary.href
+ *      then stops.
+ *   5. If they are equal (WC handled both, or WC hasn't run yet), keeps
+ *      the loop alive until the 10 s timeout.
  *
  * SAFETY
  * ------
- * - Never throws: the entire body is wrapped in try/catch.
- * - Clears previous loop before starting a new one (safe on route changes).
+ * - Never throws: entire body is wrapped in try/catch.
+ * - Clears any previous loop before starting (safe on SPA route changes).
  * - Auto-stops after 10 s regardless.
  */
 
@@ -67,23 +81,34 @@ export function startDniFooterSync(): void {
       if (!primaryText) return;
 
       const primaryHref = primary.getAttribute("href") ?? "";
-      const footerText = (footer.textContent ?? "").trim();
       const footerHref = footer.getAttribute("href") ?? "";
 
-      // Sync footer only when primary and footer differ (i.e. WC has swapped
-      // primary but the footer was missed, OR footer rendered after WC ran)
-      if (primaryText !== footerText || primaryHref !== footerHref) {
-        footer.textContent = primaryText;
-        footer.setAttribute("href", primaryHref);
-
-        // Stop — we have successfully mirrored the swapped number
-        clearInterval(syncTimer!);
-        syncTimer = null;
+      // Only sync when WC has swapped the primary but not the footer,
+      // detected by an href mismatch between the two anchors.
+      if (primaryHref === footerHref) {
+        // Both still on original number (WC hasn't run yet) OR
+        // WC already swapped both — either way nothing to do this tick.
         return;
       }
 
-      // Values are already in sync. Keep the loop alive in case WC has not
-      // yet run — it will change primary first and the next tick will catch it.
+      // WC swapped primary (different href) but footer was missed.
+      // Update the footer anchor href.
+      footer.setAttribute("href", primaryHref);
+
+      // Update only the phone span (last <span> child) so the label span
+      // ("Call Us 24/7") is never touched.
+      const phoneSpan = footer.querySelector<HTMLElement>("span:last-child");
+      if (phoneSpan) {
+        phoneSpan.textContent = primaryText;
+      } else {
+        // Fallback: footer has no span children (unexpected structure) —
+        // safe to set full textContent since there's nothing else inside.
+        footer.textContent = primaryText;
+      }
+
+      // Stop — footer has been successfully synced to the swapped number.
+      clearInterval(syncTimer!);
+      syncTimer = null;
     } catch {
       // Fail silently — never break the page
       clearInterval(syncTimer!);
