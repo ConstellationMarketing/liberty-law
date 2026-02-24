@@ -14,7 +14,7 @@
     "dev": "vite",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build",
-    "build:ssg": "npm run build:client && npx tsx vendor/cms-core/scripts/ssg-generate.ts && npx tsx scripts/inject-ssg-links.ts",
+    "build:ssg": "npm run build:client && npx tsx vendor/cms-core/scripts/ssg-generate.ts && npx tsx scripts/patch-sitemap.ts && npx tsx scripts/inject-ssg-links.ts",
     "build:server": "vite build --config vite.config.server.ts",
     "start": "node dist/server/node-build.mjs",
     "test": "vitest --run",
