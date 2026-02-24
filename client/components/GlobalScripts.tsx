@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useSiteSettings } from "@site/contexts/SiteSettingsContext";
-import { refreshWhatConverts } from "@site/lib/whatconverts-spa";
+import { refreshWhatConvertsDni } from "@site/lib/whatconvertsRefresh";
 
 /**
  * Parses an HTML string and injects any <script> and other tags
@@ -52,9 +52,10 @@ export default function GlobalScripts() {
     if (settings.headScripts === prevHead.current) return;
     prevHead.current = settings.headScripts;
     const cleanup = injectHtml(settings.headScripts, document.head);
-    // After injecting head scripts (which may include WhatConverts),
-    // trigger a refresh so DNI runs even after DOMContentLoaded/load have already fired.
-    refreshWhatConverts(location.pathname, location.search);
+    // Force-refresh immediately after injecting head scripts: this is the
+    // moment the WC script first lands in the DOM, so we bypass the throttle
+    // to guarantee DNI runs regardless of any earlier (failed) attempts.
+    refreshWhatConvertsDni("head-scripts", { force: true });
     return cleanup;
   }, [settings.headScripts]);
 
@@ -88,12 +89,6 @@ export default function GlobalScripts() {
     `;
     document.head.appendChild(configScript);
   }, [settings.ga4MeasurementId]);
-
-  // WhatConverts: DNI refresh on every SPA route change.
-  // DNI should swap on initial load and when navigating between pages without reload.
-  useEffect(() => {
-    refreshWhatConverts(location.pathname, location.search);
-  }, [location.pathname, location.search]);
 
   return null;
 }

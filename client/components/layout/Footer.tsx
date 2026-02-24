@@ -61,7 +61,7 @@ export default function Footer() {
 
         {/* Right: Call Us Box */}
         <div className="lg:w-[25%]">
-          <a href={`tel:${phoneNumber}`} className="block">
+          <a href={`tel:${phoneNumber}`} className="block" data-phone="footer">
           <div className="bg-law-accent p-[8px] w-full ml-auto cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
             <div className="table w-full mx-auto max-w-full flex-row-reverse">
               <div className="table-cell w-[32px] leading-[0] mb-[30px]">

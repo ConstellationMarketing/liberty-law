@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import AdminRoutes from "./pages/AdminRoutes";
 import ScrollToTop from "./components/ScrollToTop";
 import GlobalScripts from "./components/GlobalScripts";
+import WcDniManager from "./components/WcDniManager";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsPage from "./pages/TermsPage";
 import ComplaintsPage from "./pages/ComplaintsPage";
@@ -30,6 +31,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <GlobalScripts />
+            <WcDniManager />
             <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
