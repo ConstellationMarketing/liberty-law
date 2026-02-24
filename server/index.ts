@@ -10,6 +10,7 @@ import { handleSeedAbout } from "./routes/seed-about";
 import { handleSeedContact } from "./routes/seed-contact";
 import { handleSeedPracticeAreas } from "./routes/seed-practice-areas";
 import { handleMigrateMedia } from "./routes/migrate-media";
+import { handleSitemap } from "./routes/sitemap";
 
 export function createServer() {
   const app = express();
@@ -38,6 +39,9 @@ export function createServer() {
   app.post("/api/seed-contact", handleSeedContact);
   app.post("/api/seed-practice-areas", handleSeedPracticeAreas);
   app.post("/api/migrate-media", handleMigrateMedia);
+
+  // Sitemap
+  app.get("/sitemap.xml", handleSitemap);
 
   return app;
 }

@@ -34,8 +34,8 @@ export default function Seo({
   // Build full canonical URL
   const fullCanonical = canonical || (siteUrl ? `${siteUrl}${pathname}` : undefined);
 
-  // Build full title from CMS site name
-  const fullTitle = title ? `${title} | ${settings.siteName}` : settings.siteName;
+  // Use CMS title exactly as entered; fall back to site name only when no title set
+  const fullTitle = title || settings.siteName;
 
   // Merge site-wide noindex with per-page noindex
   const shouldNoindex = noindex || settings.siteNoindex;
