@@ -31,10 +31,19 @@ export default function ContactForm() {
 
   const onSubmit = async (data: ContactFormData) => {
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
-      console.log('Form submitted:', data);
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          'form-name': 'contact-main',
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone || '',
+          message: data.message,
+          honeypot: data.honeypot || '',
+        }).toString(),
+      });
       toast.success('Thank you! We will contact you soon.');
       reset();
     } catch (error) {
@@ -45,7 +54,14 @@ export default function ContactForm() {
 
   return (
     <div className="bg-law-card border border-law-border p-[30px]">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-[25px]">
+      <form
+        name="contact-main"
+        data-netlify="true"
+        data-netlify-honeypot="honeypot"
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-[25px]"
+      >
+        <input type="hidden" name="form-name" value="contact-main" />
         {/* First Name */}
         <div>
           <Input

@@ -7,6 +7,16 @@
   </head>
 
   <body>
+    <!-- Hidden form for Netlify form detection at build time -->
+    <form name="contact-main" data-netlify="true" data-netlify-honeypot="honeypot" hidden>
+      <input type="text" name="firstName" />
+      <input type="text" name="lastName" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <textarea name="message"></textarea>
+      <input type="text" name="honeypot" />
+    </form>
+
     <div id="root"></div>
 
     <script type="module" src="/client/App.tsx"></script>

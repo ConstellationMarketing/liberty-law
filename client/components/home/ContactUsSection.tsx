@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Scale } from "lucide-react";
+import { toast } from "sonner";
 import type { ContactContent } from "@site/lib/cms/homePageTypes";
 
 interface ContactUsSectionProps {
@@ -16,8 +18,38 @@ const defaultContent: ContactContent = {
   formHeading: "Contact Us Today To Schedule a Consultation",
 };
 
+const emptyForm = { firstName: "", lastName: "", email: "", phone: "", message: "" };
+
 export default function ContactUsSection({ content }: ContactUsSectionProps) {
   const data = content || defaultContent;
+  const [fields, setFields] = useState(emptyForm);
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFields((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          "form-name": "contact-main",
+          ...fields,
+        }).toString(),
+      });
+      toast.success("Thank you! We will contact you soon.");
+      setFields(emptyForm);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
   return (
     <div className="bg-white pt-[30px] md:pt-[54px] relative">
       <div className="max-w-[1600px] mx-auto w-[95%] md:w-[85%] lg:w-[80%] relative flex flex-col lg:flex-row gap-8 lg:gap-[3%]">
@@ -100,12 +132,23 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
         {/* Right Side: Form */}
         <div className="lg:w-[31.3333%] relative p-[30px] pt-[30px] shadow-[0px_7px_29px_0px_rgba(100,100,111,0.2)]">
           <div className="relative">
-            <form className="p-[5px] mx-auto">
+            <form
+              name="contact-main"
+              data-netlify="true"
+              data-netlify-honeypot="honeypot"
+              onSubmit={handleSubmit}
+              className="p-[5px] mx-auto"
+            >
+              <input type="hidden" name="form-name" value="contact-main" />
+
               <div className="space-y-[25px]">
                 {/* First Name */}
                 <div className="relative">
                   <Input
                     type="text"
+                    name="firstName"
+                    value={fields.firstName}
+                    onChange={handleChange}
                     placeholder="First Name *"
                     required
                     className="w-full h-[50px] bg-[#f7f7f7] border-[0.8px] border-[#c4c4c4] text-[#6b6b6b] text-[16px] px-[12px] py-[12px] rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
@@ -116,6 +159,9 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
                 <div className="relative">
                   <Input
                     type="text"
+                    name="lastName"
+                    value={fields.lastName}
+                    onChange={handleChange}
                     placeholder="Last Name *"
                     required
                     className="w-full h-[50px] bg-[#f7f7f7] border-[0.8px] border-[#c4c4c4] text-[#6b6b6b] text-[16px] px-[12px] py-[12px] rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
@@ -127,6 +173,8 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
                   <Input
                     type="email"
                     name="email"
+                    value={fields.email}
+                    onChange={handleChange}
                     placeholder="Email Address *"
                     required
                     className="w-full h-[50px] bg-[#f7f7f7] border-[0.8px] border-[#c4c4c4] text-[#6b6b6b] text-[16px] px-[12px] py-[12px] rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
@@ -138,6 +186,8 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
                   <Input
                     type="tel"
                     name="phone"
+                    value={fields.phone}
+                    onChange={handleChange}
                     placeholder="Phone Number"
                     className="w-full h-[50px] bg-[#f7f7f7] border-[0.8px] border-[#c4c4c4] text-[#6b6b6b] text-[16px] px-[12px] py-[12px] rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
                   />
@@ -146,6 +196,9 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
                 {/* Message */}
                 <div className="relative">
                   <Textarea
+                    name="message"
+                    value={fields.message}
+                    onChange={handleChange}
                     placeholder="Message *"
                     required
                     className="w-full h-[200px] bg-[#f7f7f7] border-[0.8px] border-[#c4c4c4] text-[#6b6b6b] text-[16px] px-[12px] py-[12px] rounded-none resize-none focus-visible:ring-0 focus-visible:ring-offset-0"
@@ -156,9 +209,10 @@ export default function ContactUsSection({ content }: ContactUsSectionProps) {
                 <div className="relative">
                   <Button
                     type="submit"
-                    className="w-full bg-red-600 text-white font-outfit text-[22px] h-[50px] hover:bg-law-accent-dark transition-all duration-500 rounded-none"
+                    disabled={submitting}
+                    className="w-full bg-red-600 text-white font-outfit text-[22px] h-[50px] hover:bg-law-accent-dark transition-all duration-500 rounded-none disabled:opacity-50"
                   >
-                    SUBMIT
+                    {submitting ? "SUBMITTING..." : "SUBMIT"}
                   </Button>
                 </div>
               </div>
