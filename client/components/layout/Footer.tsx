@@ -59,9 +59,9 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Right: Call Us Box */}
+        {/* Right: Call Us Box — outer div is positioned so the inner anchor's ::after covers it */}
         <div className="lg:w-[25%]">
-          <a href={`tel:${phoneNumber}`} className="block" data-phone="footer">
+          <div className="relative block">
           <div className="bg-law-accent p-[8px] w-full ml-auto cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
             <div className="table w-full mx-auto max-w-full flex-row-reverse">
               <div className="table-cell w-[32px] leading-[0] mb-[30px]">
@@ -79,14 +79,25 @@ export default function Footer() {
                   {phoneLabel}
                 </h4>
                 <div>
-                  <p className="font-outfit text-[28px] md:text-[40px] leading-tight md:leading-[44px] text-white transition-colors duration-300 whitespace-nowrap">
+                  {/*
+                    data-dni-phone="footer" — sync target for startDniFooterSync().
+                    Simple anchor with phone number as the only text node.
+                    after:absolute after:inset-0 stretches the click area to cover
+                    the entire relative-positioned parent div (whole call box).
+                  */}
+                  <a
+                    href={`tel:${phoneNumber}`}
+                    data-dni-phone="footer"
+                    data-phone="footer"
+                    className="font-outfit text-[28px] md:text-[40px] leading-tight md:leading-[44px] text-white transition-colors duration-300 whitespace-nowrap after:absolute after:inset-0 after:content-['']"
+                  >
                     {phoneDisplay}
-                  </p>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
-          </a>
+          </div>
         </div>
       </div>
 

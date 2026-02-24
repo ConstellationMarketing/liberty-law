@@ -19,6 +19,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { refreshWhatConvertsDni } from "@site/lib/whatconvertsRefresh";
+import { startDniFooterSync } from "@site/lib/syncDniPhone";
 
 export default function WcDniManager() {
   // ── 1. Initial mount ──────────────────────────────────────────────────────
@@ -26,6 +27,26 @@ export default function WcDniManager() {
     // Runs once. If the WC script is already in the DOM (e.g. from browser
     // cache on a repeat visit) this will trigger an immediate DNI scan.
     refreshWhatConvertsDni("initial");
+
+    // Start the footer-sync loop immediately on mount.
+    startDniFooterSync();
+
+    // Also fire on window "load" (all resources including WC CDN script
+    // should have executed by then) so we catch the swapped primary value
+    // even in incognito where WC loads late.
+    function onLoad() {
+      startDniFooterSync();
+    }
+    if (document.readyState === "complete") {
+      // Page already fully loaded (e.g. SPA route change) — run immediately.
+      onLoad();
+    } else {
+      window.addEventListener("load", onLoad, { once: true });
+    }
+
+    return () => {
+      window.removeEventListener("load", onLoad);
+    };
   }, []);
 
   // ── 2. Route change ───────────────────────────────────────────────────────
@@ -35,6 +56,10 @@ export default function WcDniManager() {
     // The effect still fires on mount, but the 2-second throttle will suppress
     // that duplicate if "initial" was called within the same tick.
     refreshWhatConvertsDni("route");
+
+    // Re-sync footer on every SPA navigation — the primary number may differ
+    // per page if WC assigns a session number after the first route swap.
+    startDniFooterSync();
   }, [location.pathname, location.search]);
 
   // ── 3. MutationObserver — footer phone element ────────────────────────────

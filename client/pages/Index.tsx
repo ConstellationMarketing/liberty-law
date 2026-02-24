@@ -70,8 +70,8 @@ export default function Index() {
               </p>
             </div>
 
-            {/* Call Box */}
-            <a href={`tel:${phoneNumber}`} className="block w-full max-w-[400px]">
+            {/* Call Box — outer div is positioned so the inner anchor's ::after can stretch to cover it */}
+            <div className="relative block w-full max-w-[400px]">
             <div className="bg-law-accent p-[8px] w-full cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group">
               <div className="flex items-start gap-4">
                 <div className="bg-white p-[15px] mt-1 flex items-center justify-center group-hover:bg-black transition-colors duration-300">
@@ -87,13 +87,22 @@ export default function Index() {
                   <h4 className="font-outfit text-[16px] md:text-[18px] leading-tight text-white pb-[10px] font-normal transition-colors duration-300">
                     {phoneLabel}
                   </h4>
-                  <p className="font-outfit text-[clamp(1.75rem,5vw,40px)] text-white leading-tight transition-colors duration-300">
+                  {/*
+                    data-dni-phone="primary" — WC swaps this simple anchor (href + textContent).
+                    after:absolute after:inset-0 after:content-[''] stretches the click area
+                    to cover the entire relative-positioned parent div.
+                  */}
+                  <a
+                    href={`tel:${phoneNumber}`}
+                    data-dni-phone="primary"
+                    className="font-outfit text-[clamp(1.75rem,5vw,40px)] text-white leading-tight transition-colors duration-300 after:absolute after:inset-0 after:content-['']"
+                  >
                     {phoneDisplay}
-                  </p>
+                  </a>
                 </div>
               </div>
             </div>
-            </a>
+            </div>
           </div>
 
           {/* Right Side: Contact Form */}
