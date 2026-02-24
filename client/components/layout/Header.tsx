@@ -77,12 +77,17 @@ function DesktopNavItem({ item }: { item: NavItemType }) {
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
     >
-      <button className="font-outfit text-[20px] text-white py-[31px] whitespace-nowrap hover:opacity-80 transition-opacity duration-400 flex items-center gap-1 cursor-pointer">
-        {item.label}
+      <NavLink
+        href={item.href}
+        label={item.label}
+        openInNewTab={item.openInNewTab}
+        className="font-outfit text-[20px] text-white py-[31px] whitespace-nowrap hover:opacity-80 transition-opacity duration-400 inline-flex items-center gap-1"
+      />
+      <span className="inline-flex items-center py-[31px] pointer-events-none">
         <ChevronDown
-          className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`w-4 h-4 transition-transform duration-200 text-white ${open ? "rotate-180" : ""}`}
         />
-      </button>
+      </span>
 
       {/* Dropdown panel */}
       <div
@@ -216,15 +221,24 @@ function MobileMenu({
               <div key={item.href || item.label}>
                 {hasDropdown ? (
                   <>
-                    <button
-                      onClick={() => toggleDropdown(index)}
-                      className="w-full flex items-center justify-between font-outfit text-[20px] text-white py-[10px] px-[5%] border-b border-black/5 hover:opacity-80 transition-opacity"
-                    >
-                      {item.label}
-                      <ChevronDown
-                        className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
+                    <div className="flex items-center border-b border-black/5">
+                      <NavLink
+                        href={item.href}
+                        label={item.label}
+                        openInNewTab={item.openInNewTab}
+                        onClick={() => setOpen(false)}
+                        className="flex-1 font-outfit text-[20px] text-white py-[10px] px-[5%] hover:opacity-80 transition-opacity"
                       />
-                    </button>
+                      <button
+                        onClick={() => toggleDropdown(index)}
+                        className="px-4 py-[10px] text-white hover:opacity-80 transition-opacity"
+                        aria-label={`Toggle ${item.label} submenu`}
+                      >
+                        <ChevronDown
+                          className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
+                        />
+                      </button>
+                    </div>
                     {isExpanded && (
                       <div className="bg-white/5 rounded-lg mx-2 mb-1">
                         {item.children!.map((child) => (
