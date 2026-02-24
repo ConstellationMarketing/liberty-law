@@ -148,7 +148,7 @@ export default function Header() {
             </div>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center flex-1 justify-end">
+            <nav className="hidden md:flex items-center flex-1 justify-end mr-6">
               <ul className="flex flex-wrap justify-end -mx-[11px]">
                 {navItems.map((item) => (
                   <li key={item.href || item.label} className="px-[11px]">
