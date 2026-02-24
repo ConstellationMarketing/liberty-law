@@ -42,11 +42,15 @@ export const handleSitemap: RequestHandler = async (_req, res) => {
   const supabaseKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 
-  // Collect static routes first (deduped by path)
-  const seenPaths = new Set<string>(STATIC_ROUTES.map((r) => r.path));
+  function normalizeSlash(p: string): string {
+    return p === "/" ? "/" : p.replace(/\/?$/, "/");
+  }
+
+  // Collect static routes first (deduped by normalized path)
+  const seenPaths = new Set<string>(STATIC_ROUTES.map((r) => normalizeSlash(r.path)));
   const urls: { loc: string; lastmod?: string; changefreq?: string; priority?: string }[] =
     STATIC_ROUTES.map((r) => ({
-      loc: `${SITE_URL}${r.path}`,
+      loc: `${SITE_URL}${normalizeSlash(r.path)}`,
       changefreq: r.changefreq,
       priority: r.priority,
     }));
@@ -63,9 +67,9 @@ export const handleSitemap: RequestHandler = async (_req, res) => {
 
       if (!error && pages) {
         for (const page of pages) {
-          if (seenPaths.has(page.url_path)) continue;
-          seenPaths.add(page.url_path);
-          const normalizedPath = page.url_path === "/" ? "/" : page.url_path.replace(/\/?$/, "/");
+          const normalizedPath = normalizeSlash(page.url_path);
+          if (seenPaths.has(normalizedPath)) continue;
+          seenPaths.add(normalizedPath);
           urls.push({
             loc: `${SITE_URL}${normalizedPath}`,
             lastmod: page.updated_at
