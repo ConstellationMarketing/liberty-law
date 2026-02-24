@@ -14,6 +14,7 @@ import ContactPage from "./pages/ContactPage";
 import NotFound from "./pages/NotFound";
 import AdminRoutes from "./pages/AdminRoutes";
 import ScrollToTop from "./components/ScrollToTop";
+import GlobalScripts from "./components/GlobalScripts";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsPage from "./pages/TermsPage";
 import ComplaintsPage from "./pages/ComplaintsPage";
@@ -24,6 +25,7 @@ const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <SiteSettingsProvider>
+        <GlobalScripts />
         <TooltipProvider>
           <Toaster />
           <Sonner />

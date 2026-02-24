@@ -26,6 +26,8 @@ interface SiteSettings {
   socialLinks: { platform: string; url: string; enabled: boolean }[];
   copyrightText: string;
   siteNoindex: boolean;
+  headScripts: string;
+  footerScripts: string;
 }
 
 // localStorage key for settings persistence
@@ -143,6 +145,8 @@ const DEFAULT_SETTINGS: SiteSettings = {
   ],
   copyrightText: "Copyright © 2026 Liberty Law P.C. All Rights Reserved.",
   siteNoindex: true,
+  headScripts: "",
+  footerScripts: "",
 };
 
 interface SiteSettingsContextValue {
@@ -281,6 +285,8 @@ export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
             socialLinks: row.social_links || DEFAULT_SETTINGS.socialLinks,
             copyrightText: row.copyright_text || DEFAULT_SETTINGS.copyrightText,
             siteNoindex: row.site_noindex ?? DEFAULT_SETTINGS.siteNoindex,
+            headScripts: row.head_scripts || "",
+            footerScripts: row.footer_scripts || "",
           };
 
           settingsCache = loadedSettings;
