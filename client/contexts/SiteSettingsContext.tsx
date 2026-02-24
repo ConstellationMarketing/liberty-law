@@ -28,6 +28,7 @@ interface SiteSettings {
   siteNoindex: boolean;
   headScripts: string;
   footerScripts: string;
+  ga4MeasurementId: string;
 }
 
 // localStorage key for settings persistence
@@ -147,6 +148,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
   siteNoindex: true,
   headScripts: "",
   footerScripts: "",
+  ga4MeasurementId: "",
 };
 
 interface SiteSettingsContextValue {
@@ -287,6 +289,7 @@ export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
             siteNoindex: row.site_noindex ?? DEFAULT_SETTINGS.siteNoindex,
             headScripts: row.head_scripts || "",
             footerScripts: row.footer_scripts || "",
+            ga4MeasurementId: row.ga4_measurement_id || "",
           };
 
           settingsCache = loadedSettings;

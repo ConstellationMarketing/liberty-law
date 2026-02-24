@@ -25,11 +25,11 @@ const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <SiteSettingsProvider>
-        <GlobalScripts />
         <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <GlobalScripts />
             <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
