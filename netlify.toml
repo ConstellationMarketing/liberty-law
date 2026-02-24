@@ -13,3 +13,14 @@
   from = "/api/*"
   status = 200
   to = "/.netlify/functions/api/:splat"
+
+[[plugins]]
+  package = "netlify-plugin-prerender-spa"
+
+  [plugins.inputs]
+    renderPaths = [
+      "/",
+      "/about",
+      "/contact",
+      "/practice-areas"
+    ]
