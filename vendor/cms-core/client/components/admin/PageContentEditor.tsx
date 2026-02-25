@@ -807,6 +807,101 @@ function HomePageEditor({
   );
 }
 
+// Shared CTA editor used by About, Contact, and Practice Areas pages
+function CTAEditor({
+  cta,
+  onChange,
+}: {
+  cta: AboutPageContent["cta"];
+  onChange: (c: AboutPageContent["cta"]) => void;
+}) {
+  return (
+    <Section title="CTA Section" defaultOpen={false}>
+      <div className="grid gap-4">
+        <div>
+          <Label>Heading</Label>
+          <Input
+            value={cta?.heading ?? ""}
+            onChange={(e) => onChange({ ...cta, heading: e.target.value })}
+          />
+        </div>
+        <div>
+          <Label>Description</Label>
+          <Textarea
+            value={cta?.description ?? ""}
+            onChange={(e) => onChange({ ...cta, description: e.target.value })}
+            rows={2}
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label>Primary Button Label</Label>
+            <Input
+              value={cta?.primaryButton?.label ?? ""}
+              onChange={(e) =>
+                onChange({
+                  ...cta,
+                  primaryButton: { ...cta?.primaryButton, label: e.target.value },
+                })
+              }
+            />
+          </div>
+          <div>
+            <Label>Primary Button Phone</Label>
+            <Input
+              value={cta?.primaryButton?.phone ?? ""}
+              onChange={(e) =>
+                onChange({
+                  ...cta,
+                  primaryButton: { ...cta?.primaryButton, phone: e.target.value },
+                })
+              }
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <Label>Secondary Button Label</Label>
+            <Input
+              value={cta?.secondaryButton?.label ?? ""}
+              onChange={(e) =>
+                onChange({
+                  ...cta,
+                  secondaryButton: { ...cta?.secondaryButton, label: e.target.value },
+                })
+              }
+            />
+          </div>
+          <div>
+            <Label>Secondary Button Sublabel</Label>
+            <Input
+              value={cta?.secondaryButton?.sublabel ?? ""}
+              onChange={(e) =>
+                onChange({
+                  ...cta,
+                  secondaryButton: { ...cta?.secondaryButton, sublabel: e.target.value },
+                })
+              }
+            />
+          </div>
+          <div>
+            <Label>Secondary Button Link</Label>
+            <Input
+              value={cta?.secondaryButton?.link ?? ""}
+              onChange={(e) =>
+                onChange({
+                  ...cta,
+                  secondaryButton: { ...cta?.secondaryButton, link: e.target.value },
+                })
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </Section>
+  );
+}
+
 // About Page Editor
 function AboutPageEditor({
   content,
@@ -827,39 +922,67 @@ function AboutPageEditor({
       <Section title="Hero Section">
         <div className="grid gap-4">
           <div>
-            <Label>Title</Label>
+            <Label>Section Label</Label>
             <Input
-              value={content?.hero?.title ?? ""}
+              value={content?.hero?.sectionLabel ?? ""}
               onChange={(e) =>
-                update("hero", { ...content.hero, title: e.target.value })
+                update("hero", { ...content.hero, sectionLabel: e.target.value })
               }
             />
           </div>
           <div>
-            <Label>Subtitle</Label>
+            <Label>Tagline</Label>
             <Input
-              value={content?.hero?.subtitle ?? ""}
+              value={content?.hero?.tagline ?? ""}
               onChange={(e) =>
-                update("hero", { ...content.hero, subtitle: e.target.value })
+                update("hero", { ...content.hero, tagline: e.target.value })
               }
             />
           </div>
           <div>
-            <Label>Background Image URL</Label>
-            <Input
-              value={content?.hero?.backgroundImage ?? ""}
+            <Label>Description</Label>
+            <Textarea
+              value={content?.hero?.description ?? ""}
               onChange={(e) =>
-                update("hero", { ...content.hero,
-                  backgroundImage: e.target.value,
-                })
+                update("hero", { ...content.hero, description: e.target.value })
               }
+              rows={2}
             />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Phone</Label>
+              <Input
+                value={content?.hero?.phone ?? ""}
+                onChange={(e) =>
+                  update("hero", { ...content.hero, phone: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <Label>Phone Label</Label>
+              <Input
+                value={content?.hero?.phoneLabel ?? ""}
+                onChange={(e) =>
+                  update("hero", { ...content.hero, phoneLabel: e.target.value })
+                }
+              />
+            </div>
           </div>
         </div>
       </Section>
 
       <Section title="Our Story" defaultOpen={false}>
         <div className="grid gap-4">
+          <div>
+            <Label>Section Label</Label>
+            <Input
+              value={content?.story?.sectionLabel ?? ""}
+              onChange={(e) =>
+                update("story", { ...content.story, sectionLabel: e.target.value })
+              }
+            />
+          </div>
           <div>
             <Label>Heading</Label>
             <Input
@@ -874,7 +997,8 @@ function AboutPageEditor({
             <Textarea
               value={(content?.story?.paragraphs ?? []).join("\n\n")}
               onChange={(e) =>
-                update("story", { ...content.story,
+                update("story", {
+                  ...content.story,
                   paragraphs: e.target.value.split("\n\n").filter(Boolean),
                 })
               }
@@ -890,13 +1014,180 @@ function AboutPageEditor({
               }
             />
           </div>
+          <div>
+            <Label>Image Alt Text</Label>
+            <Input
+              value={content?.story?.imageAlt ?? ""}
+              onChange={(e) =>
+                update("story", { ...content.story, imageAlt: e.target.value })
+              }
+            />
+          </div>
         </div>
       </Section>
 
-      <Section title="Our Values" defaultOpen={false}>
+      <Section title="Mission & Vision" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div>
+            <Label>Mission Heading</Label>
+            <Input
+              value={content?.missionVision?.mission?.heading ?? ""}
+              onChange={(e) =>
+                update("missionVision", {
+                  ...content.missionVision,
+                  mission: { ...content.missionVision?.mission, heading: e.target.value },
+                })
+              }
+            />
+          </div>
+          <div>
+            <Label>Mission Text</Label>
+            <Textarea
+              value={content?.missionVision?.mission?.text ?? ""}
+              onChange={(e) =>
+                update("missionVision", {
+                  ...content.missionVision,
+                  mission: { ...content.missionVision?.mission, text: e.target.value },
+                })
+              }
+              rows={3}
+            />
+          </div>
+          <div>
+            <Label>Vision Heading</Label>
+            <Input
+              value={content?.missionVision?.vision?.heading ?? ""}
+              onChange={(e) =>
+                update("missionVision", {
+                  ...content.missionVision,
+                  vision: { ...content.missionVision?.vision, heading: e.target.value },
+                })
+              }
+            />
+          </div>
+          <div>
+            <Label>Vision Text</Label>
+            <Textarea
+              value={content?.missionVision?.vision?.text ?? ""}
+              onChange={(e) =>
+                update("missionVision", {
+                  ...content.missionVision,
+                  vision: { ...content.missionVision?.vision, text: e.target.value },
+                })
+              }
+              rows={3}
+            />
+          </div>
+        </div>
+      </Section>
+
+      <Section title="Team" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div>
+            <Label>Section Label</Label>
+            <Input
+              value={content?.team?.sectionLabel ?? ""}
+              onChange={(e) =>
+                update("team", { ...content.team, sectionLabel: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Heading</Label>
+            <Input
+              value={content?.team?.heading ?? ""}
+              onChange={(e) =>
+                update("team", { ...content.team, heading: e.target.value })
+              }
+            />
+          </div>
+        </div>
         <ArrayEditor
-          items={content?.values ?? []}
-          onChange={(items) => update("values", items)}
+          items={content?.team?.members ?? []}
+          onChange={(items) => update("team", { ...content.team, members: items })}
+          itemLabel="Team Member"
+          newItem={() => ({ name: "", title: "", bio: "", image: "", specialties: [] })}
+          renderItem={(item, _, updateItem) => (
+            <div className="grid gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label>Name</Label>
+                  <Input
+                    value={item.name}
+                    onChange={(e) => updateItem({ ...item, name: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <Label>Title</Label>
+                  <Input
+                    value={item.title}
+                    onChange={(e) => updateItem({ ...item, title: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div>
+                <Label>Bio</Label>
+                <Textarea
+                  value={item.bio}
+                  onChange={(e) => updateItem({ ...item, bio: e.target.value })}
+                  rows={4}
+                />
+              </div>
+              <div>
+                <Label>Image URL</Label>
+                <Input
+                  value={item.image}
+                  onChange={(e) => updateItem({ ...item, image: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>Specialties (one per line)</Label>
+                <Textarea
+                  value={(item.specialties ?? []).join("\n")}
+                  onChange={(e) =>
+                    updateItem({ ...item, specialties: e.target.value.split("\n").filter(Boolean) })
+                  }
+                  rows={3}
+                />
+              </div>
+            </div>
+          )}
+        />
+      </Section>
+
+      <Section title="Our Values" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div>
+            <Label>Section Label</Label>
+            <Input
+              value={content?.values?.sectionLabel ?? ""}
+              onChange={(e) =>
+                update("values", { ...content.values, sectionLabel: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Heading</Label>
+            <Input
+              value={content?.values?.heading ?? ""}
+              onChange={(e) =>
+                update("values", { ...content.values, heading: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Subtitle</Label>
+            <Input
+              value={content?.values?.subtitle ?? ""}
+              onChange={(e) =>
+                update("values", { ...content.values, subtitle: e.target.value })
+              }
+            />
+          </div>
+        </div>
+        <ArrayEditor
+          items={content?.values?.items ?? []}
+          onChange={(items) => update("values", { ...content.values, items })}
           itemLabel="Value"
           newItem={() => ({ icon: "FileText", title: "", description: "" })}
           renderItem={(item, _, updateItem) => (
@@ -905,9 +1196,7 @@ function AboutPageEditor({
                 <Label>Icon (Lucide name)</Label>
                 <Input
                   value={item.icon}
-                  onChange={(e) =>
-                    updateItem({ ...item, icon: e.target.value })
-                  }
+                  onChange={(e) => updateItem({ ...item, icon: e.target.value })}
                   placeholder="FileText, Scale, Users"
                 />
               </div>
@@ -915,18 +1204,14 @@ function AboutPageEditor({
                 <Label>Title</Label>
                 <Input
                   value={item.title}
-                  onChange={(e) =>
-                    updateItem({ ...item, title: e.target.value })
-                  }
+                  onChange={(e) => updateItem({ ...item, title: e.target.value })}
                 />
               </div>
               <div>
                 <Label>Description</Label>
                 <Textarea
                   value={item.description}
-                  onChange={(e) =>
-                    updateItem({ ...item, description: e.target.value })
-                  }
+                  onChange={(e) => updateItem({ ...item, description: e.target.value })}
                   rows={2}
                 />
               </div>
@@ -935,173 +1220,95 @@ function AboutPageEditor({
         />
       </Section>
 
-      <Section title="Attorney" defaultOpen={false}>
+      <Section title="Why Choose Us" defaultOpen={false}>
         <div className="grid gap-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Name</Label>
-              <Input
-                value={content?.attorney?.name ?? ""}
-                onChange={(e) =>
-                  update("attorney", { ...content.attorney,
-                    name: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div>
-              <Label>Title</Label>
-              <Input
-                value={content?.attorney?.title ?? ""}
-                onChange={(e) =>
-                  update("attorney", { ...content.attorney,
-                    title: e.target.value,
-                  })
-                }
-              />
-            </div>
-          </div>
           <div>
-            <Label>Image URL</Label>
+            <Label>Section Label</Label>
             <Input
-              value={content?.attorney?.image ?? ""}
+              value={content?.whyChooseUs?.sectionLabel ?? ""}
               onChange={(e) =>
-                update("attorney", { ...content.attorney,
-                  image: e.target.value,
-                })
+                update("whyChooseUs", { ...content.whyChooseUs, sectionLabel: e.target.value })
               }
             />
           </div>
-          <div>
-            <Label>Bio Paragraphs (separate with blank line)</Label>
-            <Textarea
-              value={(content?.attorney?.bio ?? []).join("\n\n")}
-              onChange={(e) =>
-                update("attorney", { ...content.attorney,
-                  bio: e.target.value.split("\n\n").filter(Boolean),
-                })
-              }
-              rows={6}
-            />
-          </div>
-          <div>
-            <Label>Credentials (one per line)</Label>
-            <Textarea
-              value={(content?.attorney?.credentials ?? []).join("\n")}
-              onChange={(e) =>
-                update("attorney", { ...content.attorney,
-                  credentials: e.target.value.split("\n").filter(Boolean),
-                })
-              }
-              rows={4}
-            />
-          </div>
-          <div>
-            <Label>Phone</Label>
-            <Input
-              value={content?.attorney?.phone ?? ""}
-              onChange={(e) =>
-                update("attorney", { ...content.attorney,
-                  phone: e.target.value,
-                })
-              }
-            />
-          </div>
-        </div>
-      </Section>
-
-      <Section title="Testimonials" defaultOpen={false}>
-        <ArrayEditor
-          items={content?.testimonials ?? []}
-          onChange={(items) => update("testimonials", items)}
-          itemLabel="Testimonial"
-          newItem={() => ({
-            quote: "",
-            author: "",
-            role: "",
-            rating: 5,
-          })}
-          renderItem={(item, _, updateItem) => (
-            <div className="grid gap-3">
-              <div>
-                <Label>Quote</Label>
-                <Textarea
-                  value={item.quote}
-                  onChange={(e) =>
-                    updateItem({ ...item, quote: e.target.value })
-                  }
-                  rows={2}
-                />
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <Label>Author</Label>
-                  <Input
-                    value={item.author}
-                    onChange={(e) =>
-                      updateItem({ ...item, author: e.target.value })
-                    }
-                  />
-                </div>
-                <div>
-                  <Label>Role</Label>
-                  <Input
-                    value={item.role}
-                    onChange={(e) =>
-                      updateItem({ ...item, role: e.target.value })
-                    }
-                  />
-                </div>
-                <div>
-                  <Label>Rating</Label>
-                  <Input
-                    type="number"
-                    min="1"
-                    max="5"
-                    value={item.rating}
-                    onChange={(e) =>
-                      updateItem({ ...item, rating: parseInt(e.target.value) })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-        />
-      </Section>
-
-      <Section title="CTA Section" defaultOpen={false}>
-        <div className="grid gap-4">
           <div>
             <Label>Heading</Label>
             <Input
-              value={content?.cta?.heading ?? ""}
+              value={content?.whyChooseUs?.heading ?? ""}
               onChange={(e) =>
-                update("cta", { ...content.cta, heading: e.target.value })
+                update("whyChooseUs", { ...content.whyChooseUs, heading: e.target.value })
               }
             />
           </div>
           <div>
             <Label>Description</Label>
             <Textarea
-              value={content?.cta?.description ?? ""}
+              value={content?.whyChooseUs?.description ?? ""}
               onChange={(e) =>
-                update("cta", { ...content.cta, description: e.target.value })
+                update("whyChooseUs", { ...content.whyChooseUs, description: e.target.value })
               }
               rows={2}
             />
           </div>
           <div>
-            <Label>Phone</Label>
+            <Label>Image URL</Label>
             <Input
-              value={content?.cta?.phone ?? ""}
+              value={content?.whyChooseUs?.image ?? ""}
               onChange={(e) =>
-                update("cta", { ...content.cta, phone: e.target.value })
+                update("whyChooseUs", { ...content.whyChooseUs, image: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Image Alt Text</Label>
+            <Input
+              value={content?.whyChooseUs?.imageAlt ?? ""}
+              onChange={(e) =>
+                update("whyChooseUs", { ...content.whyChooseUs, imageAlt: e.target.value })
               }
             />
           </div>
         </div>
+        <ArrayEditor
+          items={content?.whyChooseUs?.items ?? []}
+          onChange={(items) => update("whyChooseUs", { ...content.whyChooseUs, items })}
+          itemLabel="Item"
+          newItem={() => ({ number: "", title: "", description: "" })}
+          renderItem={(item, _, updateItem) => (
+            <div className="grid gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label>Number</Label>
+                  <Input
+                    value={item.number}
+                    onChange={(e) => updateItem({ ...item, number: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <Label>Title</Label>
+                  <Input
+                    value={item.title}
+                    onChange={(e) => updateItem({ ...item, title: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div>
+                <Label>Description</Label>
+                <Textarea
+                  value={item.description}
+                  onChange={(e) => updateItem({ ...item, description: e.target.value })}
+                  rows={2}
+                />
+              </div>
+            </div>
+          )}
+        />
       </Section>
+
+      <CTAEditor
+        cta={content?.cta}
+        onChange={(cta) => update("cta", cta)}
+      />
     </div>
   );
 }
@@ -1126,85 +1333,80 @@ function ContactPageEditor({
       <Section title="Hero Section">
         <div className="grid gap-4">
           <div>
-            <Label>Title</Label>
+            <Label>Section Label</Label>
             <Input
-              value={content?.hero?.title ?? ""}
+              value={content?.hero?.sectionLabel ?? ""}
               onChange={(e) =>
-                update("hero", { ...content.hero, title: e.target.value })
+                update("hero", { ...content.hero, sectionLabel: e.target.value })
               }
             />
           </div>
           <div>
-            <Label>Subtitle</Label>
-            <Textarea
-              value={content?.hero?.subtitle ?? ""}
+            <Label>Tagline</Label>
+            <Input
+              value={content?.hero?.tagline ?? ""}
               onChange={(e) =>
-                update("hero", { ...content.hero, subtitle: e.target.value })
+                update("hero", { ...content.hero, tagline: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Textarea
+              value={content?.hero?.description ?? ""}
+              onChange={(e) =>
+                update("hero", { ...content.hero, description: e.target.value })
               }
               rows={2}
-            />
-          </div>
-          <div>
-            <Label>Background Image URL</Label>
-            <Input
-              value={content?.hero?.backgroundImage ?? ""}
-              onChange={(e) =>
-                update("hero", { ...content.hero,
-                  backgroundImage: e.target.value,
-                })
-              }
             />
           </div>
         </div>
       </Section>
 
-      <Section title="Contact Info" defaultOpen={false}>
-        <div className="grid gap-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Phone</Label>
-              <Input
-                value={content?.info?.phone ?? ""}
-                onChange={(e) =>
-                  update("info", { ...content.info, phone: e.target.value })
-                }
-              />
+      <Section title="Contact Methods" defaultOpen={false}>
+        <ArrayEditor
+          items={content?.contactMethods?.methods ?? []}
+          onChange={(items) => update("contactMethods", { ...content.contactMethods, methods: items })}
+          itemLabel="Method"
+          newItem={() => ({ icon: "Phone", title: "", detail: "", subDetail: "" })}
+          renderItem={(item, _, updateItem) => (
+            <div className="grid gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label>Icon (Lucide name)</Label>
+                  <Input
+                    value={item.icon}
+                    onChange={(e) => updateItem({ ...item, icon: e.target.value })}
+                    placeholder="Phone, Mail, MapPin"
+                  />
+                </div>
+                <div>
+                  <Label>Title</Label>
+                  <Input
+                    value={item.title}
+                    onChange={(e) => updateItem({ ...item, title: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div>
+                <Label>Detail</Label>
+                <Input
+                  value={item.detail}
+                  onChange={(e) => updateItem({ ...item, detail: e.target.value })}
+                  placeholder="Phone number, email, or address"
+                />
+              </div>
+              <div>
+                <Label>Sub-Detail</Label>
+                <Input
+                  value={item.subDetail}
+                  onChange={(e) => updateItem({ ...item, subDetail: e.target.value })}
+                  placeholder="Availability, response time, etc."
+                />
+              </div>
             </div>
-            <div>
-              <Label>Email</Label>
-              <Input
-                value={content?.info?.email ?? ""}
-                onChange={(e) =>
-                  update("info", { ...content.info, email: e.target.value })
-                }
-              />
-            </div>
-          </div>
-          <div>
-            <Label>Address (one line per entry)</Label>
-            <Textarea
-              value={(content?.info?.address ?? []).join("\n")}
-              onChange={(e) =>
-                update("info", { ...content.info,
-                  address: e.target.value.split("\n").filter(Boolean),
-                })
-              }
-              rows={2}
-            />
-          </div>
-          <div>
-            <Label>Hours</Label>
-            <Input
-              value={content?.info?.hours ?? ""}
-              onChange={(e) =>
-                update("info", { ...content.info,
-                  hours: e.target.value,
-                })
-              }
-              placeholder="Mon-Fri: 9am-5pm"
-            />
-          </div>
-        </div>
+          )}
+        />
       </Section>
 
       <Section title="Contact Form" defaultOpen={false}>
@@ -1219,11 +1421,11 @@ function ContactPageEditor({
             />
           </div>
           <div>
-            <Label>Description</Label>
+            <Label>Subtext</Label>
             <Textarea
-              value={content?.form?.description ?? ""}
+              value={content?.form?.subtext ?? ""}
               onChange={(e) =>
-                update("form", { ...content.form, description: e.target.value })
+                update("form", { ...content.form, subtext: e.target.value })
               }
               rows={2}
             />
@@ -1231,51 +1433,157 @@ function ContactPageEditor({
         </div>
       </Section>
 
-      <Section title="Map" defaultOpen={false}>
-        <div>
-          <Label>Google Maps Embed URL</Label>
-          <Input
-            value={content?.mapEmbedUrl ?? ""}
-            onChange={(e) =>
-              onChange({ ...content, mapEmbedUrl: e.target.value })
-            }
-            placeholder="https://www.google.com/maps/embed?pb=..."
-          />
-        </div>
-      </Section>
-
-      <Section title="CTA Section" defaultOpen={false}>
+      <Section title="Office Hours" defaultOpen={false}>
         <div className="grid gap-4">
           <div>
             <Label>Heading</Label>
             <Input
-              value={content?.cta?.heading ?? ""}
+              value={content?.officeHours?.heading ?? ""}
               onChange={(e) =>
-                update("cta", { ...content.cta, heading: e.target.value })
+                update("officeHours", { ...content.officeHours, heading: e.target.value })
+              }
+            />
+          </div>
+        </div>
+        <ArrayEditor
+          items={content?.officeHours?.items ?? []}
+          onChange={(items) => update("officeHours", { ...content.officeHours, items })}
+          itemLabel="Hours Entry"
+          newItem={() => ({ day: "", hours: "" })}
+          renderItem={(item, _, updateItem) => (
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label>Day</Label>
+                <Input
+                  value={item.day}
+                  onChange={(e) => updateItem({ ...item, day: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>Hours</Label>
+                <Input
+                  value={item.hours}
+                  onChange={(e) => updateItem({ ...item, hours: e.target.value })}
+                />
+              </div>
+            </div>
+          )}
+        />
+        <div className="mt-4">
+          <Label>Note</Label>
+          <Input
+            value={content?.officeHours?.note ?? ""}
+            onChange={(e) =>
+              update("officeHours", { ...content.officeHours, note: e.target.value })
+            }
+          />
+        </div>
+      </Section>
+
+      <Section title="Process Steps" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div>
+            <Label>Section Label</Label>
+            <Input
+              value={content?.process?.sectionLabel ?? ""}
+              onChange={(e) =>
+                update("process", { ...content.process, sectionLabel: e.target.value })
               }
             />
           </div>
           <div>
-            <Label>Description</Label>
-            <Textarea
-              value={content?.cta?.description ?? ""}
+            <Label>Heading</Label>
+            <Input
+              value={content?.process?.heading ?? ""}
               onChange={(e) =>
-                update("cta", { ...content.cta, description: e.target.value })
+                update("process", { ...content.process, heading: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Subtitle</Label>
+            <Input
+              value={content?.process?.subtitle ?? ""}
+              onChange={(e) =>
+                update("process", { ...content.process, subtitle: e.target.value })
+              }
+            />
+          </div>
+        </div>
+        <ArrayEditor
+          items={content?.process?.steps ?? []}
+          onChange={(items) => update("process", { ...content.process, steps: items })}
+          itemLabel="Step"
+          newItem={() => ({ number: "", title: "", description: "" })}
+          renderItem={(item, _, updateItem) => (
+            <div className="grid gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label>Number</Label>
+                  <Input
+                    value={item.number}
+                    onChange={(e) => updateItem({ ...item, number: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <Label>Title</Label>
+                  <Input
+                    value={item.title}
+                    onChange={(e) => updateItem({ ...item, title: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div>
+                <Label>Description</Label>
+                <Textarea
+                  value={item.description}
+                  onChange={(e) => updateItem({ ...item, description: e.target.value })}
+                  rows={2}
+                />
+              </div>
+            </div>
+          )}
+        />
+      </Section>
+
+      <Section title="Visit Our Office" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div>
+            <Label>Heading</Label>
+            <Input
+              value={content?.visitOffice?.heading ?? ""}
+              onChange={(e) =>
+                update("visitOffice", { ...content.visitOffice, heading: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Subtext</Label>
+            <Textarea
+              value={content?.visitOffice?.subtext ?? ""}
+              onChange={(e) =>
+                update("visitOffice", { ...content.visitOffice, subtext: e.target.value })
               }
               rows={2}
             />
           </div>
           <div>
-            <Label>Phone</Label>
+            <Label>Google Maps Embed URL</Label>
             <Input
-              value={content?.cta?.phone ?? ""}
+              value={content?.visitOffice?.mapEmbedUrl ?? ""}
               onChange={(e) =>
-                update("cta", { ...content.cta, phone: e.target.value })
+                update("visitOffice", { ...content.visitOffice, mapEmbedUrl: e.target.value })
               }
+              placeholder="https://www.google.com/maps/embed?pb=..."
             />
           </div>
         </div>
       </Section>
+
+      <CTAEditor
+        cta={content?.cta}
+        onChange={(cta) => update("cta", cta)}
+      />
     </div>
   );
 }
@@ -1300,69 +1608,83 @@ function PracticeAreasPageEditor({
       <Section title="Hero Section">
         <div className="grid gap-4">
           <div>
-            <Label>Title</Label>
+            <Label>Section Label</Label>
             <Input
-              value={content?.hero?.title ?? ""}
+              value={content?.hero?.sectionLabel ?? ""}
               onChange={(e) =>
-                update("hero", { ...content.hero, title: e.target.value })
+                update("hero", { ...content.hero, sectionLabel: e.target.value })
               }
             />
           </div>
           <div>
-            <Label>Subtitle</Label>
+            <Label>Tagline</Label>
             <Input
-              value={content?.hero?.subtitle ?? ""}
+              value={content?.hero?.tagline ?? ""}
               onChange={(e) =>
-                update("hero", { ...content.hero, subtitle: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Background Image URL</Label>
-            <Input
-              value={content?.hero?.backgroundImage ?? ""}
-              onChange={(e) =>
-                update("hero", { ...content.hero,
-                  backgroundImage: e.target.value,
-                })
-              }
-            />
-          </div>
-        </div>
-      </Section>
-
-      <Section title="Introduction" defaultOpen={false}>
-        <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.intro?.heading ?? ""}
-              onChange={(e) =>
-                update("intro", { ...content.intro, heading: e.target.value })
+                update("hero", { ...content.hero, tagline: e.target.value })
               }
             />
           </div>
           <div>
             <Label>Description</Label>
             <Textarea
-              value={content?.intro?.description ?? ""}
+              value={content?.hero?.description ?? ""}
               onChange={(e) =>
-                update("intro", { ...content.intro,
-                  description: e.target.value,
-                })
+                update("hero", { ...content.hero, description: e.target.value })
               }
-              rows={3}
+              rows={2}
             />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Phone</Label>
+              <Input
+                value={content?.hero?.phone ?? ""}
+                onChange={(e) =>
+                  update("hero", { ...content.hero, phone: e.target.value })
+                }
+              />
+            </div>
+            <div>
+              <Label>Phone Label</Label>
+              <Input
+                value={content?.hero?.phoneLabel ?? ""}
+                onChange={(e) =>
+                  update("hero", { ...content.hero, phoneLabel: e.target.value })
+                }
+              />
+            </div>
           </div>
         </div>
       </Section>
 
-      <Section title="Practice Areas" defaultOpen={false}>
+      <Section title="Practice Areas Grid" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div>
+            <Label>Heading</Label>
+            <Input
+              value={content?.grid?.heading ?? ""}
+              onChange={(e) =>
+                update("grid", { ...content.grid, heading: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Textarea
+              value={content?.grid?.description ?? ""}
+              onChange={(e) =>
+                update("grid", { ...content.grid, description: e.target.value })
+              }
+              rows={2}
+            />
+          </div>
+        </div>
         <ArrayEditor
-          items={content?.areas ?? []}
-          onChange={(items) => update("areas", items)}
+          items={content?.grid?.areas ?? []}
+          onChange={(items) => update("grid", { ...content.grid, areas: items })}
           itemLabel="Practice Area"
-          newItem={() => ({ title: "", icon: "CarFront", description: "", image: "" })}
+          newItem={() => ({ icon: "CarFront", title: "", description: "", image: "", link: "" })}
           renderItem={(item, _, updateItem) => (
             <div className="grid gap-3">
               <div className="grid grid-cols-2 gap-3">
@@ -1370,19 +1692,15 @@ function PracticeAreasPageEditor({
                   <Label>Title</Label>
                   <Input
                     value={item.title}
-                    onChange={(e) =>
-                      updateItem({ ...item, title: e.target.value })
-                    }
+                    onChange={(e) => updateItem({ ...item, title: e.target.value })}
                   />
                 </div>
                 <div>
                   <Label>Icon (Lucide name)</Label>
                   <Input
                     value={item.icon}
-                    onChange={(e) =>
-                      updateItem({ ...item, icon: e.target.value })
-                    }
-                    placeholder="CarFront, Truck, etc."
+                    onChange={(e) => updateItem({ ...item, icon: e.target.value })}
+                    placeholder="Car, Lock, Scale, etc."
                   />
                 </div>
               </div>
@@ -1390,9 +1708,7 @@ function PracticeAreasPageEditor({
                 <Label>Description</Label>
                 <Textarea
                   value={item.description}
-                  onChange={(e) =>
-                    updateItem({ ...item, description: e.target.value })
-                  }
+                  onChange={(e) => updateItem({ ...item, description: e.target.value })}
                   rows={2}
                 />
               </div>
@@ -1400,9 +1716,15 @@ function PracticeAreasPageEditor({
                 <Label>Image URL</Label>
                 <Input
                   value={item.image}
-                  onChange={(e) =>
-                    updateItem({ ...item, image: e.target.value })
-                  }
+                  onChange={(e) => updateItem({ ...item, image: e.target.value })}
+                />
+              </div>
+              <div>
+                <Label>Link</Label>
+                <Input
+                  value={item.link}
+                  onChange={(e) => updateItem({ ...item, link: e.target.value })}
+                  placeholder="/practice-areas"
                 />
               </div>
             </div>
@@ -1410,38 +1732,104 @@ function PracticeAreasPageEditor({
         />
       </Section>
 
-      <Section title="CTA Section" defaultOpen={false}>
+      <Section title="Why Choose Us" defaultOpen={false}>
         <div className="grid gap-4">
+          <div>
+            <Label>Section Label</Label>
+            <Input
+              value={content?.whyChoose?.sectionLabel ?? ""}
+              onChange={(e) =>
+                update("whyChoose", { ...content.whyChoose, sectionLabel: e.target.value })
+              }
+            />
+          </div>
           <div>
             <Label>Heading</Label>
             <Input
-              value={content?.cta?.heading ?? ""}
+              value={content?.whyChoose?.heading ?? ""}
               onChange={(e) =>
-                update("cta", { ...content.cta, heading: e.target.value })
+                update("whyChoose", { ...content.whyChoose, heading: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Subtitle</Label>
+            <Input
+              value={content?.whyChoose?.subtitle ?? ""}
+              onChange={(e) =>
+                update("whyChoose", { ...content.whyChoose, subtitle: e.target.value })
               }
             />
           </div>
           <div>
             <Label>Description</Label>
             <Textarea
-              value={content?.cta?.description ?? ""}
+              value={content?.whyChoose?.description ?? ""}
               onChange={(e) =>
-                update("cta", { ...content.cta, description: e.target.value })
+                update("whyChoose", { ...content.whyChoose, description: e.target.value })
               }
               rows={2}
             />
           </div>
           <div>
-            <Label>Phone</Label>
+            <Label>Image URL</Label>
             <Input
-              value={content?.cta?.phone ?? ""}
+              value={content?.whyChoose?.image ?? ""}
               onChange={(e) =>
-                update("cta", { ...content.cta, phone: e.target.value })
+                update("whyChoose", { ...content.whyChoose, image: e.target.value })
+              }
+            />
+          </div>
+          <div>
+            <Label>Image Alt Text</Label>
+            <Input
+              value={content?.whyChoose?.imageAlt ?? ""}
+              onChange={(e) =>
+                update("whyChoose", { ...content.whyChoose, imageAlt: e.target.value })
               }
             />
           </div>
         </div>
+        <ArrayEditor
+          items={content?.whyChoose?.items ?? []}
+          onChange={(items) => update("whyChoose", { ...content.whyChoose, items })}
+          itemLabel="Item"
+          newItem={() => ({ number: "", title: "", description: "" })}
+          renderItem={(item, _, updateItem) => (
+            <div className="grid gap-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label>Number</Label>
+                  <Input
+                    value={item.number}
+                    onChange={(e) => updateItem({ ...item, number: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <Label>Title</Label>
+                  <Input
+                    value={item.title}
+                    onChange={(e) => updateItem({ ...item, title: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div>
+                <Label>Description</Label>
+                <Textarea
+                  value={item.description}
+                  onChange={(e) => updateItem({ ...item, description: e.target.value })}
+                  rows={2}
+                />
+              </div>
+            </div>
+          )}
+        />
       </Section>
+
+      <CTAEditor
+        cta={content?.cta}
+        onChange={(cta) => update("cta", cta)}
+      />
     </div>
   );
 }

@@ -72,40 +72,61 @@ export interface HomePageContent {
 // ============================================
 export interface AboutPageContent {
   hero: {
-    title: string;
-    backgroundImage: string;
+    sectionLabel: string;
+    tagline: string;
+    description: string;
+    phone: string;
+    phoneLabel: string;
   };
   story: {
+    sectionLabel: string;
+    heading: string;
     paragraphs: string[];
-    ctaPrimaryText: string;
-    ctaPrimaryUrl: string;
-    ctaSecondaryText: string;
-    ctaSecondaryUrl: string;
     image: string;
+    imageAlt: string;
   };
-  attorney: {
-    name: string;
-    title: string;
-    photo: string;
-    bio: string[];
-    phone: string;
+  missionVision: {
+    mission: { heading: string; text: string };
+    vision: { heading: string; text: string };
   };
-  approach: Array<{
-    icon: string; // Lucide icon name
-    title: string;
+  team: {
+    sectionLabel: string;
+    heading: string;
+    members: Array<{
+      name: string;
+      title: string;
+      bio: string;
+      image: string;
+      specialties: string[];
+    }>;
+  };
+  values: {
+    sectionLabel: string;
+    heading: string;
+    subtitle: string;
+    items: Array<{
+      icon: string;
+      title: string;
+      description: string;
+    }>;
+  };
+  whyChooseUs: {
+    sectionLabel: string;
+    heading: string;
     description: string;
-  }>;
-  testimonials: Array<{
-    quote: string;
-    name: string;
-    initials: string;
-    caseType: string;
-    rating: number;
-  }>;
+    image: string;
+    imageAlt: string;
+    items: Array<{
+      number: string;
+      title: string;
+      description: string;
+    }>;
+  };
   cta: {
     heading: string;
     description: string;
-    phone: string;
+    primaryButton: { label: string; phone: string };
+    secondaryButton: { label: string; sublabel: string; link: string };
   };
 }
 
@@ -114,31 +135,47 @@ export interface AboutPageContent {
 // ============================================
 export interface ContactPageContent {
   hero: {
-    title: string;
-    subtitle: string;
-    backgroundImage: string;
+    sectionLabel: string;
+    tagline: string;
+    description: string;
   };
-  info: {
-    phone: string;
-    phoneNote: string;
-    address: string[];
-    addressLabel: string;
+  contactMethods: {
+    methods: Array<{
+      icon: string;
+      title: string;
+      detail: string;
+      subDetail: string;
+    }>;
   };
   form: {
     heading: string;
-    image: string;
-    badgeImage: string;
+    subtext: string;
   };
-  officeHours: Array<{
-    label: string;
-    hours: string;
-  }>;
-  hoursNote: string;
-  mapEmbedUrl: string;
+  officeHours: {
+    heading: string;
+    items: Array<{ day: string; hours: string }>;
+    note: string;
+  };
+  process: {
+    sectionLabel: string;
+    heading: string;
+    subtitle: string;
+    steps: Array<{
+      number: string;
+      title: string;
+      description: string;
+    }>;
+  };
+  visitOffice: {
+    heading: string;
+    subtext: string;
+    mapEmbedUrl: string;
+  };
   cta: {
     heading: string;
     description: string;
-    phone: string;
+    primaryButton: { label: string; phone: string };
+    secondaryButton: { label: string; sublabel: string; link: string };
   };
 }
 
@@ -147,28 +184,41 @@ export interface ContactPageContent {
 // ============================================
 export interface PracticeAreasPageContent {
   hero: {
-    title: string;
-    backgroundImage: string;
-  };
-  intro: string;
-  areas: Array<{
-    name: string;
-    icon: string; // Lucide icon name
+    sectionLabel: string;
+    tagline: string;
     description: string;
-  }>;
-  options: {
+    phone: string;
+    phoneLabel: string;
+  };
+  grid: {
     heading: string;
-    text: string;
+    description: string;
+    areas: Array<{
+      icon: string;
+      title: string;
+      description: string;
+      image: string;
+      link: string;
+    }>;
+  };
+  whyChoose: {
+    sectionLabel: string;
+    heading: string;
+    subtitle: string;
+    description: string;
     image: string;
-    ctaPrimaryText: string;
-    ctaPrimaryUrl: string;
-    ctaSecondaryText: string;
-    ctaSecondaryUrl: string;
+    imageAlt: string;
+    items: Array<{
+      number: string;
+      title: string;
+      description: string;
+    }>;
   };
   cta: {
     heading: string;
     description: string;
-    phone: string;
+    primaryButton: { label: string; phone: string };
+    secondaryButton: { label: string; sublabel: string; link: string };
   };
 }
 
