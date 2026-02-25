@@ -148,6 +148,8 @@ export default function Header() {
                 <img
                   src={settings.logoUrl}
                   alt={settings.logoAlt}
+                  width={200}
+                  height={55}
                   className="h-[55px] w-auto max-w-[280px] object-contain"
                 />
               </Link>

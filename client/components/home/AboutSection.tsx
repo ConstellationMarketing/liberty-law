@@ -72,6 +72,8 @@ export default function AboutSection({ content }: AboutSectionProps) {
             <img
               src={data.attorneyImage}
               alt={data.attorneyImageAlt}
+              width={800}
+              height={600}
               className="w-full h-auto object-cover"
               loading="lazy"
             />

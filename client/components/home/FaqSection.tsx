@@ -68,6 +68,8 @@ export default function FaqSection({ content }: FaqSectionProps) {
           <img
             src={data.videoThumbnail}
             alt="Frequently Asked Questions"
+            width={700}
+            height={500}
             className="w-full h-auto object-cover"
             loading="lazy"
           />

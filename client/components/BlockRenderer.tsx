@@ -223,7 +223,7 @@ function ImageBlock({
 }) {
   return (
     <figure className="my-6">
-      <img src={block.src} alt={block.alt} className="w-full rounded-lg" />
+      <img src={block.src} alt={block.alt} width={800} height={450} className="w-full rounded-lg" />
       {block.alt && (
         <figcaption className="text-center text-sm text-gray-500 mt-2">
           {block.alt}
@@ -241,7 +241,7 @@ function AttorneyBioBlock({
   return (
     <div className="flex flex-col md:flex-row gap-8 py-8">
       <div className="md:w-1/3">
-        <img src={block.image} alt={block.name} className="w-full rounded-lg" />
+        <img src={block.image} alt={block.name} width={400} height={500} className="w-full rounded-lg" />
       </div>
       <div className="md:w-2/3">
         <h3
