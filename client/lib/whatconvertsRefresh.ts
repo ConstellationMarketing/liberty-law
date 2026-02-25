@@ -157,6 +157,7 @@ export function refreshWhatConvertsDni(
 
       const script = document.createElement("script");
       script.src = src;
+      script.async = true;
       script.setAttribute(WC_ATTR, "dni");
       document.head.appendChild(script);
       log("→ re-inserted WC script (fallback)");

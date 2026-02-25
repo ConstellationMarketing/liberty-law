@@ -26,6 +26,10 @@ function injectHtml(html: string, target: HTMLElement): () => void {
       if (child.textContent) {
         script.textContent = child.textContent;
       }
+      // Ensure external scripts are non-blocking
+      if (script.src) {
+        script.async = true;
+      }
       target.appendChild(script);
       injected.push(script);
     } else {
