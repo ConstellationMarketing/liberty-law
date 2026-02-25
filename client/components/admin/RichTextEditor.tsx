@@ -1,9 +1,9 @@
-import { useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
-import { Bold, Italic, List, ListOrdered, Heading2, Undo, Redo, Link as LinkIcon, Unlink } from 'lucide-react';
+import { Bold, Italic, List, ListOrdered, Heading2, Undo, Redo, Link as LinkIcon, Unlink, Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface RichTextEditorProps {
@@ -19,6 +19,10 @@ export default function RichTextEditor({
   placeholder = 'Start typing...',
   className,
 }: RichTextEditorProps) {
+  const [showLinkInput, setShowLinkInput] = useState(false);
+  const [linkUrl, setLinkUrl] = useState('');
+  const linkInputRef = useRef<HTMLInputElement>(null);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -38,20 +42,36 @@ export default function RichTextEditor({
     },
   });
 
-  const setLink = useCallback(() => {
+  useEffect(() => {
+    if (showLinkInput && linkInputRef.current) {
+      linkInputRef.current.focus();
+    }
+  }, [showLinkInput]);
+
+  const openLinkInput = useCallback(() => {
+    if (!editor) return;
+    const previousUrl = editor.getAttributes('link').href || '';
+    setLinkUrl(previousUrl);
+    setShowLinkInput(true);
+  }, [editor]);
+
+  const applyLink = useCallback(() => {
     if (!editor) return;
 
-    const previousUrl = editor.getAttributes('link').href || '';
-    const url = window.prompt('Enter URL:', previousUrl);
-
-    if (url === null) return; // cancelled
-
-    if (url === '') {
+    if (linkUrl.trim() === '') {
       editor.chain().focus().extendMarkRange('link').unsetLink().run();
-      return;
+    } else {
+      editor.chain().focus().extendMarkRange('link').setLink({ href: linkUrl.trim() }).run();
     }
 
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    setShowLinkInput(false);
+    setLinkUrl('');
+  }, [editor, linkUrl]);
+
+  const cancelLink = useCallback(() => {
+    setShowLinkInput(false);
+    setLinkUrl('');
+    editor?.chain().focus().run();
   }, [editor]);
 
   if (!editor) {
@@ -122,7 +142,7 @@ export default function RichTextEditor({
         <div className="w-px h-6 bg-gray-300 mx-1" />
         <button
           type="button"
-          onClick={setLink}
+          onClick={openLinkInput}
           className={cn(
             'p-2 rounded hover:bg-gray-200 transition-colors',
             editor.isActive('link') && 'bg-gray-300'
@@ -161,6 +181,46 @@ export default function RichTextEditor({
           <Redo className="h-4 w-4" />
         </button>
       </div>
+
+      {/* Inline link input bar */}
+      {showLinkInput && (
+        <div className="border-b bg-blue-50 px-3 py-2 flex items-center gap-2">
+          <LinkIcon className="h-4 w-4 text-gray-500 shrink-0" />
+          <input
+            ref={linkInputRef}
+            type="url"
+            value={linkUrl}
+            onChange={(e) => setLinkUrl(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                applyLink();
+              }
+              if (e.key === 'Escape') {
+                cancelLink();
+              }
+            }}
+            placeholder="Enter URL (e.g. https://example.com)"
+            className="flex-1 text-sm px-2 py-1 border rounded bg-white outline-none focus:ring-1 focus:ring-blue-400"
+          />
+          <button
+            type="button"
+            onClick={applyLink}
+            className="p-1.5 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+            title="Apply link"
+          >
+            <Check className="h-3.5 w-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={cancelLink}
+            className="p-1.5 rounded bg-gray-200 text-gray-600 hover:bg-gray-300 transition-colors"
+            title="Cancel"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* Editor content */}
       <EditorContent
