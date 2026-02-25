@@ -1,4 +1,0 @@
-[submodule "vendor/cms-core"]
-	path = vendor/cms-core
-	url = https://github.com/ConstellationMarketing/cms-core.git
-	shallow = true
