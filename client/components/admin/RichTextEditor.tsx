@@ -1,7 +1,9 @@
+import { useCallback } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
-import { Bold, Italic, List, ListOrdered, Heading2, Undo, Redo } from 'lucide-react';
+import Link from '@tiptap/extension-link';
+import { Bold, Italic, List, ListOrdered, Heading2, Undo, Redo, Link as LinkIcon, Unlink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface RichTextEditorProps {
@@ -23,12 +25,34 @@ export default function RichTextEditor({
       Placeholder.configure({
         placeholder,
       }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          rel: 'noopener noreferrer',
+        },
+      }),
     ],
     content: value,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
   });
+
+  const setLink = useCallback(() => {
+    if (!editor) return;
+
+    const previousUrl = editor.getAttributes('link').href || '';
+    const url = window.prompt('Enter URL:', previousUrl);
+
+    if (url === null) return; // cancelled
+
+    if (url === '') {
+      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+      return;
+    }
+
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+  }, [editor]);
 
   if (!editor) {
     return null;
@@ -95,6 +119,28 @@ export default function RichTextEditor({
         >
           <ListOrdered className="h-4 w-4" />
         </button>
+        <div className="w-px h-6 bg-gray-300 mx-1" />
+        <button
+          type="button"
+          onClick={setLink}
+          className={cn(
+            'p-2 rounded hover:bg-gray-200 transition-colors',
+            editor.isActive('link') && 'bg-gray-300'
+          )}
+          title="Add Link"
+        >
+          <LinkIcon className="h-4 w-4" />
+        </button>
+        {editor.isActive('link') && (
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().unsetLink().run()}
+            className="p-2 rounded hover:bg-gray-200 transition-colors"
+            title="Remove Link"
+          >
+            <Unlink className="h-4 w-4" />
+          </button>
+        )}
         <div className="w-px h-6 bg-gray-300 mx-1" />
         <button
           type="button"
