@@ -1,6 +1,8 @@
 import Layout from "@site/components/layout/Layout";
 import Seo from "@site/components/Seo";
+import JsonLdSchema from "@site/components/JsonLdSchema";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
+import { useSiteSettings } from "@site/contexts/SiteSettingsContext";
 import type { SimplePageContent } from "@site/lib/cms/simplePageTypes";
 
 interface SimpleContentPageProps {
@@ -13,15 +15,22 @@ interface SimpleContentPageProps {
     ogDescription: string | null;
     ogImage: string | null;
     noindex: boolean;
+    schemaType: unknown;
+    schemaData: Record<string, unknown> | null;
   };
+  urlPath: string;
   isLoading: boolean;
 }
 
 export default function SimpleContentPage({
   content,
   seoMeta,
+  urlPath,
   isLoading,
 }: SimpleContentPageProps) {
+  const { settings } = useSiteSettings();
+  const siteUrl = import.meta.env.VITE_SITE_URL || '';
+
   return (
     <Layout>
       <Seo
@@ -30,6 +39,15 @@ export default function SimpleContentPage({
         canonical={seoMeta.canonicalUrl || undefined}
         image={seoMeta.ogImage || undefined}
         noindex={seoMeta.noindex}
+      />
+      <JsonLdSchema
+        schemaType={seoMeta.schemaType}
+        schemaData={seoMeta.schemaData}
+        pageContent={content}
+        site={settings}
+        pageUrl={`${siteUrl}${urlPath}`}
+        pageTitle={seoMeta.metaTitle || content.title}
+        pageDescription={seoMeta.metaDescription || ""}
       />
 
       {/* Hero */}

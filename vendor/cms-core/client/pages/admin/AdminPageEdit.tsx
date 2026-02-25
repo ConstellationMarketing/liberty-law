@@ -37,6 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Save, Loader2, ExternalLink, History } from "lucide-react";
 import BlockEditor from "../../components/admin/BlockEditor";
 import PageContentEditor from "../../components/admin/PageContentEditor";
@@ -44,6 +45,7 @@ import ImageUploader from "../../components/admin/ImageUploader";
 import { clearPageCache } from "../../hooks/usePageContent";
 import type { PageKey } from "../../lib/pageContentTypes";
 import RevisionPanel, { createPageRevision } from "../../components/admin/RevisionPanel";
+import { parseSchemaTypes } from "@site/lib/schemaHelpers";
 import URLChangeRedirectModal from "../../components/admin/URLChangeRedirectModal";
 import type { PageRevision } from "@/lib/database.types";
 
@@ -495,30 +497,42 @@ export default function AdminPageEdit() {
                 content
               </p>
 
-              <div className="space-y-2">
-                <Label htmlFor="schemaType">Schema Type</Label>
-                <Select
-                  value={page.schema_type || ""}
-                  onValueChange={(v) => updatePage({ schema_type: v || null })}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select schema type..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="LocalBusiness">
-                      Local Business
-                    </SelectItem>
-                    <SelectItem value="Attorney">Attorney</SelectItem>
-                    <SelectItem value="LegalService">Legal Service</SelectItem>
-                    <SelectItem value="WebPage">Web Page</SelectItem>
-                    <SelectItem value="AboutPage">About Page</SelectItem>
-                    <SelectItem value="ContactPage">Contact Page</SelectItem>
-                    <SelectItem value="FAQPage">FAQ Page</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="space-y-3">
+                <Label>Schema Types</Label>
+                <p className="text-sm text-gray-500">
+                  Select one or more schema types. FAQ schema auto-generates from page FAQ content when FAQPage is selected.
+                </p>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { value: "LocalBusiness", label: "Local Business" },
+                    { value: "Attorney", label: "Attorney" },
+                    { value: "LegalService", label: "Legal Service" },
+                    { value: "WebPage", label: "Web Page" },
+                    { value: "AboutPage", label: "About Page" },
+                    { value: "ContactPage", label: "Contact Page" },
+                    { value: "FAQPage", label: "FAQ Page" },
+                  ].map((opt) => {
+                    const currentTypes = parseSchemaTypes(page.schema_type);
+                    const checked = currentTypes.includes(opt.value);
+                    return (
+                      <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
+                        <Checkbox
+                          checked={checked}
+                          onCheckedChange={(c) => {
+                            const next = c
+                              ? [...currentTypes, opt.value]
+                              : currentTypes.filter((t: string) => t !== opt.value);
+                            updatePage({ schema_type: next.length > 0 ? JSON.stringify(next) : null } as any);
+                          }}
+                        />
+                        <span className="text-sm">{opt.label}</span>
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
 
-              {page.schema_type && (
+              {parseSchemaTypes(page.schema_type).length > 0 && (
                 <div className="space-y-2">
                   <Label htmlFor="schemaData">Schema Data (JSON)</Label>
                   <Textarea

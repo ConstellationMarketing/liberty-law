@@ -14,6 +14,8 @@ interface PageSeoMeta {
   ogDescription: string | null;
   ogImage: string | null;
   noindex: boolean;
+  schemaType: unknown;
+  schemaData: Record<string, unknown> | null;
 }
 
 interface UseContactContentResult {
@@ -35,6 +37,8 @@ const defaultSeoMeta: PageSeoMeta = {
   ogDescription: null,
   ogImage: null,
   noindex: false,
+  schemaType: null,
+  schemaData: null,
 };
 
 export function useContactContent(): UseContactContentResult {
@@ -62,7 +66,7 @@ export function useContactContent(): UseContactContentResult {
 
         // Fetch contact page from pages table
         const response = await fetch(
-          `${SUPABASE_URL}/rest/v1/pages?url_path=eq./contact&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex`,
+          `${SUPABASE_URL}/rest/v1/pages?url_path=eq./contact&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
           {
             headers: {
               apikey: SUPABASE_ANON_KEY,
@@ -99,6 +103,8 @@ export function useContactContent(): UseContactContentResult {
           ogDescription: pageData.og_description || null,
           ogImage: pageData.og_image || null,
           noindex: pageData.noindex || false,
+          schemaType: pageData.schema_type || null,
+          schemaData: pageData.schema_data || null,
         };
 
         // Merge CMS content with defaults (CMS content takes precedence)

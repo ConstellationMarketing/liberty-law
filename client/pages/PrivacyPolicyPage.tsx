@@ -8,5 +8,5 @@ export default function PrivacyPolicyPage() {
     defaultPrivacyPolicyContent,
   );
 
-  return <SimpleContentPage content={content} seoMeta={seoMeta} isLoading={isLoading} />;
+  return <SimpleContentPage content={content} seoMeta={seoMeta} urlPath="/privacy-policy" isLoading={isLoading} />;
 }

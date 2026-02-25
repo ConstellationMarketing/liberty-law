@@ -27,6 +27,9 @@ interface Page {
   og_description: string | null;
   og_image: string | null;
   noindex: boolean;
+  schema_type: string | null;
+  schema_data: Record<string, unknown> | null;
+  content: unknown;
   updated_at: string;
 }
 
@@ -34,6 +37,15 @@ interface Redirect {
   from_path: string;
   to_path: string;
   status_code: number;
+}
+
+interface SiteInfo {
+  siteName: string;
+  phoneNumber: string;
+  phoneDisplay: string;
+  logoUrl: string;
+  addressLine1: string;
+  addressLine2: string;
 }
 
 interface SiteSettings {
@@ -75,7 +87,7 @@ async function generateSSG() {
   // 1. Fetch all published pages
   const { data: pages, error: pagesError } = await supabase
     .from('pages')
-    .select('id, title, url_path, meta_title, meta_description, canonical_url, og_title, og_description, og_image, noindex, updated_at')
+    .select('id, title, url_path, meta_title, meta_description, canonical_url, og_title, og_description, og_image, noindex, schema_type, schema_data, content, updated_at')
     .eq('status', 'published');
 
   if (pagesError) {
@@ -95,8 +107,24 @@ async function generateSSG() {
   const template = fs.readFileSync(templatePath, 'utf-8');
 
   // 3. For each page, generate static HTML with SEO meta tags
+  // Fetch site info for schema generation
+  const { data: siteInfoData } = await supabase
+    .from('site_settings')
+    .select('site_name, phone_number, phone_display, logo_url, address_line1, address_line2')
+    .eq('settings_key', 'global')
+    .single();
+
+  const siteInfo: SiteInfo = {
+    siteName: siteInfoData?.site_name || '',
+    phoneNumber: siteInfoData?.phone_number || '',
+    phoneDisplay: siteInfoData?.phone_display || '',
+    logoUrl: siteInfoData?.logo_url || '',
+    addressLine1: siteInfoData?.address_line1 || '',
+    addressLine2: siteInfoData?.address_line2 || '',
+  };
+
   for (const page of pages || []) {
-    const html = generatePageHTML(template, page, siteSettings);
+    const html = generatePageHTML(template, page, siteSettings, siteInfo);
     
     let outputPath: string;
     if (page.url_path === '/') {
@@ -168,13 +196,16 @@ Sitemap: ${siteUrl}/sitemap.xml`;
   console.log('SSG generation complete!');
 }
 
-function generatePageHTML(template: string, page: Page, siteSettings: SiteSettings): string {
+function generatePageHTML(template: string, page: Page, siteSettings: SiteSettings, siteInfo: SiteInfo): string {
   const title = page.meta_title || page.title;
   const description = page.meta_description || '';
   const canonical = page.canonical_url || `${siteUrl}${page.url_path}`;
   const ogTitle = page.og_title || title;
   const ogDescription = page.og_description || description;
   
+  // Generate JSON-LD structured data
+  const jsonLdScripts = generateJsonLd(page, siteInfo);
+
   const metaTags = `
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}">
@@ -189,6 +220,7 @@ function generatePageHTML(template: string, page: Page, siteSettings: SiteSettin
     <meta name="twitter:title" content="${escapeHtml(ogTitle)}">
     <meta name="twitter:description" content="${escapeHtml(ogDescription)}">
     ${page.og_image ? `<meta name="twitter:image" content="${escapeHtml(page.og_image)}">` : ''}
+    ${jsonLdScripts}
   `;
 
   // Generate analytics scripts
@@ -271,6 +303,137 @@ function generateSitemap(pages: Page[], siteUrl: string): string {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls}
 </urlset>`;
+}
+
+// ---------------------------------------------------------------------------
+// JSON-LD generation (mirrors client/lib/schemaHelpers.ts logic)
+// ---------------------------------------------------------------------------
+
+function parseSchemaTypes(raw: unknown): string[] {
+  if (!raw) return [];
+  if (Array.isArray(raw)) return raw.filter((s) => typeof s === 'string');
+  if (typeof raw === 'string') {
+    const trimmed = raw.trim();
+    if (trimmed.startsWith('[')) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        if (Array.isArray(parsed)) return parsed.filter((s: unknown) => typeof s === 'string');
+      } catch { /* fall through */ }
+    }
+    if (trimmed) return [trimmed];
+  }
+  return [];
+}
+
+interface FaqItem { question: string; answer: string; }
+
+function extractFaqItems(content: unknown): FaqItem[] {
+  if (!content || typeof content !== 'object') return [];
+  if (Array.isArray(content)) {
+    const items = content.filter(
+      (item) =>
+        item && typeof item === 'object' &&
+        typeof (item as Record<string, unknown>).question === 'string' &&
+        typeof (item as Record<string, unknown>).answer === 'string',
+    ) as FaqItem[];
+    if (items.length > 0) return items;
+    for (const el of content) {
+      const found = extractFaqItems(el);
+      if (found.length > 0) return found;
+    }
+    return [];
+  }
+  const obj = content as Record<string, unknown>;
+  if (obj.faq && typeof obj.faq === 'object') {
+    const faqObj = obj.faq as Record<string, unknown>;
+    if (Array.isArray(faqObj.items)) {
+      const items = extractFaqItems(faqObj.items);
+      if (items.length > 0) return items;
+    }
+  }
+  if (Array.isArray(obj.items)) {
+    const items = extractFaqItems(obj.items);
+    if (items.length > 0) return items;
+  }
+  for (const val of Object.values(obj)) {
+    if (val && typeof val === 'object') {
+      const found = extractFaqItems(val);
+      if (found.length > 0) return found;
+    }
+  }
+  return [];
+}
+
+const BUSINESS_TYPES = new Set(['LocalBusiness', 'Attorney', 'LegalService']);
+const WEBPAGE_TYPES = new Set(['WebPage', 'AboutPage', 'ContactPage']);
+
+function generateJsonLd(page: Page, site: SiteInfo): string {
+  const types = parseSchemaTypes(page.schema_type);
+  if (types.length === 0) return '';
+
+  const title = page.meta_title || page.title;
+  const description = page.meta_description || '';
+  const url = `${siteUrl}${page.url_path}`;
+
+  // Parse address
+  let city = '', state = '', zip = '';
+  if (site.addressLine2) {
+    const match = site.addressLine2.match(/^(.+),\s*([A-Z]{2})\s+(\d{5})/);
+    if (match) { city = match[1]; state = match[2]; zip = match[3]; }
+  }
+
+  const scripts: string[] = [];
+
+  for (const type of types) {
+    let schema: Record<string, unknown> | null = null;
+
+    if (BUSINESS_TYPES.has(type)) {
+      const base: Record<string, unknown> = {
+        '@context': 'https://schema.org',
+        '@type': type,
+        name: site.siteName,
+        telephone: site.phoneDisplay,
+        image: site.logoUrl,
+        ...(site.addressLine1 && {
+          address: {
+            '@type': 'PostalAddress',
+            streetAddress: site.addressLine1,
+            addressLocality: city,
+            addressRegion: state,
+            postalCode: zip,
+          },
+        }),
+      };
+      schema = page.schema_data ? { ...base, ...page.schema_data } : base;
+    } else if (WEBPAGE_TYPES.has(type)) {
+      schema = {
+        '@context': 'https://schema.org',
+        '@type': type,
+        name: title,
+        description,
+        url,
+      };
+    } else if (type === 'FAQPage') {
+      const faqItems = extractFaqItems(page.content);
+      if (faqItems.length > 0) {
+        schema = {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqItems.map((item) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: { '@type': 'Answer', text: item.answer },
+          })),
+        };
+      }
+    }
+
+    if (schema) {
+      scripts.push(`<script type="application/ld+json">${JSON.stringify(schema)}</script>`);
+    }
+  }
+
+  return scripts.join('\n    ');
 }
 
 generateSSG().catch(err => {

@@ -8,5 +8,5 @@ export default function TermsPage() {
     defaultTermsContent,
   );
 
-  return <SimpleContentPage content={content} seoMeta={seoMeta} isLoading={isLoading} />;
+  return <SimpleContentPage content={content} seoMeta={seoMeta} urlPath="/terms-and-conditions" isLoading={isLoading} />;
 }

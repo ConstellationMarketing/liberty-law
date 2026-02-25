@@ -1,4 +1,5 @@
 import Seo from "@site/components/Seo";
+import JsonLdSchema from "@site/components/JsonLdSchema";
 import Layout from "@site/components/layout/Layout";
 import Hero from "@site/components/home/Hero";
 import ContactForm from "@site/components/home/ContactForm";
@@ -11,12 +12,14 @@ import TeamSection from "@site/components/home/TeamSection";
 import FaqSection from "@site/components/home/FaqSection";
 import ContactUsSection from "@site/components/home/ContactUsSection";
 import { useHomeContent } from "@site/hooks/useHomeContent";
-import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
+import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
 
 
 export default function Index() {
   const { content, seoMeta, isLoading } = useHomeContent();
   const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
+  const { settings } = useSiteSettings();
+  const siteUrl = import.meta.env.VITE_SITE_URL || '';
 
   // Use CMS content for hero and partner logos
   const heroContent = content.hero;
@@ -29,6 +32,16 @@ export default function Index() {
         canonical={seoMeta.canonicalUrl || undefined}
         image={seoMeta.ogImage || undefined}
         noindex={seoMeta.noindex}
+      />
+
+      <JsonLdSchema
+        schemaType={seoMeta.schemaType}
+        schemaData={seoMeta.schemaData}
+        pageContent={content}
+        site={settings}
+        pageUrl={`${siteUrl}/`}
+        pageTitle={seoMeta.metaTitle || "Home"}
+        pageDescription={seoMeta.metaDescription || ""}
       />
 
       {/* Hero and Contact Form Section */}

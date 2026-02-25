@@ -1,4 +1,5 @@
 import Seo from "@site/components/Seo";
+import JsonLdSchema from "@site/components/JsonLdSchema";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import Layout from "@site/components/layout/Layout";
 import CallBox from "@site/components/shared/CallBox";
@@ -15,7 +16,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { useAboutContent } from "@site/hooks/useAboutContent";
-import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
+import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
 
 
 // Icon mapping for values section
@@ -29,6 +30,8 @@ const iconMap: Record<string, LucideIcon> = {
 export default function AboutUs() {
   const { content, seoMeta } = useAboutContent();
   const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
+  const { settings } = useSiteSettings();
+  const siteUrl = import.meta.env.VITE_SITE_URL || '';
 
   // Map team members from CMS content
   const teamMembers = content.team.members;
@@ -51,6 +54,16 @@ export default function AboutUs() {
         canonical={seoMeta.canonicalUrl || undefined}
         image={seoMeta.ogImage || undefined}
         noindex={seoMeta.noindex}
+      />
+
+      <JsonLdSchema
+        schemaType={seoMeta.schemaType}
+        schemaData={seoMeta.schemaData}
+        pageContent={content}
+        site={settings}
+        pageUrl={`${siteUrl}/about`}
+        pageTitle={seoMeta.metaTitle || "About Us"}
+        pageDescription={seoMeta.metaDescription || ""}
       />
 
       {/* Hero Section */}

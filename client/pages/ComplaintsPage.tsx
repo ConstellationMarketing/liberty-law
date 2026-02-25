@@ -8,5 +8,5 @@ export default function ComplaintsPage() {
     defaultComplaintsContent,
   );
 
-  return <SimpleContentPage content={content} seoMeta={seoMeta} isLoading={isLoading} />;
+  return <SimpleContentPage content={content} seoMeta={seoMeta} urlPath="/complaints-process" isLoading={isLoading} />;
 }

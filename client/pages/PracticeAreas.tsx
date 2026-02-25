@@ -1,4 +1,5 @@
 import Seo from "@site/components/Seo";
+import JsonLdSchema from "@site/components/JsonLdSchema";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import Layout from "@site/components/layout/Layout";
 import PracticeAreaCard from "@site/components/practice/PracticeAreaCard";
@@ -22,7 +23,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { usePracticeAreasContent } from "@site/hooks/usePracticeAreasContent";
-import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
+import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
 
 // Icon mapping for practice areas
 const iconMap: Record<string, LucideIcon> = {
@@ -43,6 +44,8 @@ const iconMap: Record<string, LucideIcon> = {
 export default function PracticeAreas() {
   const { content, seoMeta } = usePracticeAreasContent();
   const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
+  const { settings } = useSiteSettings();
+  const siteUrl = import.meta.env.VITE_SITE_URL || '';
 
   // Map practice areas from CMS content with icon components
   const practiceAreas = content.grid.areas.map((area) => ({
@@ -64,6 +67,16 @@ export default function PracticeAreas() {
         canonical={seoMeta.canonicalUrl || undefined}
         image={seoMeta.ogImage || undefined}
         noindex={seoMeta.noindex}
+      />
+
+      <JsonLdSchema
+        schemaType={seoMeta.schemaType}
+        schemaData={seoMeta.schemaData}
+        pageContent={content}
+        site={settings}
+        pageUrl={`${siteUrl}/practice-areas`}
+        pageTitle={seoMeta.metaTitle || "Practice Areas"}
+        pageDescription={seoMeta.metaDescription || ""}
       />
 
       {/* Hero Section */}
