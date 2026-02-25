@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
 import type { TestimonialsContent, TestimonialItem } from "@site/lib/cms/homePageTypes";
 
 interface TestimonialsSectionProps {
@@ -98,9 +99,11 @@ export default function TestimonialsSection({
                 >
                   <div className="flex items-center min-h-[502px]">
                     <div className="w-full p-[30px]">
-                      <p className="font-outfit text-[24px] leading-[31.2px] text-black pb-[10px] text-left">
-                        {testimonial.text}
-                      </p>
+                      <SafeHtml
+                        html={testimonial.text}
+                        className="font-outfit text-[24px] leading-[31.2px] text-black pb-[10px] text-left"
+                        as="div"
+                      />
                       <div className="font-outfit text-[24px] font-semibold text-black text-left">
                         <img
                           src={testimonial.ratingImage}

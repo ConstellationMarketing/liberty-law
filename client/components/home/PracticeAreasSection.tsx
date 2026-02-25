@@ -1,5 +1,6 @@
 import { Scale } from "lucide-react";
 import { Link } from "react-router-dom";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
 import { PracticeAreasIntroContent } from "@site/lib/cms/homePageTypes";
 
 interface PracticeAreasSectionProps {
@@ -18,10 +19,12 @@ export default function PracticeAreasSection({
             <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-white pb-[10px]">
               {content?.heading || "Practice Areas"}
             </h2>
-            <p className="font-outfit text-[20px] leading-[30px] text-white/80">
-              {content?.description ||
+            <SafeHtml
+              html={content?.description ||
                 "At Liberty Law, P. C., we provide the following legal services"}
-            </p>
+              className="font-outfit text-[20px] leading-[30px] text-white/80"
+              as="div"
+            />
           </div>
 
           {/* Right Column - Discover CTA */}

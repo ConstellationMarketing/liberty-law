@@ -1,6 +1,7 @@
 import Seo from "@site/components/Seo";
 import JsonLdSchema from "@site/components/JsonLdSchema";
 import Layout from "@site/components/layout/Layout";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
 import Hero from "@site/components/home/Hero";
 import ContactForm from "@site/components/home/ContactForm";
 import AboutSection from "@site/components/home/AboutSection";
@@ -77,10 +78,12 @@ export default function Index() {
               </p>
 
               {/* Subtext */}
-              <p className="font-outfit text-[20px] font-light leading-[30px] text-white/80 mt-[15px] md:mt-[20px]">
-                {heroContent?.subtext ||
+              <SafeHtml
+                html={heroContent?.subtext ||
                   "We provide expert representation for Criminal Defense, DUI, Real Estate, and Business Law matters across DuPage, Kane, Kendall, Will, and Grundy Counties."}
-              </p>
+                className="font-outfit text-[20px] font-light leading-[30px] text-white/80 mt-[15px] md:mt-[20px]"
+                as="div"
+              />
             </div>
 
             {/* Call Box — outer div is positioned so the inner anchor's ::after can stretch to cover it */}
