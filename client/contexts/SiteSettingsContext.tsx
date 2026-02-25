@@ -72,7 +72,7 @@ function saveSettingsToStorage(settings: SiteSettings): void {
 const DEFAULT_SETTINGS: SiteSettings = {
   siteName: "Liberty Law, P.C.",
   logoUrl:
-    "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1770648915970-g754g8.png",
+    "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025971251-7kfm6s-1770648915970-g754g8.webp",
   logoAlt: "Liberty Law, P.C. Logo",
   phoneNumber: "6304494800",
   phoneDisplay: "630-449-4800",

@@ -32,37 +32,37 @@ const defaultContent: GoogleReviewsContent = {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Lorem Ipsum",
       ratingImage:
-        "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
+        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
     },
     {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Lorem Ipsum",
       ratingImage:
-        "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
+        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
     },
     {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Lorem Ipsum",
       ratingImage:
-        "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
+        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
     },
     {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Lorem Ipsum",
       ratingImage:
-        "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
+        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
     },
     {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Lorem Ipsum",
       ratingImage:
-        "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
+        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
     },
     {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Lorem Ipsum",
       ratingImage:
-        "https://design.constellationdev.com/wp-content/uploads/2025/06/Group-2-min.png",
+        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
     },
   ],
 };
@@ -121,7 +121,7 @@ export default function GoogleReviewsSection({
               <div className="font-outfit text-[22px] leading-[33px] text-black flex items-center justify-between">
                 <strong className="font-bold">{review.author}</strong>
                 <img
-                  src="/images/logos/google-icon.png"
+                  src="https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026032541-mxc63k-google-icon.webp"
                   alt="Google"
                   loading="lazy"
                   className="max-w-full"
@@ -158,7 +158,7 @@ export default function GoogleReviewsSection({
               <div className="font-outfit text-[22px] leading-[33px] text-black flex items-center justify-between">
                 <strong className="font-bold">{review.author}</strong>
                 <img
-                  src="/images/logos/google-icon.png"
+                  src="https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026032541-mxc63k-google-icon.webp"
                   alt="Google"
                   loading="lazy"
                   className="max-w-full"

@@ -9,22 +9,22 @@ interface TestimonialsSectionProps {
 const defaultContent: TestimonialsContent = {
   sectionLabel: "– Testimonials",
   heading: "Inspiring client success stories that drive change.",
-  backgroundImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052715-pve0xy-testimonials-bg.jpg",
+  backgroundImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025952358-k7vihv-1771601052715-pve0xy-testimonials-bg.webp",
   items: [
     {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Sharon",
-      ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052367-tr8ks9-rating-stars.png",
+      ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025951296-knhivd-1771601052367-tr8ks9-rating-stars.webp",
     },
     {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Sharon",
-      ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052367-tr8ks9-rating-stars.png",
+      ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025951296-knhivd-1771601052367-tr8ks9-rating-stars.webp",
     },
     {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
       author: "Sharon",
-      ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1771601052367-tr8ks9-rating-stars.png",
+      ratingImage: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025951296-knhivd-1771601052367-tr8ks9-rating-stars.webp",
     },
   ],
 };
@@ -94,7 +94,7 @@ export default function TestimonialsSection({
               {testimonials.map((testimonial, index) => (
                 <div
                   key={index}
-                  className="w-full flex-shrink-0 bg-white bg-[url('/images/backgrounds/quote-bg.png')] bg-no-repeat bg-[position:left_10%_top_10%] px-[6%]"
+                  className="w-full flex-shrink-0 bg-white bg-[url('https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026033286-xluqez-quote-bg.webp')] bg-no-repeat bg-[position:left_10%_top_10%] px-[6%]"
                 >
                   <div className="flex items-center min-h-[502px]">
                     <div className="w-full p-[30px]">
