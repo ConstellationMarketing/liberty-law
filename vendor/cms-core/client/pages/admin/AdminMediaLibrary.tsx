@@ -47,6 +47,7 @@ import {
   Search,
   FileText,
 } from "lucide-react";
+import { optimizeImage } from "../../lib/imageOptimizer";
 
 export default function AdminMediaLibrary() {
   const [loading, setLoading] = useState(true);
@@ -84,8 +85,13 @@ export default function AdminMediaLibrary() {
 
     for (const file of Array.from(files)) {
       try {
+        // Optimize image (compress + convert to WebP) before upload
+        const optimized = file.type.startsWith("image/")
+          ? await optimizeImage(file)
+          : file;
+
         // Generate unique filename
-        const ext = file.name.split(".").pop();
+        const ext = optimized.name.split(".").pop();
         const timestamp = Date.now();
         const randomStr = Math.random().toString(36).substring(2, 8);
         const filePath = `library/${timestamp}-${randomStr}.${ext}`;
@@ -93,7 +99,7 @@ export default function AdminMediaLibrary() {
         // Upload to Supabase Storage
         const { error: uploadError } = await supabase.storage
           .from("media")
-          .upload(filePath, file, {
+          .upload(filePath, optimized, {
             cacheControl: "3600",
             upsert: false,
           });
@@ -112,11 +118,11 @@ export default function AdminMediaLibrary() {
 
         // Save to media table
         const { error: dbError } = await supabase.from("media").insert({
-          file_name: file.name,
+          file_name: optimized.name,
           file_path: filePath,
           public_url: urlData.publicUrl,
-          file_size: file.size,
-          mime_type: file.type,
+          file_size: optimized.size,
+          mime_type: optimized.type,
           uploaded_by: user?.id || null,
         });
 

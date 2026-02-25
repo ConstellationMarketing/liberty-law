@@ -16,6 +16,10 @@ import type {
   ContactPageContent,
   PracticeAreasPageContent,
 } from "../../lib/pageContentTypes";
+import RichTextEditor from "@site/components/admin/RichTextEditor";
+import ImageUploader from "./ImageUploader";
+import PhoneSettingsField from "./PhoneSettingsField";
+import HeadingInput from "./HeadingInput";
 
 interface PageContentEditorProps {
   pageKey: string;
@@ -121,7 +125,7 @@ function ArrayEditor<T extends Record<string, unknown>>({
   );
 }
 
-// Home Page Editor
+// ─── Home Page Editor ────────────────────────────────────────────────
 function HomePageEditor({
   content,
   onChange,
@@ -141,66 +145,43 @@ function HomePageEditor({
       {/* Hero Section */}
       <Section title="Hero Section">
         <div className="grid gap-4">
-          <div>
-            <Label>H1 Title</Label>
-            <Input
-              value={content?.hero?.h1Title ?? ""}
-              onChange={(e) =>
-                update("hero", { ...content.hero, h1Title: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <Label>Headline</Label>
-            <Input
-              value={content?.hero?.headline ?? ""}
-              onChange={(e) =>
-                update("hero", { ...content.hero, headline: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="H1 Title"
+            value={content?.hero?.h1Title ?? ""}
+            onChange={(v) => update("hero", { ...content.hero, h1Title: v })}
+            level="h1"
+          />
+          <HeadingInput
+            label="Headline"
+            value={content?.hero?.headline ?? ""}
+            onChange={(v) => update("hero", { ...content.hero, headline: v })}
+          />
           <div>
             <Label>Highlighted Text</Label>
             <Input
               value={content?.hero?.highlightedText ?? ""}
               onChange={(e) =>
-                update("hero", { ...content.hero,
-                  highlightedText: e.target.value,
-                })
+                update("hero", { ...content.hero, highlightedText: e.target.value })
               }
             />
           </div>
           <div>
             <Label>Subtext</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.hero?.subtext ?? ""}
-              onChange={(e) =>
-                update("hero", { ...content.hero, subtext: e.target.value })
-              }
-              rows={2}
+              onChange={(v) => update("hero", { ...content.hero, subtext: v })}
+              placeholder="Hero subtext..."
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Phone</Label>
-              <Input
-                value={content?.hero?.phone ?? ""}
-                onChange={(e) =>
-                  update("hero", { ...content.hero, phone: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <Label>Phone Label</Label>
-              <Input
-                value={content?.hero?.phoneLabel ?? ""}
-                onChange={(e) =>
-                  update("hero", { ...content.hero,
-                    phoneLabel: e.target.value,
-                  })
-                }
-              />
-            </div>
+          <PhoneSettingsField label="Phone Number" />
+          <div>
+            <Label>Phone Label</Label>
+            <Input
+              value={content?.hero?.phoneLabel ?? ""}
+              onChange={(e) =>
+                update("hero", { ...content.hero, phoneLabel: e.target.value })
+              }
+            />
           </div>
         </div>
       </Section>
@@ -213,54 +194,32 @@ function HomePageEditor({
             <Input
               value={content?.about?.sectionLabel ?? ""}
               onChange={(e) =>
-                update("about", { ...content.about,
-                  sectionLabel: e.target.value,
-                })
+                update("about", { ...content.about, sectionLabel: e.target.value })
               }
             />
           </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.about?.heading ?? ""}
-              onChange={(e) =>
-                update("about", { ...content.about, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.about?.heading ?? ""}
+            onChange={(v) => update("about", { ...content.about, heading: v })}
+          />
           <div>
             <Label>Description</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.about?.description ?? ""}
-              onChange={(e) =>
-                update("about", { ...content.about,
-                  description: e.target.value,
-                })
-              }
-              rows={3}
+              onChange={(v) => update("about", { ...content.about, description: v })}
+              placeholder="About section description..."
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Phone</Label>
-              <Input
-                value={content?.about?.phone ?? ""}
-                onChange={(e) =>
-                  update("about", { ...content.about, phone: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <Label>Phone Label</Label>
-              <Input
-                value={content?.about?.phoneLabel ?? ""}
-                onChange={(e) =>
-                  update("about", { ...content.about,
-                    phoneLabel: e.target.value,
-                  })
-                }
-              />
-            </div>
+          <PhoneSettingsField label="Phone Number" />
+          <div>
+            <Label>Phone Label</Label>
+            <Input
+              value={content?.about?.phoneLabel ?? ""}
+              onChange={(e) =>
+                update("about", { ...content.about, phoneLabel: e.target.value })
+              }
+            />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -268,9 +227,7 @@ function HomePageEditor({
               <Input
                 value={content?.about?.contactLabel ?? ""}
                 onChange={(e) =>
-                  update("about", { ...content.about,
-                    contactLabel: e.target.value,
-                  })
+                  update("about", { ...content.about, contactLabel: e.target.value })
                 }
               />
             </div>
@@ -279,22 +236,19 @@ function HomePageEditor({
               <Input
                 value={content?.about?.contactText ?? ""}
                 onChange={(e) =>
-                  update("about", { ...content.about,
-                    contactText: e.target.value,
-                  })
+                  update("about", { ...content.about, contactText: e.target.value })
                 }
               />
             </div>
           </div>
           <div>
-            <Label>Attorney Image URL</Label>
-            <Input
+            <Label>Attorney Image</Label>
+            <ImageUploader
               value={content?.about?.attorneyImage ?? ""}
-              onChange={(e) =>
-                update("about", { ...content.about,
-                  attorneyImage: e.target.value,
-                })
+              onChange={(url) =>
+                update("about", { ...content.about, attorneyImage: url })
               }
+              folder="home"
             />
           </div>
           <div>
@@ -302,9 +256,7 @@ function HomePageEditor({
             <Input
               value={content?.about?.attorneyImageAlt ?? ""}
               onChange={(e) =>
-                update("about", { ...content.about,
-                  attorneyImageAlt: e.target.value,
-                })
+                update("about", { ...content.about, attorneyImageAlt: e.target.value })
               }
             />
           </div>
@@ -321,28 +273,21 @@ function HomePageEditor({
                   <Label>Number</Label>
                   <Input
                     value={item.number}
-                    onChange={(e) =>
-                      updateItem({ ...item, number: e.target.value })
-                    }
+                    onChange={(e) => updateItem({ ...item, number: e.target.value })}
                   />
                 </div>
                 <div>
                   <Label>Title</Label>
                   <Input
                     value={item.title}
-                    onChange={(e) =>
-                      updateItem({ ...item, title: e.target.value })
-                    }
+                    onChange={(e) => updateItem({ ...item, title: e.target.value })}
                   />
                 </div>
                 <div>
                   <Label>Description</Label>
-                  <Textarea
-                    value={item.description}
-                    onChange={(e) =>
-                      updateItem({ ...item, description: e.target.value })
-                    }
-                    rows={2}
+                  <RichTextEditor
+                    value={String(item.description ?? "")}
+                    onChange={(v) => updateItem({ ...item, description: v })}
                   />
                 </div>
               </div>
@@ -359,33 +304,24 @@ function HomePageEditor({
             <Input
               value={content?.practiceAreasIntro?.sectionLabel ?? ""}
               onChange={(e) =>
-                update("practiceAreasIntro", { ...content.practiceAreasIntro,
-                  sectionLabel: e.target.value,
-                })
+                update("practiceAreasIntro", { ...content.practiceAreasIntro, sectionLabel: e.target.value })
               }
             />
           </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.practiceAreasIntro?.heading ?? ""}
-              onChange={(e) =>
-                update("practiceAreasIntro", { ...content.practiceAreasIntro,
-                  heading: e.target.value,
-                })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.practiceAreasIntro?.heading ?? ""}
+            onChange={(v) =>
+              update("practiceAreasIntro", { ...content.practiceAreasIntro, heading: v })
+            }
+          />
           <div>
             <Label>Description</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.practiceAreasIntro?.description ?? ""}
-              onChange={(e) =>
-                update("practiceAreasIntro", { ...content.practiceAreasIntro,
-                  description: e.target.value,
-                })
+              onChange={(v) =>
+                update("practiceAreasIntro", { ...content.practiceAreasIntro, description: v })
               }
-              rows={2}
             />
           </div>
         </div>
@@ -410,19 +346,14 @@ function HomePageEditor({
                 <Label>Title</Label>
                 <Input
                   value={item.title}
-                  onChange={(e) =>
-                    updateItem({ ...item, title: e.target.value })
-                  }
+                  onChange={(e) => updateItem({ ...item, title: e.target.value })}
                 />
               </div>
               <div>
                 <Label>Description</Label>
-                <Textarea
-                  value={item.description}
-                  onChange={(e) =>
-                    updateItem({ ...item, description: e.target.value })
-                  }
-                  rows={2}
+                <RichTextEditor
+                  value={String(item.description ?? "")}
+                  onChange={(v) => updateItem({ ...item, description: v })}
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
@@ -430,9 +361,7 @@ function HomePageEditor({
                   <Label>Icon (Lucide name)</Label>
                   <Input
                     value={item.icon}
-                    onChange={(e) =>
-                      updateItem({ ...item, icon: e.target.value })
-                    }
+                    onChange={(e) => updateItem({ ...item, icon: e.target.value })}
                     placeholder="Car, Scale, etc."
                   />
                 </div>
@@ -440,19 +369,16 @@ function HomePageEditor({
                   <Label>Link</Label>
                   <Input
                     value={item.link}
-                    onChange={(e) =>
-                      updateItem({ ...item, link: e.target.value })
-                    }
+                    onChange={(e) => updateItem({ ...item, link: e.target.value })}
                   />
                 </div>
               </div>
               <div>
-                <Label>Image URL</Label>
-                <Input
-                  value={item.image}
-                  onChange={(e) =>
-                    updateItem({ ...item, image: e.target.value })
-                  }
+                <Label>Image</Label>
+                <ImageUploader
+                  value={String(item.image ?? "")}
+                  onChange={(url) => updateItem({ ...item, image: url })}
+                  folder="practice-areas"
                 />
               </div>
             </div>
@@ -463,15 +389,11 @@ function HomePageEditor({
       {/* CTA Section */}
       <Section title="CTA Section" defaultOpen={false}>
         <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.cta?.heading ?? ""}
-              onChange={(e) =>
-                update("cta", { ...content.cta, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.cta?.heading ?? ""}
+            onChange={(v) => update("cta", { ...content.cta, heading: v })}
+          />
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Button Text</Label>
@@ -503,32 +425,25 @@ function HomePageEditor({
             <Input
               value={content?.testimonials?.sectionLabel ?? ""}
               onChange={(e) =>
-                update("testimonials", { ...content.testimonials,
-                  sectionLabel: e.target.value,
-                })
+                update("testimonials", { ...content.testimonials, sectionLabel: e.target.value })
               }
             />
           </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.testimonials?.heading ?? ""}
+            onChange={(v) =>
+              update("testimonials", { ...content.testimonials, heading: v })
+            }
+          />
           <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.testimonials?.heading ?? ""}
-              onChange={(e) =>
-                update("testimonials", { ...content.testimonials,
-                  heading: e.target.value,
-                })
-              }
-            />
-          </div>
-          <div>
-            <Label>Background Image URL</Label>
-            <Input
+            <Label>Background Image</Label>
+            <ImageUploader
               value={content?.testimonials?.backgroundImage ?? ""}
-              onChange={(e) =>
-                update("testimonials", { ...content.testimonials,
-                  backgroundImage: e.target.value,
-                })
+              onChange={(url) =>
+                update("testimonials", { ...content.testimonials, backgroundImage: url })
               }
+              folder="testimonials"
             />
           </div>
           <ArrayEditor
@@ -546,12 +461,10 @@ function HomePageEditor({
               <div className="grid gap-3">
                 <div>
                   <Label>Text</Label>
-                  <Textarea
-                    value={item.text}
-                    onChange={(e) =>
-                      updateItem({ ...item, text: e.target.value })
-                    }
-                    rows={3}
+                  <RichTextEditor
+                    value={String(item.text ?? "")}
+                    onChange={(v) => updateItem({ ...item, text: v })}
+                    placeholder="Testimonial text..."
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -559,18 +472,15 @@ function HomePageEditor({
                     <Label>Author</Label>
                     <Input
                       value={item.author}
-                      onChange={(e) =>
-                        updateItem({ ...item, author: e.target.value })
-                      }
+                      onChange={(e) => updateItem({ ...item, author: e.target.value })}
                     />
                   </div>
                   <div>
-                    <Label>Rating Image URL</Label>
-                    <Input
-                      value={item.ratingImage}
-                      onChange={(e) =>
-                        updateItem({ ...item, ratingImage: e.target.value })
-                      }
+                    <Label>Rating Image</Label>
+                    <ImageUploader
+                      value={String(item.ratingImage ?? "")}
+                      onChange={(url) => updateItem({ ...item, ratingImage: url })}
+                      folder="testimonials"
                     />
                   </div>
                 </div>
@@ -588,29 +498,21 @@ function HomePageEditor({
             <Input
               value={content?.team?.sectionLabel ?? ""}
               onChange={(e) =>
-                update("team", { ...content.team,
-                  sectionLabel: e.target.value,
-                })
+                update("team", { ...content.team, sectionLabel: e.target.value })
               }
             />
           </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.team?.heading ?? ""}
-              onChange={(e) =>
-                update("team", { ...content.team, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.team?.heading ?? ""}
+            onChange={(v) => update("team", { ...content.team, heading: v })}
+          />
           <div>
             <Label>Intro</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.team?.intro ?? ""}
-              onChange={(e) =>
-                update("team", { ...content.team, intro: e.target.value })
-              }
-              rows={3}
+              onChange={(v) => update("team", { ...content.team, intro: v })}
+              placeholder="Team intro..."
             />
           </div>
           <ArrayEditor
@@ -631,47 +533,38 @@ function HomePageEditor({
                     <Label>Name</Label>
                     <Input
                       value={item.name}
-                      onChange={(e) =>
-                        updateItem({ ...item, name: e.target.value })
-                      }
+                      onChange={(e) => updateItem({ ...item, name: e.target.value })}
                     />
                   </div>
                   <div>
                     <Label>Title</Label>
                     <Input
                       value={item.title}
-                      onChange={(e) =>
-                        updateItem({ ...item, title: e.target.value })
-                      }
+                      onChange={(e) => updateItem({ ...item, title: e.target.value })}
                     />
                   </div>
                 </div>
                 <div>
                   <Label>Bio</Label>
-                  <Textarea
-                    value={item.bio}
-                    onChange={(e) =>
-                      updateItem({ ...item, bio: e.target.value })
-                    }
-                    rows={3}
+                  <RichTextEditor
+                    value={String(item.bio ?? "")}
+                    onChange={(v) => updateItem({ ...item, bio: v })}
+                    placeholder="Team member bio..."
                   />
                 </div>
                 <div>
-                  <Label>Image URL</Label>
-                  <Input
-                    value={item.image}
-                    onChange={(e) =>
-                      updateItem({ ...item, image: e.target.value })
-                    }
+                  <Label>Photo</Label>
+                  <ImageUploader
+                    value={String(item.image ?? "")}
+                    onChange={(url) => updateItem({ ...item, image: url })}
+                    folder="team"
                   />
                 </div>
                 <div>
                   <Label>Image Alt Text</Label>
                   <Input
                     value={item.imageAlt}
-                    onChange={(e) =>
-                      updateItem({ ...item, imageAlt: e.target.value })
-                    }
+                    onChange={(e) => updateItem({ ...item, imageAlt: e.target.value })}
                   />
                 </div>
               </div>
@@ -683,34 +576,27 @@ function HomePageEditor({
       {/* FAQ Section */}
       <Section title="FAQ Section" defaultOpen={false}>
         <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.faq?.heading ?? ""}
-              onChange={(e) =>
-                update("faq", { ...content.faq, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.faq?.heading ?? ""}
+            onChange={(v) => update("faq", { ...content.faq, heading: v })}
+          />
           <div>
             <Label>Description</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.faq?.description ?? ""}
-              onChange={(e) =>
-                update("faq", { ...content.faq, description: e.target.value })
-              }
-              rows={2}
+              onChange={(v) => update("faq", { ...content.faq, description: v })}
+              placeholder="FAQ description..."
             />
           </div>
           <div>
-            <Label>Video Thumbnail URL</Label>
-            <Input
+            <Label>Video Thumbnail</Label>
+            <ImageUploader
               value={content?.faq?.videoThumbnail ?? ""}
-              onChange={(e) =>
-                update("faq", { ...content.faq,
-                  videoThumbnail: e.target.value,
-                })
+              onChange={(url) =>
+                update("faq", { ...content.faq, videoThumbnail: url })
               }
+              folder="faq"
             />
           </div>
           <div>
@@ -733,19 +619,15 @@ function HomePageEditor({
                   <Label>Question</Label>
                   <Input
                     value={item.question}
-                    onChange={(e) =>
-                      updateItem({ ...item, question: e.target.value })
-                    }
+                    onChange={(e) => updateItem({ ...item, question: e.target.value })}
                   />
                 </div>
                 <div>
                   <Label>Answer</Label>
-                  <Textarea
-                    value={item.answer}
-                    onChange={(e) =>
-                      updateItem({ ...item, answer: e.target.value })
-                    }
-                    rows={3}
+                  <RichTextEditor
+                    value={String(item.answer ?? "")}
+                    onChange={(v) => updateItem({ ...item, answer: v })}
+                    placeholder="FAQ answer..."
                   />
                 </div>
               </div>
@@ -762,52 +644,40 @@ function HomePageEditor({
             <Input
               value={content?.contact?.sectionLabel ?? ""}
               onChange={(e) =>
-                update("contact", { ...content.contact,
-                  sectionLabel: e.target.value,
-                })
+                update("contact", { ...content.contact, sectionLabel: e.target.value })
               }
             />
           </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.contact?.heading ?? ""}
-              onChange={(e) =>
-                update("contact", { ...content.contact,
-                  heading: e.target.value,
-                })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.contact?.heading ?? ""}
+            onChange={(v) =>
+              update("contact", { ...content.contact, heading: v })
+            }
+          />
           <div>
             <Label>Availability Text</Label>
             <Input
               value={content?.contact?.availabilityText ?? ""}
               onChange={(e) =>
-                update("contact", { ...content.contact,
-                  availabilityText: e.target.value,
-                })
+                update("contact", { ...content.contact, availabilityText: e.target.value })
               }
             />
           </div>
-          <div>
-            <Label>Form Heading</Label>
-            <Input
-              value={content?.contact?.formHeading ?? ""}
-              onChange={(e) =>
-                update("contact", { ...content.contact,
-                  formHeading: e.target.value,
-                })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Form Heading"
+            value={content?.contact?.formHeading ?? ""}
+            onChange={(v) =>
+              update("contact", { ...content.contact, formHeading: v })
+            }
+          />
         </div>
       </Section>
     </div>
   );
 }
 
-// Shared CTA editor used by About, Contact, and Practice Areas pages
+// ─── Shared CTA Editor (About, Contact, Practice Areas) ─────────────
 function CTAEditor({
   cta,
   onChange,
@@ -818,19 +688,17 @@ function CTAEditor({
   return (
     <Section title="CTA Section" defaultOpen={false}>
       <div className="grid gap-4">
-        <div>
-          <Label>Heading</Label>
-          <Input
-            value={cta?.heading ?? ""}
-            onChange={(e) => onChange({ ...cta, heading: e.target.value })}
-          />
-        </div>
+        <HeadingInput
+          label="Heading"
+          value={cta?.heading ?? ""}
+          onChange={(v) => onChange({ ...cta, heading: v })}
+        />
         <div>
           <Label>Description</Label>
-          <Textarea
+          <RichTextEditor
             value={cta?.description ?? ""}
-            onChange={(e) => onChange({ ...cta, description: e.target.value })}
-            rows={2}
+            onChange={(v) => onChange({ ...cta, description: v })}
+            placeholder="CTA description..."
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -846,18 +714,7 @@ function CTAEditor({
               }
             />
           </div>
-          <div>
-            <Label>Primary Button Phone</Label>
-            <Input
-              value={cta?.primaryButton?.phone ?? ""}
-              onChange={(e) =>
-                onChange({
-                  ...cta,
-                  primaryButton: { ...cta?.primaryButton, phone: e.target.value },
-                })
-              }
-            />
-          </div>
+          <PhoneSettingsField label="Primary Button Phone" />
         </div>
         <div className="grid grid-cols-3 gap-4">
           <div>
@@ -902,7 +759,7 @@ function CTAEditor({
   );
 }
 
-// About Page Editor
+// ─── About Page Editor ───────────────────────────────────────────────
 function AboutPageEditor({
   content,
   onChange,
@@ -930,44 +787,28 @@ function AboutPageEditor({
               }
             />
           </div>
-          <div>
-            <Label>Tagline</Label>
-            <Input
-              value={content?.hero?.tagline ?? ""}
-              onChange={(e) =>
-                update("hero", { ...content.hero, tagline: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Tagline"
+            value={content?.hero?.tagline ?? ""}
+            onChange={(v) => update("hero", { ...content.hero, tagline: v })}
+          />
           <div>
             <Label>Description</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.hero?.description ?? ""}
-              onChange={(e) =>
-                update("hero", { ...content.hero, description: e.target.value })
-              }
-              rows={2}
+              onChange={(v) => update("hero", { ...content.hero, description: v })}
+              placeholder="Hero description..."
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Phone</Label>
-              <Input
-                value={content?.hero?.phone ?? ""}
-                onChange={(e) =>
-                  update("hero", { ...content.hero, phone: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <Label>Phone Label</Label>
-              <Input
-                value={content?.hero?.phoneLabel ?? ""}
-                onChange={(e) =>
-                  update("hero", { ...content.hero, phoneLabel: e.target.value })
-                }
-              />
-            </div>
+          <PhoneSettingsField label="Phone Number" />
+          <div>
+            <Label>Phone Label</Label>
+            <Input
+              value={content?.hero?.phoneLabel ?? ""}
+              onChange={(e) =>
+                update("hero", { ...content.hero, phoneLabel: e.target.value })
+              }
+            />
           </div>
         </div>
       </Section>
@@ -983,15 +824,11 @@ function AboutPageEditor({
               }
             />
           </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.story?.heading ?? ""}
-              onChange={(e) =>
-                update("story", { ...content.story, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.story?.heading ?? ""}
+            onChange={(v) => update("story", { ...content.story, heading: v })}
+          />
           <div>
             <Label>Paragraphs (separate with blank line)</Label>
             <Textarea
@@ -1006,12 +843,11 @@ function AboutPageEditor({
             />
           </div>
           <div>
-            <Label>Image URL</Label>
-            <Input
+            <Label>Image</Label>
+            <ImageUploader
               value={content?.story?.image ?? ""}
-              onChange={(e) =>
-                update("story", { ...content.story, image: e.target.value })
-              }
+              onChange={(url) => update("story", { ...content.story, image: url })}
+              folder="about"
             />
           </div>
           <div>
@@ -1028,54 +864,50 @@ function AboutPageEditor({
 
       <Section title="Mission & Vision" defaultOpen={false}>
         <div className="grid gap-4">
-          <div>
-            <Label>Mission Heading</Label>
-            <Input
-              value={content?.missionVision?.mission?.heading ?? ""}
-              onChange={(e) =>
-                update("missionVision", {
-                  ...content.missionVision,
-                  mission: { ...content.missionVision?.mission, heading: e.target.value },
-                })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Mission Heading"
+            value={content?.missionVision?.mission?.heading ?? ""}
+            onChange={(v) =>
+              update("missionVision", {
+                ...content.missionVision,
+                mission: { ...content.missionVision?.mission, heading: v },
+              })
+            }
+          />
           <div>
             <Label>Mission Text</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.missionVision?.mission?.text ?? ""}
-              onChange={(e) =>
+              onChange={(v) =>
                 update("missionVision", {
                   ...content.missionVision,
-                  mission: { ...content.missionVision?.mission, text: e.target.value },
+                  mission: { ...content.missionVision?.mission, text: v },
                 })
               }
-              rows={3}
+              placeholder="Mission statement..."
             />
           </div>
-          <div>
-            <Label>Vision Heading</Label>
-            <Input
-              value={content?.missionVision?.vision?.heading ?? ""}
-              onChange={(e) =>
-                update("missionVision", {
-                  ...content.missionVision,
-                  vision: { ...content.missionVision?.vision, heading: e.target.value },
-                })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Vision Heading"
+            value={content?.missionVision?.vision?.heading ?? ""}
+            onChange={(v) =>
+              update("missionVision", {
+                ...content.missionVision,
+                vision: { ...content.missionVision?.vision, heading: v },
+              })
+            }
+          />
           <div>
             <Label>Vision Text</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.missionVision?.vision?.text ?? ""}
-              onChange={(e) =>
+              onChange={(v) =>
                 update("missionVision", {
                   ...content.missionVision,
-                  vision: { ...content.missionVision?.vision, text: e.target.value },
+                  vision: { ...content.missionVision?.vision, text: v },
                 })
               }
-              rows={3}
+              placeholder="Vision statement..."
             />
           </div>
         </div>
@@ -1092,15 +924,11 @@ function AboutPageEditor({
               }
             />
           </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.team?.heading ?? ""}
-              onChange={(e) =>
-                update("team", { ...content.team, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.team?.heading ?? ""}
+            onChange={(v) => update("team", { ...content.team, heading: v })}
+          />
         </div>
         <ArrayEditor
           items={content?.team?.members ?? []}
@@ -1127,23 +955,24 @@ function AboutPageEditor({
               </div>
               <div>
                 <Label>Bio</Label>
-                <Textarea
-                  value={item.bio}
-                  onChange={(e) => updateItem({ ...item, bio: e.target.value })}
-                  rows={4}
+                <RichTextEditor
+                  value={String(item.bio ?? "")}
+                  onChange={(v) => updateItem({ ...item, bio: v })}
+                  placeholder="Team member bio..."
                 />
               </div>
               <div>
-                <Label>Image URL</Label>
-                <Input
-                  value={item.image}
-                  onChange={(e) => updateItem({ ...item, image: e.target.value })}
+                <Label>Photo</Label>
+                <ImageUploader
+                  value={String(item.image ?? "")}
+                  onChange={(url) => updateItem({ ...item, image: url })}
+                  folder="team"
                 />
               </div>
               <div>
                 <Label>Specialties (one per line)</Label>
                 <Textarea
-                  value={(item.specialties ?? []).join("\n")}
+                  value={(item.specialties as string[] ?? []).join("\n")}
                   onChange={(e) =>
                     updateItem({ ...item, specialties: e.target.value.split("\n").filter(Boolean) })
                   }
@@ -1166,15 +995,11 @@ function AboutPageEditor({
               }
             />
           </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.values?.heading ?? ""}
-              onChange={(e) =>
-                update("values", { ...content.values, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.values?.heading ?? ""}
+            onChange={(v) => update("values", { ...content.values, heading: v })}
+          />
           <div>
             <Label>Subtitle</Label>
             <Input
@@ -1209,10 +1034,9 @@ function AboutPageEditor({
               </div>
               <div>
                 <Label>Description</Label>
-                <Textarea
-                  value={item.description}
-                  onChange={(e) => updateItem({ ...item, description: e.target.value })}
-                  rows={2}
+                <RichTextEditor
+                  value={String(item.description ?? "")}
+                  onChange={(v) => updateItem({ ...item, description: v })}
                 />
               </div>
             </div>
@@ -1231,32 +1055,30 @@ function AboutPageEditor({
               }
             />
           </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.whyChooseUs?.heading ?? ""}
-              onChange={(e) =>
-                update("whyChooseUs", { ...content.whyChooseUs, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.whyChooseUs?.heading ?? ""}
+            onChange={(v) =>
+              update("whyChooseUs", { ...content.whyChooseUs, heading: v })
+            }
+          />
           <div>
             <Label>Description</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.whyChooseUs?.description ?? ""}
-              onChange={(e) =>
-                update("whyChooseUs", { ...content.whyChooseUs, description: e.target.value })
+              onChange={(v) =>
+                update("whyChooseUs", { ...content.whyChooseUs, description: v })
               }
-              rows={2}
             />
           </div>
           <div>
-            <Label>Image URL</Label>
-            <Input
+            <Label>Image</Label>
+            <ImageUploader
               value={content?.whyChooseUs?.image ?? ""}
-              onChange={(e) =>
-                update("whyChooseUs", { ...content.whyChooseUs, image: e.target.value })
+              onChange={(url) =>
+                update("whyChooseUs", { ...content.whyChooseUs, image: url })
               }
+              folder="about"
             />
           </div>
           <div>
@@ -1294,10 +1116,9 @@ function AboutPageEditor({
               </div>
               <div>
                 <Label>Description</Label>
-                <Textarea
-                  value={item.description}
-                  onChange={(e) => updateItem({ ...item, description: e.target.value })}
-                  rows={2}
+                <RichTextEditor
+                  value={String(item.description ?? "")}
+                  onChange={(v) => updateItem({ ...item, description: v })}
                 />
               </div>
             </div>
@@ -1313,7 +1134,7 @@ function AboutPageEditor({
   );
 }
 
-// Contact Page Editor
+// ─── Contact Page Editor ─────────────────────────────────────────────
 function ContactPageEditor({
   content,
   onChange,
@@ -1341,23 +1162,17 @@ function ContactPageEditor({
               }
             />
           </div>
-          <div>
-            <Label>Tagline</Label>
-            <Input
-              value={content?.hero?.tagline ?? ""}
-              onChange={(e) =>
-                update("hero", { ...content.hero, tagline: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Tagline"
+            value={content?.hero?.tagline ?? ""}
+            onChange={(v) => update("hero", { ...content.hero, tagline: v })}
+          />
           <div>
             <Label>Description</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.hero?.description ?? ""}
-              onChange={(e) =>
-                update("hero", { ...content.hero, description: e.target.value })
-              }
-              rows={2}
+              onChange={(v) => update("hero", { ...content.hero, description: v })}
+              placeholder="Hero description..."
             />
           </div>
         </div>
@@ -1411,23 +1226,17 @@ function ContactPageEditor({
 
       <Section title="Contact Form" defaultOpen={false}>
         <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.form?.heading ?? ""}
-              onChange={(e) =>
-                update("form", { ...content.form, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.form?.heading ?? ""}
+            onChange={(v) => update("form", { ...content.form, heading: v })}
+          />
           <div>
             <Label>Subtext</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.form?.subtext ?? ""}
-              onChange={(e) =>
-                update("form", { ...content.form, subtext: e.target.value })
-              }
-              rows={2}
+              onChange={(v) => update("form", { ...content.form, subtext: v })}
+              placeholder="Form subtext..."
             />
           </div>
         </div>
@@ -1435,15 +1244,13 @@ function ContactPageEditor({
 
       <Section title="Office Hours" defaultOpen={false}>
         <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.officeHours?.heading ?? ""}
-              onChange={(e) =>
-                update("officeHours", { ...content.officeHours, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.officeHours?.heading ?? ""}
+            onChange={(v) =>
+              update("officeHours", { ...content.officeHours, heading: v })
+            }
+          />
         </div>
         <ArrayEditor
           items={content?.officeHours?.items ?? []}
@@ -1491,15 +1298,11 @@ function ContactPageEditor({
               }
             />
           </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.process?.heading ?? ""}
-              onChange={(e) =>
-                update("process", { ...content.process, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.process?.heading ?? ""}
+            onChange={(v) => update("process", { ...content.process, heading: v })}
+          />
           <div>
             <Label>Subtitle</Label>
             <Input
@@ -1535,10 +1338,9 @@ function ContactPageEditor({
               </div>
               <div>
                 <Label>Description</Label>
-                <Textarea
-                  value={item.description}
-                  onChange={(e) => updateItem({ ...item, description: e.target.value })}
-                  rows={2}
+                <RichTextEditor
+                  value={String(item.description ?? "")}
+                  onChange={(v) => updateItem({ ...item, description: v })}
                 />
               </div>
             </div>
@@ -1548,23 +1350,21 @@ function ContactPageEditor({
 
       <Section title="Visit Our Office" defaultOpen={false}>
         <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.visitOffice?.heading ?? ""}
-              onChange={(e) =>
-                update("visitOffice", { ...content.visitOffice, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.visitOffice?.heading ?? ""}
+            onChange={(v) =>
+              update("visitOffice", { ...content.visitOffice, heading: v })
+            }
+          />
           <div>
             <Label>Subtext</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.visitOffice?.subtext ?? ""}
-              onChange={(e) =>
-                update("visitOffice", { ...content.visitOffice, subtext: e.target.value })
+              onChange={(v) =>
+                update("visitOffice", { ...content.visitOffice, subtext: v })
               }
-              rows={2}
+              placeholder="Office visit description..."
             />
           </div>
           <div>
@@ -1588,7 +1388,7 @@ function ContactPageEditor({
   );
 }
 
-// Practice Areas Page Editor
+// ─── Practice Areas Page Editor ──────────────────────────────────────
 function PracticeAreasPageEditor({
   content,
   onChange,
@@ -1616,67 +1416,44 @@ function PracticeAreasPageEditor({
               }
             />
           </div>
-          <div>
-            <Label>Tagline</Label>
-            <Input
-              value={content?.hero?.tagline ?? ""}
-              onChange={(e) =>
-                update("hero", { ...content.hero, tagline: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Tagline"
+            value={content?.hero?.tagline ?? ""}
+            onChange={(v) => update("hero", { ...content.hero, tagline: v })}
+          />
           <div>
             <Label>Description</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.hero?.description ?? ""}
-              onChange={(e) =>
-                update("hero", { ...content.hero, description: e.target.value })
-              }
-              rows={2}
+              onChange={(v) => update("hero", { ...content.hero, description: v })}
+              placeholder="Hero description..."
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Phone</Label>
-              <Input
-                value={content?.hero?.phone ?? ""}
-                onChange={(e) =>
-                  update("hero", { ...content.hero, phone: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <Label>Phone Label</Label>
-              <Input
-                value={content?.hero?.phoneLabel ?? ""}
-                onChange={(e) =>
-                  update("hero", { ...content.hero, phoneLabel: e.target.value })
-                }
-              />
-            </div>
+          <PhoneSettingsField label="Phone Number" />
+          <div>
+            <Label>Phone Label</Label>
+            <Input
+              value={content?.hero?.phoneLabel ?? ""}
+              onChange={(e) =>
+                update("hero", { ...content.hero, phoneLabel: e.target.value })
+              }
+            />
           </div>
         </div>
       </Section>
 
       <Section title="Practice Areas Grid" defaultOpen={false}>
         <div className="grid gap-4">
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.grid?.heading ?? ""}
-              onChange={(e) =>
-                update("grid", { ...content.grid, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.grid?.heading ?? ""}
+            onChange={(v) => update("grid", { ...content.grid, heading: v })}
+          />
           <div>
             <Label>Description</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.grid?.description ?? ""}
-              onChange={(e) =>
-                update("grid", { ...content.grid, description: e.target.value })
-              }
-              rows={2}
+              onChange={(v) => update("grid", { ...content.grid, description: v })}
             />
           </div>
         </div>
@@ -1706,17 +1483,17 @@ function PracticeAreasPageEditor({
               </div>
               <div>
                 <Label>Description</Label>
-                <Textarea
-                  value={item.description}
-                  onChange={(e) => updateItem({ ...item, description: e.target.value })}
-                  rows={2}
+                <RichTextEditor
+                  value={String(item.description ?? "")}
+                  onChange={(v) => updateItem({ ...item, description: v })}
                 />
               </div>
               <div>
-                <Label>Image URL</Label>
-                <Input
-                  value={item.image}
-                  onChange={(e) => updateItem({ ...item, image: e.target.value })}
+                <Label>Image</Label>
+                <ImageUploader
+                  value={String(item.image ?? "")}
+                  onChange={(url) => updateItem({ ...item, image: url })}
+                  folder="practice-areas"
                 />
               </div>
               <div>
@@ -1743,15 +1520,13 @@ function PracticeAreasPageEditor({
               }
             />
           </div>
-          <div>
-            <Label>Heading</Label>
-            <Input
-              value={content?.whyChoose?.heading ?? ""}
-              onChange={(e) =>
-                update("whyChoose", { ...content.whyChoose, heading: e.target.value })
-              }
-            />
-          </div>
+          <HeadingInput
+            label="Heading"
+            value={content?.whyChoose?.heading ?? ""}
+            onChange={(v) =>
+              update("whyChoose", { ...content.whyChoose, heading: v })
+            }
+          />
           <div>
             <Label>Subtitle</Label>
             <Input
@@ -1763,21 +1538,21 @@ function PracticeAreasPageEditor({
           </div>
           <div>
             <Label>Description</Label>
-            <Textarea
+            <RichTextEditor
               value={content?.whyChoose?.description ?? ""}
-              onChange={(e) =>
-                update("whyChoose", { ...content.whyChoose, description: e.target.value })
+              onChange={(v) =>
+                update("whyChoose", { ...content.whyChoose, description: v })
               }
-              rows={2}
             />
           </div>
           <div>
-            <Label>Image URL</Label>
-            <Input
+            <Label>Image</Label>
+            <ImageUploader
               value={content?.whyChoose?.image ?? ""}
-              onChange={(e) =>
-                update("whyChoose", { ...content.whyChoose, image: e.target.value })
+              onChange={(url) =>
+                update("whyChoose", { ...content.whyChoose, image: url })
               }
+              folder="practice-areas"
             />
           </div>
           <div>
@@ -1815,10 +1590,9 @@ function PracticeAreasPageEditor({
               </div>
               <div>
                 <Label>Description</Label>
-                <Textarea
-                  value={item.description}
-                  onChange={(e) => updateItem({ ...item, description: e.target.value })}
-                  rows={2}
+                <RichTextEditor
+                  value={String(item.description ?? "")}
+                  onChange={(v) => updateItem({ ...item, description: v })}
                 />
               </div>
             </div>
@@ -1834,13 +1608,12 @@ function PracticeAreasPageEditor({
   );
 }
 
-// Main PageContentEditor component
+// ─── Main PageContentEditor ─────────────────────────────────────────
 export default function PageContentEditor({
   pageKey,
   content,
   onChange,
 }: PageContentEditorProps) {
-  // Determine which editor to show based on page key
   const urlPath = typeof pageKey === "string" ? pageKey : "";
 
   if (urlPath === "/" || urlPath === "/home") {
