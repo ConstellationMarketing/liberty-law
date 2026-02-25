@@ -10,6 +10,12 @@ import { defaultContactContent } from "@site/lib/cms/contactPageTypes";
 import type { ContactPageContent } from "@site/lib/cms/contactPageTypes";
 import { defaultPracticeAreasContent } from "@site/lib/cms/practiceAreasPageTypes";
 import type { PracticeAreasPageContent } from "@site/lib/cms/practiceAreasPageTypes";
+import type { SimplePageContent } from "@site/lib/cms/simplePageTypes";
+import {
+  defaultPrivacyPolicyContent,
+  defaultTermsContent,
+  defaultComplaintsContent,
+} from "@site/lib/cms/simplePageTypes";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -165,7 +171,7 @@ export default function AdminPageEdit() {
       alert("Failed to save page: " + error.message);
     } else {
       // Clear the page cache so the frontend fetches fresh content
-      if (page.url_path === "/" || page.url_path === "/about" || page.url_path === "/contact" || page.url_path === "/practice-areas") {
+      if (["/", "/about", "/contact", "/practice-areas", "/privacy-policy", "/terms-and-conditions", "/complaints-process"].includes(page.url_path)) {
         clearPageCache(page.url_path as PageKey);
       }
       // Update tracking state after successful save
@@ -220,7 +226,7 @@ export default function AdminPageEdit() {
   // Check if this is a structured page (main site pages)
   const isStructuredPage =
     page?.url_path &&
-    ["/", "/about", "/contact", "/practice-areas"].includes(page.url_path);
+    ["/", "/about", "/contact", "/practice-areas", "/privacy-policy", "/terms-and-conditions", "/complaints-process"].includes(page.url_path);
 
   // Normalize content by merging with defaults based on page type
   const normalizedContent = useMemo(() => {
@@ -246,6 +252,21 @@ export default function AdminPageEdit() {
         return mergeWithDefaults(
           page.content as unknown as Partial<PracticeAreasPageContent>,
           defaultPracticeAreasContent
+        );
+      case '/privacy-policy':
+        return mergeWithDefaults(
+          page.content as unknown as Partial<SimplePageContent>,
+          defaultPrivacyPolicyContent
+        );
+      case '/terms-and-conditions':
+        return mergeWithDefaults(
+          page.content as unknown as Partial<SimplePageContent>,
+          defaultTermsContent
+        );
+      case '/complaints-process':
+        return mergeWithDefaults(
+          page.content as unknown as Partial<SimplePageContent>,
+          defaultComplaintsContent
         );
       default:
         return page.content;

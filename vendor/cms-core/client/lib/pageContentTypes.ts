@@ -242,13 +242,22 @@ export interface PracticeAreasPageContent {
 }
 
 // ============================================
+// SIMPLE PAGE CONTENT (Privacy Policy, Terms, Complaints)
+// ============================================
+export interface SimplePageContent {
+  title: string;
+  body: string; // Rich text / HTML
+}
+
+// ============================================
 // UNION TYPE FOR ALL PAGE CONTENT
 // ============================================
 export type PageContent =
   | HomePageContent
   | AboutPageContent
   | ContactPageContent
-  | PracticeAreasPageContent;
+  | PracticeAreasPageContent
+  | SimplePageContent;
 
 // Page key to content type mapping
 export type PageKeyToContent = {
@@ -256,6 +265,9 @@ export type PageKeyToContent = {
   about: AboutPageContent;
   contact: ContactPageContent;
   "practice-areas": PracticeAreasPageContent;
+  "privacy-policy": SimplePageContent;
+  "terms-and-conditions": SimplePageContent;
+  "complaints-process": SimplePageContent;
 };
 
 export type PageKey = keyof PageKeyToContent;

@@ -15,6 +15,7 @@ import type {
   AboutPageContent,
   ContactPageContent,
   PracticeAreasPageContent,
+  SimplePageContent,
 } from "../../lib/pageContentTypes";
 import RichTextEditor from "@site/components/admin/RichTextEditor";
 import ImageUploader from "./ImageUploader";
@@ -1649,6 +1650,37 @@ export default function PageContentEditor({
         content={content as PracticeAreasPageContent}
         onChange={onChange}
       />
+    );
+  }
+
+  // Simple content pages (Privacy Policy, Terms, Complaints)
+  if (
+    urlPath === "/privacy-policy" ||
+    urlPath === "/terms-and-conditions" ||
+    urlPath === "/complaints-process"
+  ) {
+    const simple = content as SimplePageContent;
+    return (
+      <div className="space-y-6">
+        <Section title="Page Content">
+          <div className="grid gap-4">
+            <HeadingInput
+              label="Title"
+              value={simple?.title ?? ""}
+              onChange={(v) => onChange({ ...simple, title: v })}
+              level="h1"
+            />
+            <div>
+              <Label>Content</Label>
+              <RichTextEditor
+                value={simple?.body ?? ""}
+                onChange={(v) => onChange({ ...simple, body: v })}
+                placeholder="Enter page content..."
+              />
+            </div>
+          </div>
+        </Section>
+      </div>
     );
   }
 
