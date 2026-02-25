@@ -185,7 +185,30 @@ try {
   )}
 
   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-    ...
+    <Button
+      type="button"
+      variant="secondary"
+      size="sm"
+      onClick={(e) => {
+        e.stopPropagation();
+        inputRef.current?.click();
+      }}
+    >
+      <Upload className="h-4 w-4 mr-1" />
+      Replace
+    </Button>
+    <Button
+      type="button"
+      variant="destructive"
+      size="sm"
+      onClick={(e) => {
+        e.stopPropagation();
+        handleRemove();
+      }}
+    >
+      <X className="h-4 w-4 mr-1" />
+      Remove
+    </Button>
   </div>
 </div>
           <p className="text-xs text-gray-500 mt-1 truncate">{value}</p>
