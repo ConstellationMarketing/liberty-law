@@ -357,7 +357,7 @@ export default function AdminPageEdit() {
                 </CardHeader>
                 <CardContent>
                   <BlockEditor
-                    content={page.content}
+                    content={Array.isArray(page.content) ? page.content : []}
                     onChange={handleContentChange}
                   />
                 </CardContent>
