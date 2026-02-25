@@ -37,9 +37,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, Save, Eye, Loader2, ExternalLink, History } from "lucide-react";
+import { ArrowLeft, Save, Loader2, ExternalLink, History } from "lucide-react";
 import BlockEditor from "../../components/admin/BlockEditor";
-import BlockRenderer from "@site/components/BlockRenderer";
 import PageContentEditor from "../../components/admin/PageContentEditor";
 import ImageUploader from "../../components/admin/ImageUploader";
 import { clearPageCache } from "../../hooks/usePageContent";
@@ -345,10 +344,6 @@ export default function AdminPageEdit() {
             <History className="h-4 w-4 mr-2" />
             Revisions
           </TabsTrigger>
-          <TabsTrigger value="preview">
-            <Eye className="h-4 w-4 mr-2" />
-            Preview
-          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="content" className="mt-6">
@@ -646,21 +641,6 @@ export default function AdminPageEdit() {
           />
         </TabsContent>
 
-        <TabsContent value="preview" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Page Preview</CardTitle>
-              <CardDescription>
-                See how your page content will appear
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="border rounded-lg overflow-hidden bg-white">
-                <BlockRenderer content={page.content} isPreview={true} />
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
       </Tabs>
 
       {/* URL Change Redirect Modal */}
