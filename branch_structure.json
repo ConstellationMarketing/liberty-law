@@ -1,0 +1,21 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "chore/vendor-cms-core",
+    "glow-landing",
+    "main",
+    "origin"
+  ],
+  "parent": {
+    "chore/vendor-cms-core": "main",
+    "glow-landing": "main",
+    "main": null,
+    "origin": "main"
+  },
+  "order": [
+    "main",
+    "chore/vendor-cms-core",
+    "glow-landing",
+    "origin"
+  ]
+}
