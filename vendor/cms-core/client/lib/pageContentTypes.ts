@@ -6,64 +6,83 @@
 // ============================================
 export interface HomePageContent {
   hero: {
-    title: string;
-    subtitle: string;
-    backgroundImage: string;
-    ctaText: string;
-    ctaUrl: string;
-    attorneyImage: string;
-    badgeImage: string;
-  };
-  features: Array<{
-    icon: string; // SVG path or icon name
-    title: string;
-    description: string;
-  }>;
-  mission: {
-    heading: string;
-    paragraphs: string[];
-    image: string;
-    ctaPrimaryText: string;
-    ctaPrimaryUrl: string;
-    ctaSecondaryText: string;
-    ctaSecondaryUrl: string;
-  };
-  attorney: {
-    name: string;
-    title: string;
-    photo: string;
-    bio: string;
-    bullets: string[];
+    h1Title: string;
+    headline: string;
+    highlightedText: string;
+    subtext: string;
     phone: string;
+    phoneLabel: string;
   };
-  speakWithUs: {
+  about: {
+    sectionLabel: string;
     heading: string;
     description: string;
-    image: string;
-    ctaText: string;
-    ctaUrl: string;
-  };
-  clientStories: {
-    heading: string;
-    subtitle: string;
-    videos: Array<{
-      embedUrl: string;
-      thumbnail: string;
-    }>;
-  };
-  contactForm: {
-    heading: string;
-    image: string;
-    badgeImage: string;
-  };
-  services: {
-    heading: string;
-    description: string;
-    items: Array<{
+    phone: string;
+    phoneLabel: string;
+    contactLabel: string;
+    contactText: string;
+    attorneyImage: string;
+    attorneyImageAlt: string;
+    features: Array<{
+      number: string;
       title: string;
-      icon: string; // Lucide icon name
+      description: string;
     }>;
-    closingText: string;
+  };
+  practiceAreasIntro: {
+    sectionLabel: string;
+    heading: string;
+    description: string;
+  };
+  practiceAreas: Array<{
+    title: string;
+    description: string;
+    icon: string;
+    image: string;
+    link: string;
+  }>;
+  cta: {
+    heading: string;
+    buttonText: string;
+    buttonLink: string;
+  };
+  testimonials: {
+    sectionLabel: string;
+    heading: string;
+    backgroundImage: string;
+    items: Array<{
+      text: string;
+      author: string;
+      ratingImage: string;
+    }>;
+  };
+  team: {
+    sectionLabel: string;
+    heading: string;
+    intro: string;
+    members: Array<{
+      name: string;
+      title: string;
+      bio: string;
+      image: string;
+      imageAlt: string;
+    }>;
+  };
+  faq: {
+    heading: string;
+    description: string;
+    videoThumbnail: string;
+    videoUrl: string;
+    items: Array<{
+      question: string;
+      answer: string;
+    }>;
+  };
+  contact: {
+    sectionLabel: string;
+    heading: string;
+    availabilityText: string;
+    formHeading: string;
   };
 }
 
