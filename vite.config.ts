@@ -36,12 +36,27 @@ function expressPlugin(): Plugin {
   return {
     name: "express-plugin",
     apply: "serve", // Only apply during development (serve mode)
-    async configureServer(server) {
-      const { createServer } = await import("./server");
-      const app = createServer();
+    configureServer(server) {
+      // Load Express server in the background so Vite can start
+      // listening immediately without waiting for heavy server
+      // dependencies (sharp, @supabase/supabase-js, etc.) to load.
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let expressApp: any = null;
+      let ready = false;
 
-      // Add Express app as middleware to Vite dev server
-      server.middlewares.use(app);
+      import("./server").then(({ createServer }) => {
+        expressApp = createServer() as any;
+        ready = true;
+      });
+
+      server.middlewares.use((req, res, next) => {
+        if (ready) {
+          (expressApp as any)(req, res, next);
+        } else {
+          // Express not loaded yet — pass through to Vite (serves HTML/JS fine)
+          next();
+        }
+      });
     },
   };
 }
