@@ -122,6 +122,25 @@
     white-space: pre;
   }
 
+  /* TipTap rich text editor styles */
+  .tiptap.ProseMirror:focus {
+    outline: none;
+  }
+
+  .tiptap.ProseMirror a {
+    color: #2563eb;
+    text-decoration: underline;
+    cursor: text;
+  }
+
+  .tiptap.ProseMirror p.is-editor-empty:first-child::before {
+    color: #9ca3af;
+    content: attr(data-placeholder);
+    float: left;
+    height: 0;
+    pointer-events: none;
+  }
+
   /* Force Lucide icons to render as outlines */
   svg.lucide *,
   .lucide * {
