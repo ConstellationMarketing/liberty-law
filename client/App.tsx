@@ -8,8 +8,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { SiteSettingsProvider } from "./contexts/SiteSettingsContext";
-import { SessionAuthProvider } from "./contexts/SessionAuthContext";
-import { SessionLoginGate } from "./components/auth/SessionLoginGate";
 import Index from "./pages/Index";
 import ScrollToTop from "./components/ScrollToTop";
 import GlobalScripts from "./components/GlobalScripts";
@@ -31,80 +29,30 @@ const App = () => (
   <HelmetProvider>
     <QueryClientProvider client={queryClient}>
       <SiteSettingsProvider>
-        <SessionAuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <GlobalScripts />
-              <WcDniManager />
-              <ScrollToTop />
-              <Suspense fallback={null}>
-                <Routes>
-                  <Route
-                    path="/"
-                    element={
-                      <SessionLoginGate>
-                        <Index />
-                      </SessionLoginGate>
-                    }
-                  />
-                  <Route
-                    path="/about"
-                    element={
-                      <SessionLoginGate>
-                        <AboutUs />
-                      </SessionLoginGate>
-                    }
-                  />
-                  <Route
-                    path="/practice-areas"
-                    element={
-                      <SessionLoginGate>
-                        <PracticeAreas />
-                      </SessionLoginGate>
-                    }
-                  />
-                  <Route
-                    path="/contact"
-                    element={
-                      <SessionLoginGate>
-                        <ContactPage />
-                      </SessionLoginGate>
-                    }
-                  />
-                  <Route path="/admin/*" element={<AdminRoutes />} />
-                  <Route
-                    path="/privacy-policy"
-                    element={
-                      <SessionLoginGate>
-                        <PrivacyPolicyPage />
-                      </SessionLoginGate>
-                    }
-                  />
-                  <Route
-                    path="/terms-and-conditions"
-                    element={
-                      <SessionLoginGate>
-                        <TermsPage />
-                      </SessionLoginGate>
-                    }
-                  />
-                  <Route
-                    path="/complaints-process"
-                    element={
-                      <SessionLoginGate>
-                        <ComplaintsPage />
-                      </SessionLoginGate>
-                    }
-                  />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
-          </TooltipProvider>
-        </SessionAuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <GlobalScripts />
+            <WcDniManager />
+            <ScrollToTop />
+            <Suspense fallback={null}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/practice-areas" element={<PracticeAreas />} />
+                <Route path="/contact" element={<ContactPage />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                <Route path="/terms-and-conditions" element={<TermsPage />} />
+                <Route path="/complaints-process" element={<ComplaintsPage />} />
+                {/* Admin section — auth is enforced inside AdminRoutes / AdminLayout */}
+                <Route path="/admin/*" element={<AdminRoutes />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </TooltipProvider>
       </SiteSettingsProvider>
     </QueryClientProvider>
   </HelmetProvider>
