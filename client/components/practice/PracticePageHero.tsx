@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { Phone } from "lucide-react";
 import CallBox from "@site/components/shared/CallBox";
 import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
@@ -33,17 +32,9 @@ export default function PracticePageHero({ hero }: Props) {
               {hero.title}
             </h1>
             {hero.tagline && (
-              <p className="font-outfit text-[20px] leading-[30px] text-white/90 mb-[30px] md:mb-[40px]">
+              <p className="font-outfit text-[20px] leading-[30px] text-white/90">
                 {hero.tagline}
               </p>
-            )}
-            {hero.ctaText && hero.ctaUrl && (
-              <Link
-                to={hero.ctaUrl}
-                className="inline-flex items-center gap-2 bg-white text-law-dark font-outfit font-semibold text-[16px] px-8 py-4 hover:bg-law-accent hover:text-white transition-colors"
-              >
-                {hero.ctaText}
-              </Link>
             )}
           </div>
 

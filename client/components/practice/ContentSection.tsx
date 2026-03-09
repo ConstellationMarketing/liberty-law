@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Phone } from "lucide-react";
+import { ArrowRight, Phone } from "lucide-react";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import type { PracticeContentSection } from "@site/lib/cms/practicePageTypes";
 
@@ -7,31 +7,69 @@ interface Props {
   section: PracticeContentSection;
   index: number;
   phoneNumber: string;
+  phoneDisplay: string;
+  phoneAvailability: string;
 }
 
-export default function ContentSection({ section, index, phoneNumber }: Props) {
+export default function ContentSection({
+  section,
+  index,
+  phoneNumber,
+  phoneDisplay,
+}: Props) {
   const bg = index % 2 === 0 ? "bg-white" : "bg-gray-50";
   const hasImage = Boolean(section.image);
   // Even index: text left / image right; odd: image left / text right
   const imageOnLeft = hasImage && index % 2 !== 0;
 
-  const ctaButton = section.ctaText && section.ctaUrl ? (
-    <Link
-      to={section.ctaUrl}
-      className="inline-flex items-center justify-center gap-2 bg-law-accent text-white font-outfit font-semibold text-[15px] px-6 py-3 hover:bg-law-accent-dark transition-colors"
-    >
-      {section.ctaText}
-    </Link>
-  ) : null;
+  const ctaButton =
+    section.ctaText && section.ctaUrl ? (
+      <Link
+        to={section.ctaUrl}
+        className="bg-law-accent p-[8px] cursor-pointer transition-all duration-300 hover:bg-law-accent-dark group inline-flex"
+      >
+        <div className="flex items-center gap-4">
+          <div className="pl-[12px] flex-1">
+            <p className="font-outfit text-[16px] md:text-[18px] text-white leading-none whitespace-nowrap">
+              {section.ctaText}
+            </p>
+          </div>
+          <div className="bg-white p-[12px] flex items-center justify-center group-hover:bg-black transition-colors duration-300">
+            <ArrowRight className="w-5 h-5 text-black group-hover:text-white transition-colors duration-300" />
+          </div>
+        </div>
+      </Link>
+    ) : null;
 
   const phoneButton = phoneNumber ? (
     <a
       href={`tel:${phoneNumber}`}
-      className="inline-flex items-center justify-center gap-2 border-2 border-law-dark text-law-dark font-outfit font-semibold text-[15px] px-6 py-3 hover:bg-law-dark hover:text-white transition-colors"
+      className="bg-law-dark p-[8px] cursor-pointer transition-all duration-300 hover:bg-law-accent group inline-flex"
     >
-      <Phone className="h-4 w-4" />
-      {phoneNumber}
+      <div className="flex items-center gap-4">
+        <div className="pl-[12px] flex-1">
+          <p className="font-outfit text-[16px] md:text-[18px] text-white leading-none whitespace-nowrap">
+            {phoneDisplay || phoneNumber}
+          </p>
+        </div>
+        <div className="bg-white p-[12px] flex items-center justify-center group-hover:bg-black transition-colors duration-300">
+          <Phone
+            className="w-5 h-5 [&>*]:stroke-black group-hover:[&>*]:stroke-white transition-colors duration-300"
+            strokeWidth={1.5}
+          />
+        </div>
+      </div>
     </a>
+  ) : null;
+
+  const hasCtas = Boolean(ctaButton || phoneButton);
+
+  // CTAs appear ONLY in the image column (when image exists), or centered below text (no image)
+  const ctaBlock = hasCtas ? (
+    <div className="flex flex-wrap gap-3">
+      {ctaButton}
+      {phoneButton}
+    </div>
   ) : null;
 
   const textBlock = (
@@ -43,12 +81,8 @@ export default function ContentSection({ section, index, phoneNumber }: Props) {
         html={section.content}
         className="font-outfit text-[17px] leading-[28px] text-black/80 prose prose-p:mb-3 prose-ul:list-disc prose-ul:pl-5 max-w-none"
       />
-      {(ctaButton || phoneButton) && (
-        <div className={`flex flex-wrap gap-3 ${hasImage ? "" : "justify-center"}`}>
-          {ctaButton}
-          {phoneButton}
-        </div>
-      )}
+      {/* CTAs in text column only when there's no image */}
+      {!hasImage && ctaBlock}
     </div>
   );
 
@@ -60,10 +94,8 @@ export default function ContentSection({ section, index, phoneNumber }: Props) {
         className="w-full rounded object-cover aspect-[4/3]"
         loading="lazy"
       />
-      <div className="flex flex-wrap gap-3">
-        {ctaButton}
-        {phoneButton}
-      </div>
+      {/* CTAs always go under the image */}
+      {ctaBlock}
     </div>
   ) : null;
 
@@ -93,7 +125,7 @@ export default function ContentSection({ section, index, phoneNumber }: Props) {
               html={section.content}
               className="font-outfit text-[17px] leading-[28px] text-black/80 prose prose-p:mb-3 prose-ul:list-disc prose-ul:pl-5 max-w-none"
             />
-            {(ctaButton || phoneButton) && (
+            {hasCtas && (
               <div className="flex flex-wrap gap-3 justify-center mt-6">
                 {ctaButton}
                 {phoneButton}

@@ -5,7 +5,7 @@ import Seo from "@site/components/Seo";
 import PracticePageHero from "@site/components/practice/PracticePageHero";
 import ContentSections from "@site/components/practice/ContentSections";
 import FaqSection from "@site/components/practice/FaqSection";
-import TestimonialsSection from "@site/components/home/TestimonialsSection";
+import PracticeTestimonials from "@site/components/practice/PracticeTestimonials";
 import { usePracticePageContent } from "@site/hooks/usePracticePageContent";
 import { useHomeTestimonials } from "@site/hooks/useHomeTestimonials";
 import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
@@ -14,7 +14,7 @@ export default function PracticeAreaPage() {
   const { slug = "" } = useParams<{ slug: string }>();
   const { content, seoMeta, isLoading, notFound } = usePracticePageContent(slug);
   const { testimonials } = useHomeTestimonials();
-  const { phoneNumber } = useGlobalPhone();
+  const { phoneNumber, phoneDisplay, phoneLabel: phoneAvailability } = useGlobalPhone();
 
   if (isLoading) {
     return (
@@ -59,11 +59,16 @@ export default function PracticeAreaPage() {
       {/* 1. Hero */}
       <PracticePageHero hero={content.hero} />
 
-      {/* 2. Global Testimonials */}
-      <TestimonialsSection content={testimonials ?? undefined} />
+      {/* 2. Testimonials */}
+      <PracticeTestimonials testimonials={testimonials} />
 
       {/* 3. Content Sections */}
-      <ContentSections sections={content.contentSections} phoneNumber={phoneNumber} />
+      <ContentSections
+        sections={content.contentSections}
+        phoneNumber={phoneNumber}
+        phoneDisplay={phoneDisplay}
+        phoneAvailability={phoneAvailability}
+      />
 
       {/* 4. FAQ (conditional) */}
       <FaqSection faq={content.faq} />
