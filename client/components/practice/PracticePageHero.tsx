@@ -28,11 +28,11 @@ export default function PracticePageHero({ hero }: Props) {
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-[5%]">
           {/* Left Side — Heading + CTA */}
           <div className="lg:w-[65%]">
-            <h1 className="font-playfair text-[clamp(2.5rem,7vw,68.8px)] font-light leading-[1.2] text-white mb-[20px] md:mb-[30px]">
+            <h1 className="font-outfit text-[16px] md:text-[18px] font-semibold uppercase tracking-widest text-law-accent mb-[12px] md:mb-[16px]">
               {hero.title}
             </h1>
             {hero.tagline && (
-              <p className="font-outfit text-[20px] leading-[30px] text-white/90">
+              <p className="font-playfair text-[clamp(2.5rem,7vw,68.8px)] font-light leading-[1.2] text-white">
                 {hero.tagline}
               </p>
             )}
