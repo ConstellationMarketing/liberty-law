@@ -5,6 +5,7 @@ export interface NavigationItem {
   href: string;
   order?: number;
   openInNewTab?: boolean;
+  children?: { label: string; href: string; openInNewTab?: boolean }[];
 }
 
 export interface FooterLink {
