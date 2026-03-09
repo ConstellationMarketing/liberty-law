@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "../../lib/supabase";
+import { useSessionAuth } from '../../../../../client/contexts/SessionAuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,6 +11,7 @@ import { Loader2 } from 'lucide-react';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
+  const { setSessionActive } = useSessionAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,6 +32,9 @@ export default function AdminLogin() {
       setLoading(false);
       return;
     }
+
+    // Set session flag in sessionStorage for per-session authentication
+    setSessionActive();
 
     navigate('/admin');
   };
