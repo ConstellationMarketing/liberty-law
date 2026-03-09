@@ -16,6 +16,8 @@ import {
   defaultTermsContent,
   defaultComplaintsContent,
 } from "@site/lib/cms/simplePageTypes";
+import { defaultPracticePageContent } from "@site/lib/cms/practicePageTypes";
+import type { PracticePageContent } from "@site/lib/cms/practicePageTypes";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -40,6 +42,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, Save, Loader2, ExternalLink, History } from "lucide-react";
 import BlockEditor from "../../components/admin/BlockEditor";
+import PracticePageEditor from "@site/components/admin/PracticePageEditor";
 import PageContentEditor from "../../components/admin/PageContentEditor";
 import ImageUploader from "../../components/admin/ImageUploader";
 import { clearPageCache } from "../../hooks/usePageContent";
@@ -175,6 +178,13 @@ export default function AdminPageEdit() {
       if (["/", "/about", "/contact", "/practice-areas", "/privacy-policy", "/terms-and-conditions", "/complaints-process"].includes(page.url_path)) {
         clearPageCache(page.url_path as PageKey);
       }
+      // For practice detail pages, clear the per-slug cache
+      if (isPracticePage && page.url_path.startsWith("/practice-areas/")) {
+        import("@site/hooks/usePracticePageContent").then(({ clearPracticePageCache }) => {
+          const slug = page.url_path.replace("/practice-areas/", "");
+          clearPracticePageCache(slug);
+        });
+      }
       // Update tracking state after successful save
       setOriginalUrlPath(page.url_path);
       setPreviousStatus(page.status);
@@ -224,14 +234,28 @@ export default function AdminPageEdit() {
     await performSave();
   };
 
+  // Detect practice area detail pages (page_type=practice, but not the listing page itself)
+  const isPracticePage =
+    page?.page_type === "practice" &&
+    page.url_path !== "/practice-areas";
+
   // Check if this is a structured page (main site pages)
   const isStructuredPage =
+    !isPracticePage &&
     page?.url_path &&
     ["/", "/about", "/contact", "/practice-areas", "/privacy-policy", "/terms-and-conditions", "/complaints-process"].includes(page.url_path);
 
   // Normalize content by merging with defaults based on page type
   const normalizedContent = useMemo(() => {
-    if (!isStructuredPage || !page?.content) return page?.content;
+    if (!isStructuredPage && !isPracticePage) return page?.content;
+    if (!page?.content) return isPracticePage ? defaultPracticePageContent : undefined;
+
+    if (isPracticePage) {
+      return mergeWithDefaults(
+        page.content as unknown as Partial<PracticePageContent>,
+        defaultPracticePageContent,
+      );
+    }
 
     switch (page.url_path) {
       case '/':
@@ -272,7 +296,7 @@ export default function AdminPageEdit() {
       default:
         return page.content;
     }
-  }, [page?.content, page?.url_path, isStructuredPage]);
+  }, [page?.content, page?.url_path, isStructuredPage, isPracticePage]);
 
   const handleStructuredContentChange = (content: unknown) => {
     updatePage({ content: content as ContentBlock[] });
@@ -350,7 +374,20 @@ export default function AdminPageEdit() {
 
         <TabsContent value="content" className="mt-6">
           <div className="grid grid-cols-1 gap-6">
-            {isStructuredPage ? (
+            {isPracticePage ? (
+              <div>
+                <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    <strong>Practice Area Page Editor:</strong> Edit the hero,
+                    content sections, and FAQ for this practice area page.
+                  </p>
+                </div>
+                <PracticePageEditor
+                  content={normalizedContent as PracticePageContent}
+                  onChange={handleStructuredContentChange}
+                />
+              </div>
+            ) : isStructuredPage ? (
               <div>
                 <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                   <p className="text-sm text-blue-800">

@@ -21,6 +21,7 @@ const AdminRoutes = lazy(() => import("./pages/AdminRoutes"));
 const PrivacyPolicyPage = lazy(() => import("./pages/PrivacyPolicyPage"));
 const TermsPage = lazy(() => import("./pages/TermsPage"));
 const ComplaintsPage = lazy(() => import("./pages/ComplaintsPage"));
+const PracticeAreaPage = lazy(() => import("./pages/PracticeAreaPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/practice-areas" element={<PracticeAreas />} />
+                <Route path="/practice-areas/:slug" element={<PracticeAreaPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
                 <Route path="/terms-and-conditions" element={<TermsPage />} />
