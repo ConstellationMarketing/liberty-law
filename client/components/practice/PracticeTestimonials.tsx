@@ -1,5 +1,16 @@
+import { Star } from "lucide-react";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import type { TestimonialsContent } from "@site/lib/cms/homePageTypes";
+
+function FiveStars() {
+  return (
+    <div className="flex gap-1">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+      ))}
+    </div>
+  );
+}
 
 interface Props {
   testimonials: TestimonialsContent | null | undefined;
@@ -19,19 +30,16 @@ export default function PracticeTestimonials({ testimonials }: Props) {
               key={i}
               className="bg-white border border-gray-100 shadow-sm p-8 flex flex-col gap-5"
             >
-              {/* Rating image */}
-              {item.ratingImage && (
-                <div
-                  className="bg-[url('/quote-bg.webp')] bg-no-repeat bg-left-top"
-                  style={{ backgroundSize: "40px" }}
-                >
-                  <img
-                    src={item.ratingImage}
-                    alt="Rating"
-                    className="h-[28px] object-contain pt-8"
-                    loading="lazy"
-                  />
-                </div>
+              {/* Stars — always 5 */}
+              {item.ratingImage ? (
+                <img
+                  src={item.ratingImage}
+                  alt="5 stars"
+                  className="h-[28px] object-contain"
+                  loading="lazy"
+                />
+              ) : (
+                <FiveStars />
               )}
 
               {/* Testimonial text */}
