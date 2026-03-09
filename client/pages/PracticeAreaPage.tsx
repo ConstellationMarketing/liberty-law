@@ -6,15 +6,18 @@ import PracticePageHero from "@site/components/practice/PracticePageHero";
 import ContentSections from "@site/components/practice/ContentSections";
 import FaqSection from "@site/components/practice/FaqSection";
 import PracticeTestimonials from "@site/components/practice/PracticeTestimonials";
+import JsonLdSchema from "@site/components/JsonLdSchema";
 import { usePracticePageContent } from "@site/hooks/usePracticePageContent";
 import { useHomeTestimonials } from "@site/hooks/useHomeTestimonials";
-import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
+import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
 
 export default function PracticeAreaPage() {
   const { slug = "" } = useParams<{ slug: string }>();
   const { content, seoMeta, isLoading, notFound } = usePracticePageContent(slug);
   const { testimonials } = useHomeTestimonials();
   const { phoneNumber, phoneDisplay, phoneLabel: phoneAvailability } = useGlobalPhone();
+  const { settings } = useSiteSettings();
+  const siteUrl = import.meta.env.VITE_SITE_URL || '';
 
   if (isLoading) {
     return (
@@ -54,6 +57,16 @@ export default function PracticeAreaPage() {
         canonical={seoMeta.canonicalUrl || undefined}
         image={seoMeta.ogImage || content.hero.backgroundImage || undefined}
         noindex={seoMeta.noindex}
+      />
+
+      <JsonLdSchema
+        schemaType={seoMeta.schemaType}
+        schemaData={seoMeta.schemaData}
+        pageContent={content}
+        site={settings}
+        pageUrl={seoMeta.canonicalUrl || `${siteUrl}/practice-areas/${slug}/`}
+        pageTitle={seoMeta.metaTitle || content.hero.title}
+        pageDescription={seoMeta.metaDescription || content.hero.tagline || ""}
       />
 
       {/* 1. Hero */}
