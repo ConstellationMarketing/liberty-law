@@ -66,7 +66,7 @@ function DesktopNavItem({ item }: { item: NavItemType }) {
         href={item.href}
         label={item.label}
         openInNewTab={item.openInNewTab}
-        className="font-outfit text-[20px] text-white py-[31px] whitespace-nowrap hover:opacity-80 transition-opacity duration-400"
+        className="inline-flex items-center font-outfit text-[20px] text-white py-[31px] whitespace-nowrap hover:opacity-80 transition-opacity duration-400"
       />
     );
   }
