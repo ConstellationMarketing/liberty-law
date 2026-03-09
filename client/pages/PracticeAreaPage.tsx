@@ -10,6 +10,7 @@ import JsonLdSchema from "@site/components/JsonLdSchema";
 import { usePracticePageContent } from "@site/hooks/usePracticePageContent";
 import { useHomeTestimonials } from "@site/hooks/useHomeTestimonials";
 import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
+import { parseSchemaTypes } from "@site/lib/schemaHelpers";
 
 export default function PracticeAreaPage() {
   const { slug = "" } = useParams<{ slug: string }>();
@@ -60,7 +61,13 @@ export default function PracticeAreaPage() {
       />
 
       <JsonLdSchema
-        schemaType={seoMeta.schemaType}
+        schemaType={(() => {
+          const hasFaq = content?.faq?.enabled && content?.faq?.items?.length > 0;
+          if (!hasFaq) return seoMeta.schemaType;
+          const types = parseSchemaTypes(seoMeta.schemaType);
+          if (types.includes("FAQPage")) return seoMeta.schemaType;
+          return [...types, "FAQPage"];
+        })()}
         schemaData={seoMeta.schemaData}
         pageContent={content}
         site={settings}

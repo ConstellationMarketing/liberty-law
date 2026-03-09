@@ -1,4 +1,3 @@
-import { Helmet } from "react-helmet-async";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import {
   Accordion,
@@ -12,32 +11,11 @@ interface Props {
   faq: PracticeFaq;
 }
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").trim();
-}
-
 export default function FaqSection({ faq }: Props) {
   if (!faq.enabled || !faq.items || faq.items.length === 0) return null;
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faq.items.map((item) => ({
-      "@type": "Question",
-      name: item.question,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: stripHtml(item.answer),
-      },
-    })),
-  };
-
   return (
     <>
-      <Helmet>
-        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
-      </Helmet>
-
       <div className="bg-gray-50 py-[50px] md:py-[70px]">
         <div className="max-w-[2560px] mx-auto w-[95%] md:w-[85%] lg:w-[75%]">
           <h2 className="font-playfair text-[clamp(1.75rem,4vw,48px)] leading-tight text-law-dark text-center mb-[40px] md:mb-[56px]">
