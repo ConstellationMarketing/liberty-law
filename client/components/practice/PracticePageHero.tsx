@@ -12,7 +12,7 @@ export default function PracticePageHero({ hero }: Props) {
 
   return (
     <div
-      className="bg-law-dark pt-[30px] md:pt-[54px] pb-[30px] md:pb-[54px] relative"
+      className="bg-law-dark -mt-[105px] pt-[135px] md:pt-[159px] pb-[30px] md:pb-[54px] relative"
       style={
         hero.backgroundImage
           ? { backgroundImage: `url(${hero.backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" }
