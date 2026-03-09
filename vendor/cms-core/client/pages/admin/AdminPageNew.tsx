@@ -25,7 +25,7 @@ export default function AdminPageNew() {
   const [title, setTitle] = useState('');
   const [urlPath, setUrlPath] = useState('');
   const [pageType, setPageType] = useState<PageType>('standard');
-  const [templateId, setTemplateId] = useState<string>('');
+  const [templateId, setTemplateId] = useState<string>('none');
 
   useEffect(() => {
     fetchTemplates();
@@ -65,7 +65,7 @@ export default function AdminPageNew() {
     e.preventDefault();
     setCreating(true);
 
-    const selectedTemplate = templates.find(t => t.id === templateId);
+    const selectedTemplate = templateId !== 'none' ? templates.find(t => t.id === templateId) : undefined;
     
     const newPage = {
       title,
@@ -175,7 +175,7 @@ export default function AdminPageNew() {
                   <SelectValue placeholder="Select a template..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">No template (blank page)</SelectItem>
+                  <SelectItem value="none">No template (blank page)</SelectItem>
                   {filteredTemplates.map(template => (
                     <SelectItem key={template.id} value={template.id}>
                       {template.name}
