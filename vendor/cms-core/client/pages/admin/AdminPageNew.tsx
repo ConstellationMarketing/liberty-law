@@ -47,19 +47,29 @@ export default function AdminPageNew() {
     setLoading(false);
   };
 
-  const generateUrlPath = (title: string) => {
-    return '/' + title
+  const generateUrlPath = (title: string, type: PageType = pageType) => {
+    const slug = title
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
       .trim();
+    return type === 'practice' ? `/practice-areas/${slug}` : `/${slug}`;
   };
 
   const handleTitleChange = (value: string) => {
     setTitle(value);
     if (!urlPath || urlPath === generateUrlPath(title)) {
       setUrlPath(generateUrlPath(value));
+    }
+  };
+
+  const handlePageTypeChange = (value: PageType) => {
+    setPageType(value);
+    setTemplateId('none');
+    // Re-generate URL with new prefix if it hasn't been manually edited
+    if (!urlPath || urlPath === generateUrlPath(title, pageType)) {
+      setUrlPath(generateUrlPath(title, value));
     }
   };
 
@@ -162,7 +172,7 @@ export default function AdminPageNew() {
 
             <div className="space-y-2">
               <Label htmlFor="pageType">Page Type</Label>
-              <Select value={pageType} onValueChange={(v) => setPageType(v as PageType)}>
+              <Select value={pageType} onValueChange={(v) => handlePageTypeChange(v as PageType)}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
