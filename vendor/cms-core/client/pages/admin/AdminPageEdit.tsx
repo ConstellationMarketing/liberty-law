@@ -483,7 +483,7 @@ export default function AdminPageEdit() {
                   onChange={(e) =>
                     updatePage({ canonical_url: e.target.value })
                   }
-                  placeholder={`${siteSettings.productionUrl || 'https://yourdomain.com'}/page`}
+                  placeholder={`${siteSettings.productionUrl || 'https://yourdomain.com'}${page.url_path || '/page'}`}
                 />
               </div>
 

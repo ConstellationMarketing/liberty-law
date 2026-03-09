@@ -92,7 +92,9 @@ export default function AdminPageNew() {
       meta_description: selectedTemplate?.default_meta_description || '',
       status: 'draft' as const,
       noindex: false,
-      canonical_url: null,
+      canonical_url: siteSettings.productionUrl
+        ? `${siteSettings.productionUrl}${normalizedUrlPath}`
+        : null,
       og_title: null,
       og_description: null,
       og_image: null,
