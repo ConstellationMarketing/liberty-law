@@ -88,8 +88,9 @@ export function usePracticePageContent(slug: string): UsePracticePageContentResu
 
         const urlPath = `/practice-areas/${slug}`;
         const urlPathSlash = `${urlPath}/`;
+        // Supabase PostgREST in-filter: values inside in.(...) must NOT be URI-encoded
         const response = await fetch(
-          `${SUPABASE_URL}/rest/v1/pages?url_path=in.(${encodeURIComponent(urlPath)},${encodeURIComponent(urlPathSlash)})&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
+          `${SUPABASE_URL}/rest/v1/pages?url_path=in.(${urlPath},${urlPathSlash})&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
           {
             headers: {
               apikey: SUPABASE_ANON_KEY,
