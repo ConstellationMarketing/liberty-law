@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { useSiteSettings } from "@site/contexts/SiteSettingsContext";
 import { supabase } from "../../lib/supabase";
 import type { Page, ContentBlock } from "@/lib/database.types";
 import { defaultHomeContent } from "@site/lib/cms/homePageTypes";
@@ -89,6 +90,7 @@ function mergeWithDefaults<T extends Record<string, any>>(
 export default function AdminPageEdit() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { settings: siteSettings } = useSiteSettings();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [page, setPage] = useState<Page | null>(null);
@@ -140,6 +142,10 @@ export default function AdminPageEdit() {
     if (!page) return;
     setSaving(true);
 
+    // Normalize url_path: remove trailing slashes (except root)
+    const normalizedUrlPath =
+      page.url_path === "/" ? "/" : page.url_path.replace(/\/+$/, "");
+
     // Auto-create revision when publishing
     const isPublishing = page.status === "published" && previousStatus !== "published";
     if (isPublishing) {
@@ -150,7 +156,7 @@ export default function AdminPageEdit() {
       .from("pages")
       .update({
         title: page.title,
-        url_path: page.url_path,
+        url_path: normalizedUrlPath,
         page_type: page.page_type,
         content: page.content as unknown,
         meta_title: page.meta_title,
@@ -299,7 +305,16 @@ export default function AdminPageEdit() {
   }, [page?.content, page?.url_path, isStructuredPage, isPracticePage]);
 
   const handleStructuredContentChange = (content: unknown) => {
-    updatePage({ content: content as ContentBlock[] });
+    const updates: Partial<Page> = { content: content as ContentBlock[] };
+    // For practice pages, keep og_image in sync with hero.backgroundImage
+    if (isPracticePage) {
+      const practiceContent = content as PracticePageContent;
+      const bgImage = practiceContent?.hero?.backgroundImage;
+      if (bgImage !== undefined) {
+        updates.og_image = bgImage || null;
+      }
+    }
+    updatePage(updates);
   };
 
   if (loading) {
@@ -436,7 +451,7 @@ export default function AdminPageEdit() {
                   id="metaTitle"
                   value={page.meta_title || ""}
                   onChange={(e) => updatePage({ meta_title: e.target.value })}
-                  placeholder="Page Title | Silva Trial Lawyers"
+                  placeholder={`Page Title | ${siteSettings.siteName || 'Your Site'}`}
                 />
                 <p className="text-sm text-gray-500">
                   {(page.meta_title || "").length}/60 characters recommended
@@ -468,7 +483,7 @@ export default function AdminPageEdit() {
                   onChange={(e) =>
                     updatePage({ canonical_url: e.target.value })
                   }
-                  placeholder="https://silvatriallawyers.com/page"
+                  placeholder={`${siteSettings.productionUrl || 'https://yourdomain.com'}/page`}
                 />
               </div>
 
@@ -508,10 +523,25 @@ export default function AdminPageEdit() {
                 </p>
                 <ImageUploader
                   value={page.og_image || ""}
-                  onChange={(url) => updatePage({ og_image: url })}
+                  onChange={(url) => {
+                    if (isPracticePage && page?.content) {
+                      const practiceContent = page.content as unknown as PracticePageContent;
+                      handleStructuredContentChange({
+                        ...practiceContent,
+                        hero: { ...practiceContent.hero, backgroundImage: url },
+                      });
+                    } else {
+                      updatePage({ og_image: url });
+                    }
+                  }}
                   folder="og-images"
                   placeholder="Upload a featured image for social sharing"
                 />
+                {isPracticePage && (
+                  <p className="text-xs text-blue-600 mt-1">
+                    Note: This image is linked to the Hero background image on this practice page.
+                  </p>
+                )}
               </div>
 
               <div className="flex items-center gap-2">
@@ -589,7 +619,7 @@ export default function AdminPageEdit() {
                         // Allow typing invalid JSON temporarily
                       }
                     }}
-                    placeholder='{"name": "Silva Trial Lawyers", "telephone": "404-905-7742"}'
+                    placeholder='{"name": "Your Law Firm", "telephone": "555-555-5555"}'
                     rows={6}
                     className="font-mono text-sm"
                   />

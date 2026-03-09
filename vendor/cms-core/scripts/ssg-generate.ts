@@ -6,7 +6,8 @@ import type { Database } from '../client/lib/database.types';
 // Load environment variables
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const siteUrl = process.env.SITE_URL || 'https://silvatriallawyers.com';
+// siteUrl will be resolved at runtime from site_settings.production_url (see generateSSG)
+let siteUrl = process.env.SITE_URL || '';
 
 if (!supabaseUrl || !supabaseServiceRoleKey) {
   console.log('Supabase credentials not configured. Skipping SSG generation.');
@@ -55,15 +56,16 @@ interface SiteSettings {
   google_ads_conversion_label: string | null;
   head_scripts: string | null;
   footer_scripts: string | null;
+  production_url: string | null;
 }
 
 async function generateSSG() {
   console.log('Starting SSG generation...');
 
-  // 0. Fetch site settings for analytics and scripts
+  // 0. Fetch site settings for analytics, scripts and production URL
   const { data: siteSettingsData } = await supabase
     .from('site_settings')
-    .select('site_noindex, ga4_measurement_id, google_ads_id, google_ads_conversion_label, head_scripts, footer_scripts')
+    .select('site_noindex, ga4_measurement_id, google_ads_id, google_ads_conversion_label, head_scripts, footer_scripts, production_url')
     .eq('settings_key', 'global')
     .single();
 
@@ -74,7 +76,13 @@ async function generateSSG() {
     google_ads_conversion_label: null,
     head_scripts: null,
     footer_scripts: null,
+    production_url: null,
   };
+
+  // Resolve siteUrl: prefer production_url from DB, then env var, then empty
+  if (siteSettings.production_url) {
+    siteUrl = siteSettings.production_url.replace(/\/+$/, '');
+  }
 
   console.log('Site settings loaded:', {
     siteNoindex: siteSettings.site_noindex,

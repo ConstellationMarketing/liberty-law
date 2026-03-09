@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
+import { useSiteSettings } from '@site/contexts/SiteSettingsContext';
 import type { Template, PageType } from '@/lib/database.types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,6 +19,7 @@ import { Link } from 'react-router-dom';
 
 export default function AdminPageNew() {
   const navigate = useNavigate();
+  const { settings: siteSettings } = useSiteSettings();
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
@@ -65,14 +67,18 @@ export default function AdminPageNew() {
     e.preventDefault();
     setCreating(true);
 
+    // Normalize url_path: remove trailing slashes (except root)
+    const normalizedUrlPath = urlPath === '/' ? '/' : urlPath.replace(/\/+$/, '');
+
     const selectedTemplate = templateId !== 'none' ? templates.find(t => t.id === templateId) : undefined;
-    
+    const siteName = siteSettings.siteName;
+
     const newPage = {
       title,
-      url_path: urlPath,
+      url_path: normalizedUrlPath,
       page_type: pageType,
       content: selectedTemplate?.default_content || [],
-      meta_title: selectedTemplate?.default_meta_title?.replace('[Page Title]', title) || `${title} | Silva Trial Lawyers`,
+      meta_title: selectedTemplate?.default_meta_title?.replace('[Page Title]', title) || (siteName ? `${title} | ${siteName}` : title),
       meta_description: selectedTemplate?.default_meta_description || '',
       status: 'draft' as const,
       noindex: false,

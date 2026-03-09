@@ -316,6 +316,26 @@ export default function AdminSiteSettings() {
 
           <Card>
             <CardHeader>
+              <CardTitle>Production URL</CardTitle>
+              <CardDescription>
+                The public-facing URL of this website (e.g. https://libertylawfirm.net). Used for canonical URLs and SEO metadata.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <Label htmlFor="productionUrl">Production URL</Label>
+                <Input
+                  id="productionUrl"
+                  value={settings.productionUrl}
+                  onChange={(e) => updateSettings({ productionUrl: e.target.value })}
+                  placeholder="https://yourdomain.com"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle>Logo</CardTitle>
               <CardDescription>
                 Your site logo appears in the header and footer

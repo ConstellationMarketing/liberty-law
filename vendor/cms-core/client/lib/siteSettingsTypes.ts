@@ -60,6 +60,9 @@ export interface SiteSettings {
   // Footer Tagline (Rich Text HTML)
   footerTaglineHtml: string;
 
+  // Production URL (used for canonical URLs and SEO)
+  productionUrl: string;
+
   // SEO
   siteNoindex: boolean;
 
@@ -99,13 +102,14 @@ export interface SiteSettingsRow {
   head_scripts: string | null;
   footer_scripts: string | null;
   site_name: string | null;
+  production_url: string | null;
   updated_at: string;
   updated_by: string | null;
 }
 
 // Default values matching current hardcoded content
 export const DEFAULT_SITE_SETTINGS: SiteSettings = {
-  siteName: "Silva Trial Lawyers",
+  siteName: "",
   logoUrl:
     "",
   logoAlt: "",
@@ -138,6 +142,7 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   googleAdsConversionLabel: "",
   headScripts: "",
   footerScripts: "",
+  productionUrl: "",
 };
 
 // Helper to convert database row to SiteSettings interface
@@ -177,6 +182,7 @@ export function rowToSiteSettings(row: SiteSettingsRow): SiteSettings {
     googleAdsConversionLabel: row.google_ads_conversion_label || "",
     headScripts: row.head_scripts || "",
     footerScripts: row.footer_scripts || "",
+    productionUrl: row.production_url || "",
   };
 }
 
@@ -209,5 +215,6 @@ export function siteSettingsToRow(
     head_scripts: settings.headScripts || null,
     footer_scripts: settings.footerScripts || null,
     site_name: settings.siteName,
+    production_url: settings.productionUrl || null,
   };
 }

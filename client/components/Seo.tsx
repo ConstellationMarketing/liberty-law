@@ -21,7 +21,7 @@ export default function Seo({
 }: SeoProps) {
   const { pathname } = useLocation();
   const { settings } = useSiteSettings();
-  const siteUrl = import.meta.env.VITE_SITE_URL || '';
+  const siteUrl = settings.productionUrl || import.meta.env.VITE_SITE_URL || '';
   const [faviconUrl, setFaviconUrl] = useState<string>(settings.logoUrl);
 
   // Generate inverted favicon from logo (white -> black for visibility)

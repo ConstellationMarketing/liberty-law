@@ -29,6 +29,7 @@ interface SiteSettings {
   headScripts: string;
   footerScripts: string;
   ga4MeasurementId: string;
+  productionUrl: string;
 }
 
 // localStorage key for settings persistence
@@ -149,6 +150,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
   headScripts: "",
   footerScripts: "",
   ga4MeasurementId: "",
+  productionUrl: "",
 };
 
 interface SiteSettingsContextValue {
@@ -290,6 +292,7 @@ export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
             headScripts: row.head_scripts || "",
             footerScripts: row.footer_scripts || "",
             ga4MeasurementId: row.ga4_measurement_id || "",
+            productionUrl: row.production_url || "",
           };
 
           settingsCache = loadedSettings;
