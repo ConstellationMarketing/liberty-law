@@ -1,44 +1,49 @@
 /**
  * WcDniManager
  *
- * Placed inside <BrowserRouter> alongside <GlobalScripts>. Owns all
- * WhatConverts DNI refresh triggers except the post-head-script-injection
- * one (which GlobalScripts handles via force:true because it knows exactly
- * when the WC script first lands in the DOM).
+ * Centralized WhatConverts DNI manager for the SPA. Placed inside
+ * <BrowserRouter> alongside <GlobalScripts>.
  *
  * Triggers:
- *  1. Initial mount  — catches cases where WC script was already cached
- *  2. Route change   — SPA navigation doesn't reload the page, so WC needs
- *                      to be told to re-scan the new route's DOM
- *  3. DOM mutation   — MutationObserver watches for the footer phone element
- *                      appearing; useful on slow devices where the footer
- *                      renders after WC's initial scan window has passed.
- *                      Observer disconnects after 5 s to avoid ongoing cost.
+ *  1. Initial mount  — multi-delay refresh series covering cached & slow loads
+ *  2. Route change   — multi-delay refresh series for async pages
+ *  3. DOM mutation    — watches for ANY new <a href="tel:..."> element anywhere
+ *                      in the DOM (no 5s cutoff — stays alive for the session)
+ *  4. Window load     — catches late WC script execution
+ *
+ * After every trigger, starts the universal phone sync loop so that if WC
+ * swaps even one element, all others get the swapped number propagated.
  */
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { refreshWhatConvertsDni } from "@site/lib/whatconvertsRefresh";
-import { startDniFooterSync } from "@site/lib/syncDniPhone";
+import {
+  scheduleRefreshSeries,
+  cancelScheduledRefreshes,
+  refreshWhatConvertsDni,
+} from "@site/lib/whatconvertsRefresh";
+import {
+  startUniversalPhoneSync,
+  syncPhoneNumbersNow,
+} from "@site/lib/syncDniPhone";
 
 export default function WcDniManager() {
+  const isFirstRender = useRef(true);
+  const location = useLocation();
+
   // ── 1. Initial mount ──────────────────────────────────────────────────────
   useEffect(() => {
-    // Runs once. If the WC script is already in the DOM (e.g. from browser
-    // cache on a repeat visit) this will trigger an immediate DNI scan.
-    refreshWhatConvertsDni("initial");
+    // Fire a staggered refresh series: 100ms, 500ms, 1.5s, 3s
+    // Each one also kicks off the universal phone sync
+    scheduleRefreshSeries("initial", startUniversalPhoneSync);
 
-    // Start the footer-sync loop immediately on mount.
-    startDniFooterSync();
-
-    // Also fire on window "load" (all resources including WC CDN script
-    // should have executed by then) so we catch the swapped primary value
-    // even in incognito where WC loads late.
+    // Also fire on window "load" for late WC script execution
     function onLoad() {
-      startDniFooterSync();
+      refreshWhatConvertsDni("window-load", { force: true });
+      startUniversalPhoneSync();
     }
+
     if (document.readyState === "complete") {
-      // Page already fully loaded (e.g. SPA route change) — run immediately.
       onLoad();
     } else {
       window.addEventListener("load", onLoad, { once: true });
@@ -46,66 +51,85 @@ export default function WcDniManager() {
 
     return () => {
       window.removeEventListener("load", onLoad);
+      cancelScheduledRefreshes();
     };
   }, []);
 
   // ── 2. Route change ───────────────────────────────────────────────────────
-  const location = useLocation();
   useEffect(() => {
-    // Skip the very first render — "initial" above already covers it.
-    // The effect still fires on mount, but the 2-second throttle will suppress
-    // that duplicate if "initial" was called within the same tick.
-    refreshWhatConvertsDni("route");
+    // Skip the very first render — the mount effect above handles it
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
 
-    // Re-sync footer on every SPA navigation — the primary number may differ
-    // per page if WC assigns a session number after the first route swap.
-    startDniFooterSync();
+    // Cancel any in-flight series from the previous route
+    cancelScheduledRefreshes();
+
+    // Fire a new staggered refresh series for the new route
+    scheduleRefreshSeries("route", startUniversalPhoneSync);
   }, [location.pathname, location.search]);
 
-  // ── 3. MutationObserver — footer phone element ────────────────────────────
+  // ── 3. MutationObserver — ANY tel: link appearing anywhere ────────────────
   useEffect(() => {
+    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+
     /**
-     * Check whether a DOM node is, or contains, the footer phone anchor.
-     * We look for both the stable data attribute we add and the semantic
-     * fallback selector so the guard works even before Footer re-renders.
+     * Check whether a node is, or contains, any <a href="tel:..."> element.
      */
-    function containsFooterPhone(node: Node): boolean {
+    function containsTelLink(node: Node): boolean {
       if (!(node instanceof Element)) return false;
-      return (
-        node.matches('[data-phone="footer"]') ||
-        node.querySelector('[data-phone="footer"]') !== null ||
-        node.matches('footer a[href^="tel:"]') ||
-        node.querySelector('footer a[href^="tel:"]') !== null
-      );
+      if (
+        node.tagName === "A" &&
+        (node.getAttribute("href") ?? "").startsWith("tel:")
+      ) {
+        return true;
+      }
+      return node.querySelector('a[href^="tel:"]') !== null;
     }
 
     const observer = new MutationObserver((mutations) => {
+      let found = false;
       for (const mutation of mutations) {
         for (const node of Array.from(mutation.addedNodes)) {
-          if (containsFooterPhone(node)) {
-            refreshWhatConvertsDni("dom");
-            // One refresh per batch is enough — stop scanning this mutation set
-            return;
+          if (containsTelLink(node)) {
+            found = true;
+            break;
           }
         }
+        if (found) break;
       }
+
+      if (!found) return;
+
+      // Debounce at 300ms to avoid excessive triggers from React batch renders
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        refreshWhatConvertsDni("dom-tel-added", { force: true });
+        startUniversalPhoneSync();
+      }, 300);
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // Disconnect after 5 s — the footer is part of the initial render; by
-    // 5 s it will have appeared on any device. Keeping the observer alive
-    // longer would add unnecessary overhead on every DOM change.
-    const disconnectTimer = window.setTimeout(
-      () => observer.disconnect(),
-      5_000,
-    );
-
+    // NO disconnect timer — stays alive for the full session
     return () => {
       observer.disconnect();
-      clearTimeout(disconnectTimer);
+      if (debounceTimer) clearTimeout(debounceTimer);
     };
-  }, []); // runs once per mount — intentional
+  }, []);
 
   return null;
+}
+
+/**
+ * Trigger a DNI refresh + sync after a UI interaction that reveals
+ * new phone content (e.g. FAQ tab open). Exported for use by FAQ components.
+ */
+export function triggerDniRefreshAfterReveal(): void {
+  setTimeout(() => {
+    refreshWhatConvertsDni("content-reveal", { force: true });
+    syncPhoneNumbersNow();
+    startUniversalPhoneSync();
+  }, 100);
 }

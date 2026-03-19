@@ -7,10 +7,8 @@
  *  - Trigger WhatConverts Dynamic Number Insertion (DNI) after React renders
  *  - Handle SPA route changes (WC only scans on initial page load by default)
  *  - Guard against duplicate script injection (max once per THROTTLE_MS)
+ *  - Provide a multi-delay refresh schedule for async pages
  *  - Fail silently when WC is blocked (ad blockers, Safari privacy mode)
- *
- * This file is intentionally framework-free — it's a plain TS module so it
- * can be imported by both React components and non-React utilities.
  */
 
 // ---------------------------------------------------------------------------
@@ -20,8 +18,8 @@
 /** Attribute stamped on script copies we insert so we can target and remove them. */
 const WC_ATTR = "data-wc";
 
-/** Minimum ms between refresh attempts. Prevents script accumulation. */
-const THROTTLE_MS = 2000;
+/** Minimum ms between refresh attempts. Reduced from 2s to 500ms for SPA responsiveness. */
+const THROTTLE_MS = 500;
 
 // ---------------------------------------------------------------------------
 // State (module-level singleton)
@@ -29,14 +27,13 @@ const THROTTLE_MS = 2000;
 
 let lastRefreshAt = 0;
 
+/** Track scheduled timer IDs so we can cancel them on new navigation. */
+let scheduledTimers: ReturnType<typeof setTimeout>[] = [];
+
 // ---------------------------------------------------------------------------
 // Debug logging
 // ---------------------------------------------------------------------------
 
-/**
- * Logging is active in dev mode OR when window.__WC_DEBUG__ = true is set
- * (useful for diagnosing issues on production without a full deploy).
- */
 function isDebug(): boolean {
   if (typeof window === "undefined") return false;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,8 +50,6 @@ function log(msg: string): void {
 
 /**
  * Find the original WhatConverts script injected by the CMS (via headScripts).
- * We intentionally exclude scripts we inserted ourselves (marked with WC_ATTR)
- * to avoid re-inserting a re-inserted copy — only the CMS-original counts.
  */
 function findOriginalWcScript(): HTMLScriptElement | null {
   return (
@@ -73,25 +68,17 @@ function findOriginalWcScript(): HTMLScriptElement | null {
 // ---------------------------------------------------------------------------
 
 export interface RefreshOptions {
-  /**
-   * Bypass the 2-second throttle. Use ONLY for events that are guaranteed
-   * to be meaningful (e.g. right after the WC script has just been injected
-   * into the DOM for the first time). Do NOT use for route changes or DOM
-   * mutation callbacks — the throttle exists to protect those paths.
-   */
+  /** Bypass the throttle. */
   force?: boolean;
 }
 
 /**
  * Trigger WhatConverts DNI to rescan the DOM and swap phone numbers.
  *
- * Tries three strategies in order, returning after the first success:
+ * Tries three strategies in order:
  *   1. Official WC SPA API  → window._wcq.push({ event: "pageview" })
  *   2. Direct re-scan APIs  → _wci.run() or WhatConverts.track()
  *   3. Fallback             → remove old tagged copy, append fresh script
- *
- * @param reason - label for debug logs ("initial" | "route" | "dom" | etc.)
- * @param opts   - { force: true } bypasses the 2-second throttle
  */
 export function refreshWhatConvertsDni(
   reason: string,
@@ -106,11 +93,8 @@ export function refreshWhatConvertsDni(
     return;
   }
 
-  // Lock immediately (before the setTimeout) so rapid calls are rejected
   lastRefreshAt = now;
 
-  // Short delay: let React finish rendering the new route's DOM before
-  // WhatConverts scans for phone number elements to swap.
   setTimeout(() => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -150,7 +134,6 @@ export function refreshWhatConvertsDni(
       const src = original.getAttribute("src");
       if (!src) return;
 
-      // Remove previously re-inserted copies to prevent accumulation
       document
         .querySelectorAll(`script[${WC_ATTR}="dni"]`)
         .forEach((el) => el.remove());
@@ -162,8 +145,47 @@ export function refreshWhatConvertsDni(
       document.head.appendChild(script);
       log("→ re-inserted WC script (fallback)");
     } catch (err) {
-      // Never throw — WC may be blocked or unavailable
       if (isDebug()) console.warn("[WC-DNI] error during refresh:", err);
     }
-  }, 100);
+  }, 50);
+}
+
+/**
+ * Schedule a series of WC refresh calls at staggered delays.
+ *
+ * This covers both instant-render pages AND async pages that fetch data
+ * from Supabase before rendering phone elements. Each call uses force:true
+ * to bypass the throttle (safe because we control the schedule).
+ *
+ * Also invokes a callback (e.g. startUniversalPhoneSync) after each refresh.
+ *
+ * @param reason  - label prefix for debug logs
+ * @param onEach  - optional callback fired after each scheduled refresh
+ */
+export function scheduleRefreshSeries(
+  reason: string,
+  onEach?: () => void,
+): void {
+  // Cancel any previously scheduled series (e.g. from prior navigation)
+  cancelScheduledRefreshes();
+
+  const delays = [100, 500, 1500, 3000];
+
+  for (const delay of delays) {
+    const timer = setTimeout(() => {
+      refreshWhatConvertsDni(`${reason}@${delay}ms`, { force: true });
+      onEach?.();
+    }, delay);
+    scheduledTimers.push(timer);
+  }
+}
+
+/**
+ * Cancel any in-flight scheduled refresh series.
+ */
+export function cancelScheduledRefreshes(): void {
+  for (const timer of scheduledTimers) {
+    clearTimeout(timer);
+  }
+  scheduledTimers = [];
 }

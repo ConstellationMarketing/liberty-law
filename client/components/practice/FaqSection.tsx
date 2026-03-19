@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@site/components/ui/accordion";
+import { triggerDniRefreshAfterReveal } from "@site/components/WcDniManager";
 import type { PracticeFaq } from "@site/lib/cms/practicePageTypes";
 
 interface Props {
@@ -22,7 +23,18 @@ export default function FaqSection({ faq }: Props) {
             {faq.heading}
           </h2>
 
-          <Accordion type="single" collapsible className="space-y-3">
+          <Accordion
+            type="single"
+            collapsible
+            className="space-y-3"
+            onValueChange={(value) => {
+              // When opening an accordion item, trigger DNI refresh
+              // so phone numbers inside the answer get swapped
+              if (value) {
+                triggerDniRefreshAfterReveal();
+              }
+            }}
+          >
             {faq.items.map((item, index) => (
               <AccordionItem
                 key={index}
