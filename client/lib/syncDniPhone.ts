@@ -124,10 +124,22 @@ function updateElementText(
     }
   }
 
-  // Last resort: if the entire textContent is just the phone number
-  const fullText = (el.textContent ?? "").trim();
-  if (containsOriginalPhone(fullText) && spans.length === 0) {
-    el.textContent = replacePhoneInText(fullText, swappedDisplay);
+  // Safe fallback: walk ALL descendant text nodes and replace only the
+  // text content of individual Text nodes that contain the original phone.
+  // This safely handles nested structures like CallBox's <p>630-449-4800</p>
+  // without destroying sibling elements (unlike setting el.textContent).
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  const textNodesToUpdate: Text[] = [];
+  let tn: Text | null;
+  while ((tn = walker.nextNode() as Text | null)) {
+    if (tn.textContent && containsOriginalPhone(tn.textContent)) {
+      textNodesToUpdate.push(tn);
+    }
+  }
+  for (const node of textNodesToUpdate) {
+    if (node.textContent) {
+      node.textContent = replacePhoneInText(node.textContent, swappedDisplay);
+    }
   }
 }
 
