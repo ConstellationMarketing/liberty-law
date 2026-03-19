@@ -131,54 +131,112 @@ function updateElementText(
   }
 }
 
+/** Elements whose text nodes should never be touched. */
+const SKIP_TAGS = new Set([
+  "SCRIPT",
+  "STYLE",
+  "TEXTAREA",
+  "INPUT",
+  "SELECT",
+  "NOSCRIPT",
+]);
+
+/**
+ * Walk all text nodes under `root` and replace any occurrence of the
+ * original phone number (in any known format) with `swappedDisplay`.
+ *
+ * This handles the case where FAQ answers (or other CMS rich-text content)
+ * contain the phone number as plain text rather than inside a tel: link.
+ */
+function replacePhoneInTextNodes(
+  root: Element,
+  swappedDisplay: string,
+): void {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      // Skip nodes inside tel: anchors (already handled by tel-link sync)
+      const parent = node.parentElement;
+      if (!parent) return NodeFilter.FILTER_SKIP;
+      if (SKIP_TAGS.has(parent.tagName)) return NodeFilter.FILTER_SKIP;
+      // Skip if inside an anchor that already has a tel: href
+      const closestAnchor = parent.closest('a[href^="tel:"]');
+      if (closestAnchor) return NodeFilter.FILTER_SKIP;
+      return NodeFilter.FILTER_ACCEPT;
+    },
+  });
+
+  const nodesToUpdate: Text[] = [];
+  let textNode: Text | null;
+  while ((textNode = walker.nextNode() as Text | null)) {
+    if (textNode.textContent && containsOriginalPhone(textNode.textContent)) {
+      nodesToUpdate.push(textNode);
+    }
+  }
+
+  for (const node of nodesToUpdate) {
+    if (node.textContent) {
+      node.textContent = replacePhoneInText(node.textContent, swappedDisplay);
+    }
+  }
+}
+
+/**
+ * Find the swapped phone number by checking all tel: links on the page.
+ * Returns null if WC hasn't swapped any number yet.
+ */
+function findSwappedNumber(): {
+  href: string;
+  display: string;
+} | null {
+  const allTelLinks = document.querySelectorAll<HTMLAnchorElement>(
+    'a[href^="tel:"]',
+  );
+
+  for (const link of allTelLinks) {
+    const href = link.getAttribute("href") ?? "";
+    if (!isOriginalHref(href) && href.startsWith("tel:")) {
+      let display: string;
+      const spans = link.querySelectorAll("span");
+      if (spans.length > 1) {
+        // Footer-style: last span is the phone number
+        display = (spans[spans.length - 1].textContent ?? "").trim();
+      } else if (spans.length === 1) {
+        display = (spans[0].textContent ?? "").trim();
+      } else {
+        display = (link.textContent ?? "").trim();
+      }
+      if (display) return { href, display };
+    }
+  }
+  return null;
+}
+
 /**
  * Run a single sync pass. Returns true if a swapped number was found and
  * propagated (or if there's nothing left to sync).
  */
 function runSyncPass(): boolean {
+  const swapped = findSwappedNumber();
+  if (!swapped) return false;
+
   const allTelLinks = document.querySelectorAll<HTMLAnchorElement>(
     'a[href^="tel:"]',
   );
-  if (allTelLinks.length === 0) return false;
 
-  // Step 1: Find the swapped number (any tel: link whose href differs from original)
-  let swappedHref: string | null = null;
-  let swappedDisplay: string | null = null;
-
-  for (const link of allTelLinks) {
-    const href = link.getAttribute("href") ?? "";
-    if (!isOriginalHref(href) && href.startsWith("tel:")) {
-      swappedHref = href;
-      // Try to get the display text from this element
-      // Look for the phone-number text (skip labels like "Call Us 24/7")
-      const spans = link.querySelectorAll("span");
-      if (spans.length > 1) {
-        // Footer-style: last span is the phone number
-        swappedDisplay = (spans[spans.length - 1].textContent ?? "").trim();
-      } else if (spans.length === 1) {
-        swappedDisplay = (spans[0].textContent ?? "").trim();
-      } else {
-        swappedDisplay = (link.textContent ?? "").trim();
-      }
-      break;
-    }
-  }
-
-  // No swapped number found yet — WC hasn't run
-  if (!swappedHref || !swappedDisplay) return false;
-
-  // Step 2: Propagate to all tel: links that still have the original number
-  let allSynced = true;
+  // Propagate to all tel: links that still have the original number
   for (const link of allTelLinks) {
     const href = link.getAttribute("href") ?? "";
     if (isOriginalHref(href)) {
-      link.setAttribute("href", swappedHref);
-      updateElementText(link, swappedDisplay);
-      allSynced = false; // We just synced one — there might be more next tick
+      link.setAttribute("href", swapped.href);
+      updateElementText(link, swapped.display);
     }
   }
 
-  return true; // Swapped number was found (whether or not we had to propagate)
+  // Also replace plain-text phone numbers anywhere in the document body
+  // (e.g. FAQ answers that contain the phone number as plain text)
+  replacePhoneInTextNodes(document.body, swapped.display);
+
+  return true;
 }
 
 /**
