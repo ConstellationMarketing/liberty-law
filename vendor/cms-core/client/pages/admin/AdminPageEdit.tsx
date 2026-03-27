@@ -245,11 +245,14 @@ export default function AdminPageEdit() {
     page?.page_type === "practice" &&
     page.url_path !== "/practice-areas";
 
-  // Check if this is a structured page (main site pages)
+  // Check if this is a structured page (main site pages or duplicates with object content)
   const isStructuredPage =
     !isPracticePage &&
     page?.url_path &&
-    ["/", "/about", "/contact", "/practice-areas", "/privacy-policy", "/terms-and-conditions", "/complaints-process"].includes(page.url_path);
+    (
+      ["/", "/about", "/contact", "/practice-areas", "/privacy-policy", "/terms-and-conditions", "/complaints-process"].includes(page.url_path) ||
+      (page.content && typeof page.content === 'object' && !Array.isArray(page.content))
+    );
 
   // Normalize content by merging with defaults based on page type
   const normalizedContent = useMemo(() => {
