@@ -83,19 +83,33 @@ export default function AdminPages() {
   const handleDuplicate = async (page: Page) => {
     setDuplicating(page.id);
 
+    // Fetch the full page record fresh from the database to ensure all JSONB content is included
+    const { data: fullPage, error: fetchError } = await supabase
+      .from('pages')
+      .select('*')
+      .eq('id', page.id)
+      .single();
+
+    if (fetchError || !fullPage) {
+      console.error('Error fetching page for duplication:', fetchError);
+      alert('Failed to fetch page data for duplication.');
+      setDuplicating(null);
+      return;
+    }
+
     // Generate a unique URL path
-    let newPath = `${page.url_path}-copy`;
+    let newPath = `${fullPage.url_path}-copy`;
     let suffix = 1;
     while (pages.some(p => p.url_path === newPath)) {
       suffix++;
-      newPath = `${page.url_path}-copy-${suffix}`;
+      newPath = `${fullPage.url_path}-copy-${suffix}`;
     }
 
-    const { id, created_at, updated_at, ...rest } = page as any;
+    const { id, created_at, updated_at, ...rest } = fullPage as any;
 
     const newPage = {
       ...rest,
-      title: `${page.title} (Copy)`,
+      title: `${fullPage.title} (Copy)`,
       url_path: newPath,
       status: 'draft',
       published_at: null,
