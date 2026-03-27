@@ -4,7 +4,7 @@ import { supabase } from '../../lib/supabase';
 import AdminSidebar from './AdminSidebar';
 import { Loader2 } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
-import { useSessionAuth } from '@/contexts/SessionAuthContext';
+import { useSessionAuth } from '../../../../../client/contexts/SessionAuthContext';
 
 export default function AdminLayout() {
   const navigate = useNavigate();
