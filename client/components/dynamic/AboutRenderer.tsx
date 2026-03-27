@@ -58,6 +58,11 @@ function mergeAbout(
   };
 }
 
+// Check if a member has any meaningful content filled in
+function hasMemberContent(m: { name?: string; image?: string; bio?: string; title?: string }) {
+  return !!(m.name || m.image || m.bio || m.title);
+}
+
 interface Props {
   content: Record<string, unknown>;
 }
@@ -65,6 +70,15 @@ interface Props {
 export default function AboutRenderer({ content: raw }: Props) {
   const content = mergeAbout(raw as Partial<AboutPageContent>, defaultAboutContent);
   const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
+
+  const hasStory = !!(content.story.heading || content.story.paragraphs.some(p => p));
+  const hasMission = !!(content.missionVision.mission.heading || content.missionVision.mission.text);
+  const hasVision = !!(content.missionVision.vision.heading || content.missionVision.vision.text);
+  const hasMissionVision = hasMission || hasVision;
+  const hasTeam = content.team.members.some(hasMemberContent);
+  const hasValues = content.values.items.length > 0 && content.values.items.some(v => v.title || v.description);
+  const hasWhyChooseUs = content.whyChooseUs.items.length > 0 && content.whyChooseUs.items.some(i => i.title || i.description);
+  const hasCta = !!(content.cta.heading || content.cta.description);
 
   const coreValues = content.values.items.map((item) => ({
     icon: iconMap[item.icon] || Scale,
@@ -105,7 +119,7 @@ export default function AboutRenderer({ content: raw }: Props) {
       </div>
 
       {/* Our Story Section */}
-      <div className="bg-white pt-[30px] md:pt-[54px] pb-[30px] md:pb-[54px]">
+      {hasStory && <div className="bg-white pt-[30px] md:pt-[54px] pb-[30px] md:pb-[54px]">
         <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[80%]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[8%]">
             <div>
@@ -129,10 +143,10 @@ export default function AboutRenderer({ content: raw }: Props) {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Mission & Vision */}
-      <div className="bg-law-accent-dark py-[40px] md:py-[60px]">
+      {hasMissionVision && <div className="bg-law-accent-dark py-[40px] md:py-[60px]">
         <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[80%]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-[8%]">
             <div className="text-center lg:text-left">
@@ -145,10 +159,10 @@ export default function AboutRenderer({ content: raw }: Props) {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Team Section */}
-      <div className="bg-white pt-[40px] md:pt-[60px] pb-[30px] md:pb-[54px]">
+      {hasTeam && <div className="bg-white pt-[40px] md:pt-[60px] pb-[30px] md:pb-[54px]">
         <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[85%]">
           <div className="text-center mb-[30px] md:mb-[50px]">
             <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-law-accent mb-[10px]">{content.team.sectionLabel}</p>
@@ -162,10 +176,10 @@ export default function AboutRenderer({ content: raw }: Props) {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Core Values */}
-      <div className="bg-law-dark py-[40px] md:py-[60px]">
+      {hasValues && <div className="bg-law-dark py-[40px] md:py-[60px]">
         <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[85%]">
           <div className="text-center mb-[30px] md:mb-[50px]">
             <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-law-accent mb-[10px]">{content.values.sectionLabel}</p>
@@ -180,13 +194,13 @@ export default function AboutRenderer({ content: raw }: Props) {
             ))}
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Why Choose Us */}
-      <WhyChooseUsSection content={content.whyChooseUs} variant="light" />
+      {hasWhyChooseUs && <WhyChooseUsSection content={content.whyChooseUs} variant="light" />}
 
       {/* CTA */}
-      <div className="bg-law-accent py-[40px] md:py-[60px]">
+      {hasCta && <div className="bg-law-accent py-[40px] md:py-[60px]">
         <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[80%]">
           <div className="text-center mb-[30px] md:mb-[40px]">
             <h2 className="font-playfair text-[36px] md:text-[48px] lg:text-[60px] leading-tight text-white pb-[15px]">{content.cta.heading}</h2>
@@ -197,7 +211,7 @@ export default function AboutRenderer({ content: raw }: Props) {
             <CallBox icon={Calendar} title={content.cta.secondaryButton.label} subtitle={content.cta.secondaryButton.sublabel} link={content.cta.secondaryButton.link} className="bg-law-accent-dark hover:bg-black" variant="dark" />
           </div>
         </div>
-      </div>
+      </div>}
     </>
   );
 }
