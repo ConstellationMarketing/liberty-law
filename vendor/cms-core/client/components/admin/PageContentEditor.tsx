@@ -1615,9 +1615,9 @@ export default function PageContentEditor({
   content,
   onChange,
 }: PageContentEditorProps) {
-  const urlPath = typeof pageKey === "string" ? pageKey : "";
+  const key = typeof pageKey === "string" ? pageKey : "";
 
-  if (urlPath === "/" || urlPath === "/home") {
+  if (key === "home" || key === "/" || key === "/home") {
     return (
       <HomePageEditor
         content={content as HomePageContent}
@@ -1626,7 +1626,7 @@ export default function PageContentEditor({
     );
   }
 
-  if (urlPath === "/about") {
+  if (key === "about" || key === "/about") {
     return (
       <AboutPageEditor
         content={content as AboutPageContent}
@@ -1635,7 +1635,7 @@ export default function PageContentEditor({
     );
   }
 
-  if (urlPath === "/contact") {
+  if (key === "contact" || key === "/contact") {
     return (
       <ContactPageEditor
         content={content as ContactPageContent}
@@ -1644,7 +1644,7 @@ export default function PageContentEditor({
     );
   }
 
-  if (urlPath === "/practice-areas") {
+  if (key === "practice-areas" || key === "/practice-areas") {
     return (
       <PracticeAreasPageEditor
         content={content as PracticeAreasPageContent}
@@ -1655,9 +1655,10 @@ export default function PageContentEditor({
 
   // Simple content pages (Privacy Policy, Terms, Complaints)
   if (
-    urlPath === "/privacy-policy" ||
-    urlPath === "/terms-and-conditions" ||
-    urlPath === "/complaints-process"
+    key === "simple" ||
+    key === "/privacy-policy" ||
+    key === "/terms-and-conditions" ||
+    key === "/complaints-process"
   ) {
     const simple = content as SimplePageContent;
     return (

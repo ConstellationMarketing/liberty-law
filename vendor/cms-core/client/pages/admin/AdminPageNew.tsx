@@ -83,10 +83,18 @@ export default function AdminPageNew() {
     const selectedTemplate = templateId !== 'none' ? templates.find(t => t.id === templateId) : undefined;
     const siteName = siteSettings.siteName;
 
+    // Determine content_template from the selected template or page type
+    const contentTemplate = selectedTemplate?.page_type === 'practice'
+      ? 'practice'
+      : pageType === 'practice'
+        ? 'practice'
+        : null;
+
     const newPage = {
       title,
       url_path: normalizedUrlPath,
       page_type: pageType,
+      content_template: contentTemplate,
       content: selectedTemplate?.default_content || [],
       meta_title: selectedTemplate?.default_meta_title?.replace('[Page Title]', title) || (siteName ? `${title} | ${siteName}` : title),
       meta_description: selectedTemplate?.default_meta_description || '',

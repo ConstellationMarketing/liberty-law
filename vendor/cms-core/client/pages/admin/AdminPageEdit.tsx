@@ -158,6 +158,7 @@ export default function AdminPageEdit() {
         title: page.title,
         url_path: normalizedUrlPath,
         page_type: page.page_type,
+        content_template: page.content_template,
         content: page.content as unknown,
         meta_title: page.meta_title,
         meta_description: page.meta_description,
@@ -185,7 +186,7 @@ export default function AdminPageEdit() {
         clearPageCache(page.url_path as PageKey);
       }
       // For practice detail pages, clear the per-slug cache
-      if (isPracticePage && page.url_path.startsWith("/practice-areas/")) {
+      if (page.content_template === 'practice' && page.url_path.startsWith("/practice-areas/")) {
         import("@site/hooks/usePracticePageContent").then(({ clearPracticePageCache }) => {
           const slug = page.url_path.replace("/practice-areas/", "");
           clearPracticePageCache(slug);
@@ -240,67 +241,50 @@ export default function AdminPageEdit() {
     await performSave();
   };
 
-  // Detect practice area detail pages (page_type=practice, but not the listing page itself)
-  const isPracticePage =
-    page?.page_type === "practice" &&
-    page.url_path !== "/practice-areas";
+  // Detect practice area detail pages by content_template
+  const isPracticePage = page?.content_template === 'practice';
 
-  // Check if this is a structured page (main site pages or duplicates with object content)
+  // Check if this is a structured page (has a known content_template)
   const isStructuredPage =
     !isPracticePage &&
-    page?.url_path &&
-    (
-      ["/", "/about", "/contact", "/practice-areas", "/privacy-policy", "/terms-and-conditions", "/complaints-process"].includes(page.url_path) ||
-      (page.content && typeof page.content === 'object' && !Array.isArray(page.content))
-    );
+    !!page?.content_template &&
+    ['home', 'about', 'contact', 'practice-areas', 'simple'].includes(page.content_template);
 
   // Normalize content by merging with defaults based on page type
   const normalizedContent = useMemo(() => {
     if (!isStructuredPage && !isPracticePage) return page?.content;
     if (!page?.content) return isPracticePage ? defaultPracticePageContent : undefined;
 
-    if (isPracticePage) {
-      return mergeWithDefaults(
-        page.content as unknown as Partial<PracticePageContent>,
-        defaultPracticePageContent,
-      );
-    }
-
-    switch (page.url_path) {
-      case '/':
+    switch (page.content_template) {
+      case 'practice':
+        return mergeWithDefaults(
+          page.content as unknown as Partial<PracticePageContent>,
+          defaultPracticePageContent,
+        );
+      case 'home':
         return mergeWithDefaults(
           page.content as unknown as Partial<HomePageContent>,
           defaultHomeContent
         );
-      case '/about':
+      case 'about':
         return mergeWithDefaults(
           page.content as unknown as Partial<AboutPageContent>,
           defaultAboutContent
         );
-      case '/contact':
+      case 'contact':
         return mergeWithDefaults(
           page.content as unknown as Partial<ContactPageContent>,
           defaultContactContent
         );
-      case '/practice-areas':
+      case 'practice-areas':
         return mergeWithDefaults(
           page.content as unknown as Partial<PracticeAreasPageContent>,
           defaultPracticeAreasContent
         );
-      case '/privacy-policy':
+      case 'simple':
         return mergeWithDefaults(
           page.content as unknown as Partial<SimplePageContent>,
           defaultPrivacyPolicyContent
-        );
-      case '/terms-and-conditions':
-        return mergeWithDefaults(
-          page.content as unknown as Partial<SimplePageContent>,
-          defaultTermsContent
-        );
-      case '/complaints-process':
-        return mergeWithDefaults(
-          page.content as unknown as Partial<SimplePageContent>,
-          defaultComplaintsContent
         );
       default:
         return page.content;
@@ -415,7 +399,7 @@ export default function AdminPageEdit() {
                   </p>
                 </div>
                 <PageContentEditor
-                  pageKey={page.url_path}
+                  pageKey={page.content_template || page.url_path}
                   content={normalizedContent}
                   onChange={handleStructuredContentChange}
                 />

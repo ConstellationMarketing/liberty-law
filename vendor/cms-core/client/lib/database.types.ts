@@ -42,6 +42,7 @@ export type ContentBlock =
 
 export type PageStatus = "draft" | "published";
 export type PageType = "standard" | "practice" | "landing";
+export type ContentTemplate = "home" | "about" | "contact" | "practice-areas" | "simple" | "practice" | "blocks";
 
 export interface Page {
   id: string;
@@ -56,6 +57,7 @@ export interface Page {
   og_description: string | null;
   og_image: string | null;
   noindex: boolean;
+  content_template: ContentTemplate | null;
   schema_type: string | null;
   schema_data: Record<string, unknown> | null;
   status: PageStatus;
