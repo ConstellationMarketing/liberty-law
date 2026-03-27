@@ -4,9 +4,11 @@ import { supabase } from '../../lib/supabase';
 import AdminSidebar from './AdminSidebar';
 import { Loader2 } from 'lucide-react';
 import type { User } from '@supabase/supabase-js';
+import { useSessionAuth } from '@/contexts/SessionAuthContext';
 
 export default function AdminLayout() {
   const navigate = useNavigate();
+  const { isSessionActive, isLoading: sessionLoading } = useSessionAuth();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
@@ -25,8 +27,8 @@ export default function AdminLayout() {
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
+
+      if (!session || !isSessionActive) {
         navigate('/admin/login');
         return;
       }
@@ -34,6 +36,8 @@ export default function AdminLayout() {
       setUser(session.user);
       setLoading(false);
     };
+
+    if (sessionLoading) return;
 
     checkAuth();
 
@@ -49,7 +53,7 @@ export default function AdminLayout() {
     return () => {
       subscription.unsubscribe();
     };
-  }, [navigate]);
+  }, [navigate, isSessionActive, sessionLoading]);
 
   if (loading) {
     return (

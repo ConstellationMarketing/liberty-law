@@ -12,6 +12,7 @@ import Index from "./pages/Index";
 import ScrollToTop from "./components/ScrollToTop";
 import GlobalScripts from "./components/GlobalScripts";
 import WcDniManager from "./components/WcDniManager";
+import { SessionAuthProvider } from "./contexts/SessionAuthContext";
 
 // Lazy-loaded routes for code splitting
 const AboutUs = lazy(() => import("./pages/AboutUs"));
@@ -34,25 +35,27 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <GlobalScripts />
-            <WcDniManager />
-            <ScrollToTop />
-            <Suspense fallback={null}>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/about" element={<AboutUs />} />
-                <Route path="/practice-areas" element={<PracticeAreas />} />
-                <Route path="/practice-areas/:slug" element={<PracticeAreaPage />} />
-                <Route path="/contact" element={<ContactPage />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-                <Route path="/terms-and-conditions" element={<TermsPage />} />
-                <Route path="/complaints-process" element={<ComplaintsPage />} />
-                {/* Admin section — auth is enforced inside AdminRoutes / AdminLayout */}
-                <Route path="/admin/*" element={<AdminRoutes />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
+            <SessionAuthProvider>
+              <GlobalScripts />
+              <WcDniManager />
+              <ScrollToTop />
+              <Suspense fallback={null}>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/about" element={<AboutUs />} />
+                  <Route path="/practice-areas" element={<PracticeAreas />} />
+                  <Route path="/practice-areas/:slug" element={<PracticeAreaPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                  <Route path="/terms-and-conditions" element={<TermsPage />} />
+                  <Route path="/complaints-process" element={<ComplaintsPage />} />
+                  {/* Admin section — auth is enforced inside AdminRoutes / AdminLayout */}
+                  <Route path="/admin/*" element={<AdminRoutes />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </SessionAuthProvider>
           </BrowserRouter>
         </TooltipProvider>
       </SiteSettingsProvider>

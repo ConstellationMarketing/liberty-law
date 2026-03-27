@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import type { Page } from '@/lib/database.types';
 import { Button } from '@/components/ui/button';
@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Plus, Search, Edit, Trash2, ExternalLink, Loader2, Square, CheckSquare, MinusSquare } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, ExternalLink, Loader2, Square, CheckSquare, MinusSquare, Copy } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import BulkActionBar, { BulkAction } from '../../components/admin/BulkActionBar';
 import {
@@ -42,6 +42,8 @@ export default function AdminPages() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [duplicating, setDuplicating] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPages();
@@ -76,6 +78,44 @@ export default function AdminPages() {
 
     setDeleteId(null);
     setDeleting(false);
+  };
+
+  const handleDuplicate = async (page: Page) => {
+    setDuplicating(page.id);
+
+    // Generate a unique URL path
+    let newPath = `${page.url_path}-copy`;
+    let suffix = 1;
+    while (pages.some(p => p.url_path === newPath)) {
+      suffix++;
+      newPath = `${page.url_path}-copy-${suffix}`;
+    }
+
+    const { id, created_at, updated_at, ...rest } = page as any;
+
+    const newPage = {
+      ...rest,
+      title: `${page.title} (Copy)`,
+      url_path: newPath,
+      status: 'draft',
+      published_at: null,
+      canonical_url: null,
+    };
+
+    const { data, error } = await supabase
+      .from('pages')
+      .insert(newPage)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error duplicating page:', error);
+      alert('Failed to duplicate page: ' + error.message);
+    } else if (data) {
+      navigate(`/admin/pages/${data.id}`);
+    }
+
+    setDuplicating(null);
   };
 
   const filteredPages = pages.filter(page => {
@@ -304,6 +344,19 @@ export default function AdminPages() {
                           <Edit className="h-4 w-4" />
                         </Button>
                       </Link>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDuplicate(page)}
+                        disabled={duplicating === page.id}
+                        title="Duplicate page"
+                      >
+                        {duplicating === page.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <Copy className="h-4 w-4" />
+                        )}
+                      </Button>
                       <Button
                         variant="ghost"
                         size="sm"
