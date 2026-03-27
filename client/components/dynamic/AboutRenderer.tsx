@@ -37,7 +37,7 @@ function mergeAbout(
     team: {
       ...defaults.team,
       ...cms.team,
-      members: cms.team?.members?.length ? cms.team.members : defaults.team.members,
+      members: cms.team?.members !== undefined ? cms.team.members : defaults.team.members,
     },
     values: {
       ...defaults.values,
@@ -58,9 +58,15 @@ function mergeAbout(
   };
 }
 
+// Strip HTML tags and check if there's actual text content
+function hasText(val?: string) {
+  if (!val) return false;
+  return val.replace(/<[^>]*>/g, '').trim().length > 0;
+}
+
 // Check if a member has any meaningful content filled in
 function hasMemberContent(m: { name?: string; image?: string; bio?: string; title?: string }) {
-  return !!(m.name || m.image || m.bio || m.title);
+  return !!(m.name?.trim() || m.image?.trim() || hasText(m.bio) || m.title?.trim());
 }
 
 interface Props {
