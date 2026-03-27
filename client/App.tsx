@@ -23,6 +23,7 @@ const PrivacyPolicyPage = lazy(() => import("./pages/PrivacyPolicyPage"));
 const TermsPage = lazy(() => import("./pages/TermsPage"));
 const ComplaintsPage = lazy(() => import("./pages/ComplaintsPage"));
 const PracticeAreaPage = lazy(() => import("./pages/PracticeAreaPage"));
+const DynamicPage = lazy(() => import("./pages/DynamicPage"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -51,6 +52,8 @@ const App = () => (
                   <Route path="/complaints-process" element={<ComplaintsPage />} />
                   {/* Admin section — auth is enforced inside AdminRoutes / AdminLayout */}
                   <Route path="/admin/*" element={<AdminRoutes />} />
+                  {/* Dynamic CMS pages — catches any published page by URL */}
+                  <Route path="/:slug" element={<DynamicPage />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
