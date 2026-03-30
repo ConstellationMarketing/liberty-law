@@ -47,14 +47,14 @@ export default function AdminPageNew() {
     setLoading(false);
   };
 
-  const generateUrlPath = (title: string, type: PageType = pageType) => {
+  const generateUrlPath = (title: string) => {
     const slug = title
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
       .trim();
-    return type === 'practice' ? `/practice-areas/${slug}` : `/${slug}`;
+    return `/${slug}`;
   };
 
   const handleTitleChange = (value: string) => {
@@ -67,11 +67,14 @@ export default function AdminPageNew() {
   const handlePageTypeChange = (value: PageType) => {
     setPageType(value);
     setTemplateId('none');
-    // Re-generate URL with new prefix if it hasn't been manually edited
-    if (!urlPath || urlPath === generateUrlPath(title, pageType)) {
-      setUrlPath(generateUrlPath(title, value));
-    }
   };
+
+  // Compute live canonical preview
+  const canonicalPreview = (() => {
+    const base = siteSettings.productionUrl || '';
+    const path = urlPath === '/' ? '/' : urlPath.replace(/\/+$/, '');
+    return base ? `${base}${path}` : path || '/';
+  })();
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -178,6 +181,11 @@ export default function AdminPageNew() {
               <p className="text-sm text-gray-500">
                 The URL where this page will be accessible
               </p>
+              {canonicalPreview && (
+                <p className="text-xs text-gray-400 break-all">
+                  Canonical URL: <span className="font-mono">{canonicalPreview}</span>
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">

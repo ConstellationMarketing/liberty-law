@@ -106,6 +106,18 @@ export default function AdminPageEdit() {
     }
   }, [id]);
 
+  // Auto-fill canonical URL when blank and productionUrl is available
+  useEffect(() => {
+    if (!page) return;
+    if (page.canonical_url) return; // already set, don't overwrite
+    if (!siteSettings.productionUrl) return;
+    const normalizedPath =
+      page.url_path === "/" ? "/" : page.url_path.replace(/\/+$/, "");
+    setPage((p) =>
+      p ? { ...p, canonical_url: `${siteSettings.productionUrl}${normalizedPath}` } : p
+    );
+  }, [page?.id, siteSettings.productionUrl]);
+
   const fetchPage = async () => {
     const { data, error } = await supabase
       .from("pages")
@@ -185,12 +197,19 @@ export default function AdminPageEdit() {
       if (["/", "/about", "/contact", "/practice-areas", "/privacy-policy", "/terms-and-conditions", "/complaints-process"].includes(page.url_path)) {
         clearPageCache(page.url_path as PageKey);
       }
-      // For practice detail pages, clear the per-slug cache
-      if (page.content_template === 'practice' && page.url_path.startsWith("/practice-areas/")) {
-        import("@site/hooks/usePracticePageContent").then(({ clearPracticePageCache }) => {
-          const slug = page.url_path.replace("/practice-areas/", "");
-          clearPracticePageCache(slug);
+      // For practice detail pages: clear both the old slug-based cache and the dynamic page cache
+      if (page.content_template === 'practice') {
+        // Clear dynamic page cache (used for practice pages at any URL)
+        import("@site/hooks/useDynamicPageContent").then(({ clearDynamicPageCache }) => {
+          clearDynamicPageCache(page.url_path);
         });
+        // Also clear old slug cache for /practice-areas/ pages
+        if (page.url_path.startsWith("/practice-areas/")) {
+          import("@site/hooks/usePracticePageContent").then(({ clearPracticePageCache }) => {
+            const slug = page.url_path.replace("/practice-areas/", "");
+            clearPracticePageCache(slug);
+          });
+        }
       }
       // Update tracking state after successful save
       setOriginalUrlPath(page.url_path);

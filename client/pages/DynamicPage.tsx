@@ -4,12 +4,14 @@ import Layout from "@site/components/layout/Layout";
 import Seo from "@site/components/Seo";
 import JsonLdSchema from "@site/components/JsonLdSchema";
 import { useDynamicPageContent } from "@site/hooks/useDynamicPageContent";
-import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
+import { useSiteSettings } from "@site/contexts/SiteSettingsContext";
+import { parseSchemaTypes } from "@site/lib/schemaHelpers";
 import { lazy, Suspense } from "react";
 
 // Lazy-load template renderers to keep the bundle small
 const AboutRenderer = lazy(() => import("@site/components/dynamic/AboutRenderer"));
 const SimpleRenderer = lazy(() => import("@site/components/dynamic/SimpleRenderer"));
+const PracticeRenderer = lazy(() => import("@site/components/dynamic/PracticeRenderer"));
 
 export default function DynamicPage() {
   const location = useLocation();
@@ -39,6 +41,22 @@ export default function DynamicPage() {
 
   const { content, contentTemplate, seoMeta, title } = page;
 
+  // For practice pages: auto-add FAQPage schema type when FAQ is enabled
+  const effectiveSchemaType = (() => {
+    if (contentTemplate !== "practice") return seoMeta.schemaType;
+    const practiceContent = content as { faq?: { enabled?: boolean; items?: unknown[] } };
+    const hasFaq =
+      practiceContent?.faq?.enabled &&
+      Array.isArray(practiceContent?.faq?.items) &&
+      practiceContent.faq.items.length > 0;
+    if (!hasFaq) return seoMeta.schemaType;
+    const types = parseSchemaTypes(seoMeta.schemaType);
+    if (types.includes("FAQPage")) return seoMeta.schemaType;
+    return [...types, "FAQPage"];
+  })();
+
+  const supportedTemplates = ["about", "simple", "practice"];
+
   return (
     <Layout>
       <Seo
@@ -50,7 +68,7 @@ export default function DynamicPage() {
       />
 
       <JsonLdSchema
-        schemaType={seoMeta.schemaType}
+        schemaType={effectiveSchemaType}
         schemaData={seoMeta.schemaData}
         pageContent={content}
         site={settings}
@@ -66,8 +84,11 @@ export default function DynamicPage() {
         {contentTemplate === "simple" && (
           <SimpleRenderer content={content} />
         )}
+        {contentTemplate === "practice" && (
+          <PracticeRenderer content={content} />
+        )}
         {/* Fallback for unknown templates */}
-        {!["about", "simple"].includes(contentTemplate || "") && (
+        {!supportedTemplates.includes(contentTemplate || "") && (
           <div className="bg-white py-16">
             <div className="max-w-4xl mx-auto px-4">
               <h1 className="font-playfair text-4xl text-black mb-8">{title}</h1>
