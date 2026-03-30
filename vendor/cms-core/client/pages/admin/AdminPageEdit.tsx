@@ -53,6 +53,15 @@ import { parseSchemaTypes } from "@site/lib/schemaHelpers";
 import URLChangeRedirectModal from "../../components/admin/URLChangeRedirectModal";
 import type { PageRevision } from "@/lib/database.types";
 
+// Normalize URL: always leading + trailing slash, no duplicates
+function normalizeUrlPath(raw: string): string {
+  if (!raw || raw === '/') return '/';
+  let path = raw.startsWith('/') ? raw : `/${raw}`;
+  path = path.replace(/\/\/+/g, '/');
+  if (!path.endsWith('/')) path = `${path}/`;
+  return path;
+}
+
 // Generic deep merge utility for content normalization
 function mergeWithDefaults<T extends Record<string, any>>(
   cmsContent: Partial<T> | null | undefined,
@@ -111,8 +120,7 @@ export default function AdminPageEdit() {
     if (!page) return;
     if (page.canonical_url) return; // already set, don't overwrite
     if (!siteSettings.productionUrl) return;
-    const normalizedPath =
-      page.url_path === "/" ? "/" : page.url_path.replace(/\/+$/, "");
+    const normalizedPath = normalizeUrlPath(page.url_path);
     setPage((p) =>
       p ? { ...p, canonical_url: `${siteSettings.productionUrl}${normalizedPath}` } : p
     );
@@ -154,9 +162,8 @@ export default function AdminPageEdit() {
     if (!page) return;
     setSaving(true);
 
-    // Normalize url_path: remove trailing slashes (except root)
-    const normalizedUrlPath =
-      page.url_path === "/" ? "/" : page.url_path.replace(/\/+$/, "");
+    // Normalize url_path: always leading + trailing slash
+    const normalizedUrlPath = normalizeUrlPath(page.url_path);
 
     // Auto-create revision when publishing
     const isPublishing = page.status === "published" && previousStatus !== "published";
@@ -201,12 +208,12 @@ export default function AdminPageEdit() {
       if (page.content_template === 'practice') {
         // Clear dynamic page cache (used for practice pages at any URL)
         import("@site/hooks/useDynamicPageContent").then(({ clearDynamicPageCache }) => {
-          clearDynamicPageCache(page.url_path);
+          clearDynamicPageCache(normalizedUrlPath);
         });
         // Also clear old slug cache for /practice-areas/ pages
         if (page.url_path.startsWith("/practice-areas/")) {
           import("@site/hooks/usePracticePageContent").then(({ clearPracticePageCache }) => {
-            const slug = page.url_path.replace("/practice-areas/", "");
+            const slug = page.url_path.replace("/practice-areas/", "").replace(/\/+$/, "");
             clearPracticePageCache(slug);
           });
         }
@@ -663,6 +670,7 @@ export default function AdminPageEdit() {
                   id="urlPath"
                   value={page.url_path}
                   onChange={(e) => updatePage({ url_path: e.target.value })}
+                  onBlur={(e) => updatePage({ url_path: normalizeUrlPath(e.target.value) })}
                 />
               </div>
 

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { useSiteSettings } from '@site/contexts/SiteSettingsContext';
 import type { Template, PageType } from '@/lib/database.types';
+import { defaultPracticePageContent } from '@site/lib/cms/practicePageTypes';
+import type { PracticePageContent } from '@site/lib/cms/practicePageTypes';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -47,6 +49,15 @@ export default function AdminPageNew() {
     setLoading(false);
   };
 
+  // Normalize URL: always leading + trailing slash, no duplicates
+  const normalizeUrlPath = (raw: string): string => {
+    if (!raw || raw === '/' ) return '/';
+    let path = raw.startsWith('/') ? raw : `/${raw}`;
+    path = path.replace(/\/\/+/g, '/');
+    if (!path.endsWith('/')) path = `${path}/`;
+    return path;
+  };
+
   const generateUrlPath = (title: string) => {
     const slug = title
       .toLowerCase()
@@ -54,7 +65,7 @@ export default function AdminPageNew() {
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
       .trim();
-    return `/${slug}`;
+    return normalizeUrlPath(`/${slug}`);
   };
 
   const handleTitleChange = (value: string) => {
@@ -69,10 +80,10 @@ export default function AdminPageNew() {
     setTemplateId('none');
   };
 
-  // Compute live canonical preview
+  // Compute live canonical preview using normalized path
   const canonicalPreview = (() => {
     const base = siteSettings.productionUrl || '';
-    const path = urlPath === '/' ? '/' : urlPath.replace(/\/+$/, '');
+    const path = normalizeUrlPath(urlPath);
     return base ? `${base}${path}` : path || '/';
   })();
 
@@ -80,8 +91,8 @@ export default function AdminPageNew() {
     e.preventDefault();
     setCreating(true);
 
-    // Normalize url_path: remove trailing slashes (except root)
-    const normalizedUrlPath = urlPath === '/' ? '/' : urlPath.replace(/\/+$/, '');
+    // Normalize url_path: always leading + trailing slash
+    const normalizedUrlPath = normalizeUrlPath(urlPath);
 
     const selectedTemplate = templateId !== 'none' ? templates.find(t => t.id === templateId) : undefined;
     const siteName = siteSettings.siteName;
@@ -93,19 +104,29 @@ export default function AdminPageNew() {
         ? 'practice'
         : null;
 
+    // Build content: for practice pages, inject the page title as hero H1
+    let resolvedContent: unknown = selectedTemplate?.default_content || [];
+    if (contentTemplate === 'practice') {
+      const base = (selectedTemplate?.default_content || defaultPracticePageContent) as PracticePageContent;
+      resolvedContent = {
+        ...base,
+        hero: { ...base.hero, title },
+      };
+    }
+
     const newPage = {
       title,
       url_path: normalizedUrlPath,
       page_type: pageType,
       content_template: contentTemplate,
-      content: selectedTemplate?.default_content || [],
+      content: resolvedContent,
       meta_title: selectedTemplate?.default_meta_title?.replace('[Page Title]', title) || (siteName ? `${title} | ${siteName}` : title),
       meta_description: selectedTemplate?.default_meta_description || '',
       status: 'draft' as const,
       noindex: false,
       canonical_url: siteSettings.productionUrl
         ? `${siteSettings.productionUrl}${normalizedUrlPath}`
-        : null,
+        : normalizedUrlPath,
       og_title: null,
       og_description: null,
       og_image: null,
@@ -175,7 +196,8 @@ export default function AdminPageNew() {
                 id="urlPath"
                 value={urlPath}
                 onChange={(e) => setUrlPath(e.target.value)}
-                placeholder="/car-accident-lawyers"
+                onBlur={(e) => setUrlPath(normalizeUrlPath(e.target.value))}
+                placeholder="/car-accident-lawyers/"
                 required
               />
               <p className="text-sm text-gray-500">

@@ -53,9 +53,9 @@ export function useDynamicPageContent(urlPath: string): UseDynamicPageResult {
     let isMounted = true;
 
     async function fetchPage() {
-      // Normalize: ensure leading slash, remove trailing slash
+      // Normalize: ensure leading slash + trailing slash
       const normalized = urlPath.startsWith("/") ? urlPath : `/${urlPath}`;
-      const cleanPath = normalized === "/" ? "/" : normalized.replace(/\/+$/, "");
+      const cleanPath = normalized === "/" ? "/" : (normalized.replace(/\/+$/, "") + "/");
 
       // Check cache
       const cached = cache.get(cleanPath);
@@ -142,7 +142,7 @@ export function useDynamicPageContent(urlPath: string): UseDynamicPageResult {
 
 export function clearDynamicPageCache(urlPath?: string) {
   if (urlPath) {
-    const cleanPath = urlPath === "/" ? "/" : urlPath.replace(/\/+$/, "");
+    const cleanPath = urlPath === "/" ? "/" : (urlPath.replace(/\/+$/, "") + "/");
     cache.delete(cleanPath);
   } else {
     cache.clear();

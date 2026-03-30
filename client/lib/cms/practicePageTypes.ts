@@ -39,7 +39,7 @@ export const defaultPracticePageContent: PracticePageContent = {
     tagline: "Experienced legal representation you can trust.",
     backgroundImage: "",
     ctaText: "Free Consultation",
-    ctaUrl: "/contact",
+    ctaUrl: "/contact/",
   },
   contentSections: [
     {
@@ -47,7 +47,7 @@ export const defaultPracticePageContent: PracticePageContent = {
       content: "<p>Describe the practice area and how your firm helps clients...</p>",
       image: "",
       ctaText: "Contact Us Today",
-      ctaUrl: "/contact",
+      ctaUrl: "/contact/",
     },
   ],
   faq: {

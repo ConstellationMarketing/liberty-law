@@ -86,9 +86,9 @@ export function usePracticePageContent(slug: string): UsePracticePageContentResu
           return;
         }
 
-        // Normalize slug: strip trailing slashes (React Router may include them)
+        // Normalize slug: strip trailing slashes and build path with trailing slash
         const cleanSlug = slug.replace(/\/+$/, "");
-        const urlPath = `/practice-areas/${cleanSlug}`;
+        const urlPath = `/practice-areas/${cleanSlug}/`;
         const response = await fetch(
           `${SUPABASE_URL}/rest/v1/pages?url_path=eq.${encodeURIComponent(urlPath)}&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
           {

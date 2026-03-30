@@ -55,8 +55,8 @@ const blankSection = (): PracticeContentSection => ({
   heading: "",
   content: "<p></p>",
   image: "",
-  ctaText: "",
-  ctaUrl: "",
+  ctaText: "Contact Us Today",
+  ctaUrl: "/contact/",
 });
 
 const blankFaqItem = (): PracticeFaqItem => ({
