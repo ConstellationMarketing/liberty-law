@@ -292,7 +292,7 @@ export function SiteSettingsProvider({ children }: SiteSettingsProviderProps) {
             headScripts: row.head_scripts || "",
             footerScripts: row.footer_scripts || "",
             ga4MeasurementId: row.ga4_measurement_id || "",
-            productionUrl: row.production_url || "",
+            productionUrl: (row.production_url || "").replace(/\/$/, ""),
           };
 
           settingsCache = loadedSettings;

@@ -497,7 +497,11 @@ export default function AdminPageEdit() {
                   onChange={(e) =>
                     updatePage({ canonical_url: e.target.value })
                   }
-                  placeholder={`${siteSettings.productionUrl || 'https://yourdomain.com'}${page.url_path || '/page'}`}
+                  placeholder={
+                    siteSettings.productionUrl
+                      ? `${siteSettings.productionUrl}${page.url_path || '/page'}`
+                      : 'Set Production URL in Site Settings to auto-generate'
+                  }
                 />
               </div>
 
