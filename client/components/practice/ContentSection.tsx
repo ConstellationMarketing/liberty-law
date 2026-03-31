@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Phone } from "lucide-react";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import type { PracticeContentSection } from "@site/lib/cms/practicePageTypes";
+import { getImageAlt } from "@/lib/utils/imageAlt";
 
 interface Props {
   section: PracticeContentSection;
@@ -90,7 +91,7 @@ export default function ContentSection({
     <div className="flex flex-col gap-4">
       <img
         src={section.image}
-        alt={section.heading}
+        alt={section.imageAlt || getImageAlt(section.image || "", section.heading)}
         className="w-full rounded object-cover aspect-[4/3]"
         loading="lazy"
       />

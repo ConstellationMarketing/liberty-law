@@ -240,6 +240,16 @@ export default function PracticePageEditor({ content, onChange }: Props) {
                   </p>
                 )}
               </div>
+              {section.image && (
+                <div>
+                  <Label>Image Alt Text (optional)</Label>
+                  <Input
+                    value={section.imageAlt ?? ""}
+                    onChange={(e) => updateSection(index, { imageAlt: e.target.value })}
+                    placeholder="Leave blank to auto-generate from filename"
+                  />
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label>CTA Button Label (optional)</Label>

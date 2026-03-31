@@ -1,4 +1,5 @@
 import type { ContentBlock } from "@/lib/database.types";
+import { getImageAlt } from "@/lib/utils/imageAlt";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Phone } from "lucide-react";
@@ -221,9 +222,10 @@ function ImageBlock({
 }: {
   block: Extract<ContentBlock, { type: "image" }>;
 }) {
+  const alt = block.alt || getImageAlt(block.src, "Image");
   return (
     <figure className="my-6">
-      <img src={block.src} alt={block.alt} width={800} height={450} className="w-full rounded-lg" />
+      <img src={block.src} alt={alt} width={800} height={450} className="w-full rounded-lg" />
       {block.alt && (
         <figcaption className="text-center text-sm text-gray-500 mt-2">
           {block.alt}

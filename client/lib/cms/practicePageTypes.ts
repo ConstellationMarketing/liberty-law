@@ -12,6 +12,7 @@ export interface PracticeContentSection {
   heading: string;
   content: string; // TipTap HTML
   image?: string;
+  imageAlt?: string;
   ctaText?: string;
   ctaUrl?: string;
 }
