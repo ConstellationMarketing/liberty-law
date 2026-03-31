@@ -115,11 +115,12 @@ export default function AdminPageEdit() {
     }
   }, [id]);
 
-  // Auto-fill canonical URL when blank and productionUrl is available
+  // Auto-fill canonical URL when blank or path-only (no domain) and productionUrl is available
   useEffect(() => {
     if (!page) return;
-    if (page.canonical_url) return; // already set, don't overwrite
     if (!siteSettings.productionUrl) return;
+    // Skip if canonical is already a full URL (starts with http)
+    if (page.canonical_url?.startsWith('http')) return;
     const normalizedPath = normalizeUrlPath(page.url_path);
     setPage((p) =>
       p ? { ...p, canonical_url: `${siteSettings.productionUrl}${normalizedPath}` } : p

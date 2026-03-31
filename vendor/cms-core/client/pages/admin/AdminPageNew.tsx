@@ -126,7 +126,7 @@ export default function AdminPageNew() {
       noindex: false,
       canonical_url: siteSettings.productionUrl
         ? `${siteSettings.productionUrl}${normalizedUrlPath}`
-        : normalizedUrlPath,
+        : null,
       og_title: null,
       og_description: null,
       og_image: null,
