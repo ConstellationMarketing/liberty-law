@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Phone } from "lucide-react";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import type { PracticeContentSection } from "@site/lib/cms/practicePageTypes";
-import { getImageAlt } from "@/lib/utils/imageAlt";
+import { getImageAlt } from "@site/lib/utils/imageAlt";
 
 interface Props {
   section: PracticeContentSection;

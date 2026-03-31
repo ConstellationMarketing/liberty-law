@@ -1,5 +1,5 @@
 import type { ContentBlock } from "@/lib/database.types";
-import { getImageAlt } from "@/lib/utils/imageAlt";
+import { getImageAlt } from "@site/lib/utils/imageAlt";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Phone } from "lucide-react";
