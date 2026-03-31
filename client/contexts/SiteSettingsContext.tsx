@@ -43,7 +43,7 @@ function loadSettingsFromStorage(): SiteSettings | null {
   try {
     const stored = localStorage.getItem(SETTINGS_STORAGE_KEY);
     if (stored) {
-      return JSON.parse(stored) as SiteSettings;
+      return { ...DEFAULT_SETTINGS, ...JSON.parse(stored) } as SiteSettings;
     }
   } catch (err) {
     console.warn(

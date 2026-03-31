@@ -110,6 +110,7 @@ export default function AdminSiteSettings() {
     } else {
       // Clear the cache so components refetch
       clearSiteSettingsCache();
+      window.dispatchEvent(new Event("site-settings-invalidated"));
       alert("Settings saved successfully!");
     }
     setSaving(false);
