@@ -100,6 +100,7 @@ export default function AdminPageEdit() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { settings: siteSettings } = useSiteSettings();
+  const [productionUrl, setProductionUrl] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [page, setPage] = useState<Page | null>(null);
@@ -113,19 +114,29 @@ export default function AdminPageEdit() {
     if (id) {
       fetchPage();
     }
+    supabase
+      .from('site_settings')
+      .select('production_url')
+      .eq('settings_key', 'global')
+      .single()
+      .then(({ data }) => {
+        if (data?.production_url) {
+          setProductionUrl(data.production_url.replace(/\/$/, ''));
+        }
+      });
   }, [id]);
 
   // Auto-fill canonical URL when blank or path-only (no domain) and productionUrl is available
   useEffect(() => {
     if (!page) return;
-    if (!siteSettings.productionUrl) return;
+    if (!productionUrl) return;
     // Skip if canonical is already a full URL (starts with http)
     if (page.canonical_url?.startsWith('http')) return;
     const normalizedPath = normalizeUrlPath(page.url_path);
     setPage((p) =>
-      p ? { ...p, canonical_url: `${siteSettings.productionUrl}${normalizedPath}` } : p
+      p ? { ...p, canonical_url: `${productionUrl}${normalizedPath}` } : p
     );
-  }, [page?.id, siteSettings.productionUrl]);
+  }, [page?.id, productionUrl]);
 
   const fetchPage = async () => {
     const { data, error } = await supabase
@@ -498,8 +509,8 @@ export default function AdminPageEdit() {
                     updatePage({ canonical_url: e.target.value })
                   }
                   placeholder={
-                    siteSettings.productionUrl
-                      ? `${siteSettings.productionUrl}${page.url_path || '/page'}`
+                    productionUrl
+                      ? `${productionUrl}${page.url_path || '/page'}`
                       : 'Set Production URL in Site Settings to auto-generate'
                   }
                 />

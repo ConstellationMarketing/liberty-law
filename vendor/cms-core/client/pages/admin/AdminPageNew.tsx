@@ -25,7 +25,8 @@ export default function AdminPageNew() {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
-  
+  const [productionUrl, setProductionUrl] = useState('');
+
   const [title, setTitle] = useState('');
   const [urlPath, setUrlPath] = useState('');
   const [pageType, setPageType] = useState<PageType>('standard');
@@ -33,6 +34,16 @@ export default function AdminPageNew() {
 
   useEffect(() => {
     fetchTemplates();
+    supabase
+      .from('site_settings')
+      .select('production_url')
+      .eq('settings_key', 'global')
+      .single()
+      .then(({ data }) => {
+        if (data?.production_url) {
+          setProductionUrl(data.production_url.replace(/\/$/, ''));
+        }
+      });
   }, []);
 
   const fetchTemplates = async () => {
@@ -82,7 +93,7 @@ export default function AdminPageNew() {
 
   // Compute live canonical preview using normalized path
   const canonicalPreview = (() => {
-    const base = siteSettings.productionUrl || '';
+    const base = productionUrl || '';
     const path = normalizeUrlPath(urlPath);
     return base ? `${base}${path}` : path || '/';
   })();
@@ -124,8 +135,8 @@ export default function AdminPageNew() {
       meta_description: selectedTemplate?.default_meta_description || '',
       status: 'draft' as const,
       noindex: false,
-      canonical_url: siteSettings.productionUrl
-        ? `${siteSettings.productionUrl}${normalizedUrlPath}`
+      canonical_url: productionUrl
+        ? `${productionUrl}${normalizedUrlPath}`
         : null,
       og_title: null,
       og_description: null,
