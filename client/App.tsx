@@ -1,3 +1,4 @@
+import "./global.css";
 import { createRoot, hydrateRoot } from "react-dom/client";
 import { ClientApp } from "@site/ClientApp";
 import { readWindowPreloadedState } from "@site/contexts/PreloadedStateContext";
