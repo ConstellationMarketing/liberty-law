@@ -1,4 +1,4 @@
-import { getSupabaseRequestKey, getSupabaseUrl } from "@site/lib/runtimeEnv";
+import { getRuntimeEnvValue, getSupabaseRequestKey, getSupabaseUrl } from "@site/lib/runtimeEnv";
 
 export interface SiteSettings {
   siteName: string;
@@ -137,7 +137,59 @@ export function mapSiteSettingsRowToSettings(row: Record<string, any> | null | u
   };
 }
 
+const PUBLIC_SITE_SETTINGS_SELECT = [
+  "settings_key",
+  "site_name",
+  "logo_url",
+  "logo_alt",
+  "phone_number",
+  "phone_display",
+  "phone_availability",
+  "apply_phone_globally",
+  "header_cta_text",
+  "header_cta_url",
+  "navigation_items",
+  "footer_about_links",
+  "footer_practice_links",
+  "address_line1",
+  "address_line2",
+  "map_embed_url",
+  "social_links",
+  "copyright_text",
+  "site_noindex",
+].join(",");
+
+const PRIVATE_SITE_SETTINGS_SELECT = [
+  PUBLIC_SITE_SETTINGS_SELECT,
+  "head_scripts",
+  "footer_scripts",
+  "ga4_measurement_id",
+  "production_url",
+].join(",");
+
 let cachedSiteSettings: SiteSettings | null = null;
+
+async function fetchSiteSettingsRow(tableName: "site_settings" | "site_settings_public", select: string) {
+  const supabaseUrl = getSupabaseUrl();
+  const supabaseKey = getSupabaseRequestKey();
+
+  const response = await fetch(
+    `${supabaseUrl}/rest/v1/${tableName}?settings_key=eq.global&select=${encodeURIComponent(select)}`,
+    {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`[loadSiteSettings] ${tableName} HTTP error ${response.status}`);
+  }
+
+  const data = await response.json();
+  return Array.isArray(data) && data.length > 0 ? data[0] : null;
+}
 
 export async function loadSiteSettings(): Promise<SiteSettings> {
   if (cachedSiteSettings) {
@@ -151,24 +203,24 @@ export async function loadSiteSettings(): Promise<SiteSettings> {
     return cachedSiteSettings;
   }
 
-  const response = await fetch(
-    `${supabaseUrl}/rest/v1/site_settings_public?settings_key=eq.global&select=*`,
-    {
-      headers: {
-        apikey: supabaseKey,
-        Authorization: `Bearer ${supabaseKey}`,
-      },
-    },
-  );
+  const hasServiceRole = Boolean(getRuntimeEnvValue("SUPABASE_SERVICE_ROLE_KEY"));
 
-  if (!response.ok) {
-    throw new Error(`[loadSiteSettings] HTTP error ${response.status}`);
+  try {
+    const row = hasServiceRole
+      ? await fetchSiteSettingsRow("site_settings", PRIVATE_SITE_SETTINGS_SELECT)
+      : await fetchSiteSettingsRow("site_settings_public", PUBLIC_SITE_SETTINGS_SELECT);
+
+    cachedSiteSettings = mapSiteSettingsRowToSettings(row);
+    return cachedSiteSettings;
+  } catch (error) {
+    if (!hasServiceRole) {
+      throw error;
+    }
+
+    const publicRow = await fetchSiteSettingsRow("site_settings_public", PUBLIC_SITE_SETTINGS_SELECT);
+    cachedSiteSettings = mapSiteSettingsRowToSettings(publicRow);
+    return cachedSiteSettings;
   }
-
-  const data = await response.json();
-  const row = Array.isArray(data) && data.length > 0 ? data[0] : null;
-  cachedSiteSettings = mapSiteSettingsRowToSettings(row);
-  return cachedSiteSettings;
 }
 
 export function clearSiteSettingsCache() {
