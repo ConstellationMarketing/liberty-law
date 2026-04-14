@@ -15,7 +15,8 @@ import { SiteSettingsProvider } from "@site/contexts/SiteSettingsContext";
 import PublicRoutes from "@site/routes/PublicRoutes";
 
 const helmetAsyncCompat =
-  (ReactHelmetAsync as Record<string, any>)["default"] || ReactHelmetAsync;
+  (Reflect.get(ReactHelmetAsync as object, "default") as Record<string, any> | undefined) ||
+  ReactHelmetAsync;
 const { HelmetProvider } = helmetAsyncCompat;
 
 function RoutedApp({

@@ -6,7 +6,8 @@ import { createFaviconFromLogo } from '@site/utils/createFaviconFromLogo';
 import { getConfiguredSiteUrl } from '@site/lib/runtimeEnv';
 
 const helmetAsyncCompat =
-  (ReactHelmetAsync as Record<string, any>)["default"] || ReactHelmetAsync;
+  (Reflect.get(ReactHelmetAsync as object, 'default') as Record<string, any> | undefined) ||
+  ReactHelmetAsync;
 const { Helmet } = helmetAsyncCompat;
 
 interface SeoProps {

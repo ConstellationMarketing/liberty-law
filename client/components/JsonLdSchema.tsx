@@ -8,7 +8,8 @@ import {
 } from "@site/lib/schemaHelpers";
 
 const helmetAsyncCompat =
-  (ReactHelmetAsync as Record<string, any>)["default"] || ReactHelmetAsync;
+  (Reflect.get(ReactHelmetAsync as object, "default") as Record<string, any> | undefined) ||
+  ReactHelmetAsync;
 const { Helmet } = helmetAsyncCompat;
 
 interface SiteInfo {
