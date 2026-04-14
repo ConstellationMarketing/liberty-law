@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet-async";
+import * as ReactHelmetAsync from "react-helmet-async";
 import {
   parseSchemaTypes,
   extractFaqItems,
@@ -6,6 +6,10 @@ import {
   buildLocalBusinessSchema,
   buildWebPageSchema,
 } from "@site/lib/schemaHelpers";
+
+const helmetAsyncCompat =
+  (ReactHelmetAsync as Record<string, any>)["default"] || ReactHelmetAsync;
+const { Helmet } = helmetAsyncCompat;
 
 interface SiteInfo {
   siteName: string;

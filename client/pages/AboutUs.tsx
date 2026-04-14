@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { useAboutContent } from "@site/hooks/useAboutContent";
 import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
+import { getConfiguredSiteUrl } from "@site/lib/runtimeEnv";
 
 
 // Icon mapping for values section
@@ -31,7 +32,7 @@ export default function AboutUs() {
   const { content, seoMeta } = useAboutContent();
   const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
   const { settings } = useSiteSettings();
-  const siteUrl = import.meta.env.VITE_SITE_URL || '';
+  const siteUrl = settings.productionUrl || getConfiguredSiteUrl() || '';
 
   // Map team members from CMS content
   const teamMembers = content.team.members;

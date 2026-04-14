@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { usePracticeAreasContent } from "@site/hooks/usePracticeAreasContent";
 import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
+import { getConfiguredSiteUrl } from "@site/lib/runtimeEnv";
 
 // Icon mapping for practice areas
 const iconMap: Record<string, LucideIcon> = {
@@ -45,7 +46,7 @@ export default function PracticeAreas() {
   const { content, seoMeta } = usePracticeAreasContent();
   const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
   const { settings } = useSiteSettings();
-  const siteUrl = import.meta.env.VITE_SITE_URL || '';
+  const siteUrl = settings.productionUrl || getConfiguredSiteUrl() || '';
 
   // Map practice areas from CMS content with icon components
   const practiceAreas = content.grid.areas.map((area) => ({

@@ -1,8 +1,13 @@
-import { Helmet } from 'react-helmet-async';
+import * as ReactHelmetAsync from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useSiteSettings } from '@site/contexts/SiteSettingsContext';
 import { createFaviconFromLogo } from '@site/utils/createFaviconFromLogo';
+import { getConfiguredSiteUrl } from '@site/lib/runtimeEnv';
+
+const helmetAsyncCompat =
+  (ReactHelmetAsync as Record<string, any>)["default"] || ReactHelmetAsync;
+const { Helmet } = helmetAsyncCompat;
 
 interface SeoProps {
   title?: string;
@@ -21,7 +26,7 @@ export default function Seo({
 }: SeoProps) {
   const { pathname } = useLocation();
   const { settings } = useSiteSettings();
-  const siteUrl = settings.productionUrl || import.meta.env.VITE_SITE_URL || '';
+  const siteUrl = settings.productionUrl || getConfiguredSiteUrl() || '';
   const [faviconUrl, setFaviconUrl] = useState<string>(settings.logoUrl);
 
   // Generate inverted favicon from logo (white -> black for visibility)

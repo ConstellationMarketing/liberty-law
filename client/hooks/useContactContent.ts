@@ -1,22 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { ContactPageContent } from "../lib/cms/contactPageTypes";
 import { defaultContactContent } from "../lib/cms/contactPageTypes";
-
-// Supabase configuration - use environment variables
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-
-interface PageSeoMeta {
-  metaTitle: string | null;
-  metaDescription: string | null;
-  canonicalUrl: string | null;
-  ogTitle: string | null;
-  ogDescription: string | null;
-  ogImage: string | null;
-  noindex: boolean;
-  schemaType: unknown;
-  schemaData: Record<string, unknown> | null;
-}
+import { getSupabaseRequestKey, getSupabaseUrl } from "@site/lib/runtimeEnv";
+import { normalizeRoutePath, usePreloadedState } from "@site/contexts/PreloadedStateContext";
+import type { PageSeoMeta } from "@site/hooks/useHomeContent";
 
 interface UseContactContentResult {
   content: ContactPageContent;
@@ -25,7 +12,6 @@ interface UseContactContentResult {
   error: Error | null;
 }
 
-// Cache for contact content
 let cachedContent: ContactPageContent | null = null;
 let cachedSeoMeta: PageSeoMeta | null = null;
 
@@ -41,12 +27,76 @@ const defaultSeoMeta: PageSeoMeta = {
   schemaData: null,
 };
 
-export function useContactContent(): UseContactContentResult {
-  const [content, setContent] = useState<ContactPageContent>(
+export async function loadContactContent() {
+  if (cachedContent && cachedSeoMeta) {
+    return { content: cachedContent, seoMeta: cachedSeoMeta };
+  }
+
+  const supabaseUrl = getSupabaseUrl();
+  const supabaseKey = getSupabaseRequestKey();
+
+  if (!supabaseUrl || !supabaseKey) {
+    return { content: defaultContactContent, seoMeta: defaultSeoMeta };
+  }
+
+  const response = await fetch(
+    `${supabaseUrl}/rest/v1/pages?url_path=eq./contact&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
+    {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  if (!Array.isArray(data) || data.length === 0) {
+    return { content: defaultContactContent, seoMeta: defaultSeoMeta };
+  }
+
+  const pageData = data[0];
+  const mergedContent = mergeWithDefaults(
+    pageData.content as ContactPageContent,
     defaultContactContent,
   );
-  const [seoMeta, setSeoMeta] = useState<PageSeoMeta>(defaultSeoMeta);
-  const [isLoading, setIsLoading] = useState(true);
+  const seoMeta: PageSeoMeta = {
+    metaTitle: pageData.meta_title || null,
+    metaDescription: pageData.meta_description || null,
+    canonicalUrl: pageData.canonical_url || null,
+    ogTitle: pageData.og_title || null,
+    ogDescription: pageData.og_description || null,
+    ogImage: pageData.og_image || null,
+    noindex: pageData.noindex || false,
+    schemaType: pageData.schema_type || null,
+    schemaData: pageData.schema_data || null,
+  };
+
+  cachedContent = mergedContent;
+  cachedSeoMeta = seoMeta;
+
+  return { content: mergedContent, seoMeta };
+}
+
+export function useContactContent(): UseContactContentResult {
+  const preloadedState = usePreloadedState();
+  const preloaded =
+    preloadedState?.routeData?.kind === "contact" &&
+    normalizeRoutePath(preloadedState.routePath) === "/contact/"
+      ? (preloadedState.routeData.payload as { content: ContactPageContent; seoMeta: PageSeoMeta })
+      : null;
+
+  const [content, setContent] = useState<ContactPageContent>(
+    preloaded?.content || defaultContactContent,
+  );
+  const [seoMeta, setSeoMeta] = useState<PageSeoMeta>(
+    preloaded?.seoMeta || defaultSeoMeta,
+  );
+  const [isLoading, setIsLoading] = useState(!preloaded);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -54,79 +104,27 @@ export function useContactContent(): UseContactContentResult {
 
     async function fetchContent() {
       try {
-        // Return cached content if available
-        if (cachedContent && cachedSeoMeta) {
+        if (preloaded) {
+          cachedContent = preloaded.content;
+          cachedSeoMeta = preloaded.seoMeta;
           if (isMounted) {
-            setContent(cachedContent);
-            setSeoMeta(cachedSeoMeta);
+            setContent(preloaded.content);
+            setSeoMeta(preloaded.seoMeta);
             setIsLoading(false);
           }
           return;
         }
 
-        // Fetch contact page from pages table
-        const response = await fetch(
-          `${SUPABASE_URL}/rest/v1/pages?url_path=eq./contact&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
-          {
-            headers: {
-              apikey: SUPABASE_ANON_KEY,
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            },
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (!Array.isArray(data) || data.length === 0) {
-          // No CMS content, use defaults
-          if (isMounted) {
-            setContent(defaultContactContent);
-            setSeoMeta(defaultSeoMeta);
-            setIsLoading(false);
-          }
-          return;
-        }
-
-        const pageData = data[0];
-        const cmsContent = pageData.content as ContactPageContent;
-
-        // Extract SEO metadata
-        const seoMetadata: PageSeoMeta = {
-          metaTitle: pageData.meta_title || null,
-          metaDescription: pageData.meta_description || null,
-          canonicalUrl: pageData.canonical_url || null,
-          ogTitle: pageData.og_title || null,
-          ogDescription: pageData.og_description || null,
-          ogImage: pageData.og_image || null,
-          noindex: pageData.noindex || false,
-          schemaType: pageData.schema_type || null,
-          schemaData: pageData.schema_data || null,
-        };
-
-        // Merge CMS content with defaults (CMS content takes precedence)
-        const mergedContent = mergeWithDefaults(
-          cmsContent,
-          defaultContactContent,
-        );
-
-        // Cache the results
-        cachedContent = mergedContent;
-        cachedSeoMeta = seoMetadata;
-
+        const loaded = await loadContactContent();
         if (isMounted) {
-          setContent(mergedContent);
-          setSeoMeta(seoMetadata);
+          setContent(loaded.content);
+          setSeoMeta(loaded.seoMeta);
           setError(null);
         }
       } catch (err) {
         console.error("[useContactContent] Error:", err);
         if (isMounted) {
           setError(err instanceof Error ? err : new Error("Unknown error"));
-          // Fall back to defaults on error
           setContent(defaultContactContent);
         }
       } finally {
@@ -136,17 +134,16 @@ export function useContactContent(): UseContactContentResult {
       }
     }
 
-    fetchContent();
+    void fetchContent();
 
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [preloaded]);
 
   return { content, seoMeta, isLoading, error };
 }
 
-// Deep merge CMS content with defaults
 function mergeWithDefaults(
   cmsContent: Partial<ContactPageContent> | null | undefined,
   defaults: ContactPageContent,
@@ -193,7 +190,6 @@ function mergeWithDefaults(
   };
 }
 
-// Helper to clear cache (useful after admin edits)
 export function clearContactContentCache() {
   cachedContent = null;
   cachedSeoMeta = null;

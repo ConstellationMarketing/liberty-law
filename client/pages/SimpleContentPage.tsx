@@ -4,6 +4,7 @@ import JsonLdSchema from "@site/components/JsonLdSchema";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import { useSiteSettings } from "@site/contexts/SiteSettingsContext";
 import type { SimplePageContent } from "@site/lib/cms/simplePageTypes";
+import { getConfiguredSiteUrl } from "@site/lib/runtimeEnv";
 
 interface SimpleContentPageProps {
   content: SimplePageContent;
@@ -29,7 +30,7 @@ export default function SimpleContentPage({
   isLoading,
 }: SimpleContentPageProps) {
   const { settings } = useSiteSettings();
-  const siteUrl = import.meta.env.VITE_SITE_URL || '';
+  const siteUrl = settings.productionUrl || getConfiguredSiteUrl() || '';
 
   return (
     <Layout>

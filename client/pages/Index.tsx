@@ -14,13 +14,14 @@ import FaqSection from "@site/components/home/FaqSection";
 import ContactUsSection from "@site/components/home/ContactUsSection";
 import { useHomeContent } from "@site/hooks/useHomeContent";
 import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
+import { getConfiguredSiteUrl } from "@site/lib/runtimeEnv";
 
 
 export default function Index() {
   const { content, seoMeta, isLoading } = useHomeContent();
   const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
   const { settings } = useSiteSettings();
-  const siteUrl = import.meta.env.VITE_SITE_URL || '';
+  const siteUrl = settings.productionUrl || getConfiguredSiteUrl() || '';
 
   // Use CMS content for hero and partner logos
   const heroContent = content.hero;

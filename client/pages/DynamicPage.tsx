@@ -6,18 +6,17 @@ import JsonLdSchema from "@site/components/JsonLdSchema";
 import { useDynamicPageContent } from "@site/hooks/useDynamicPageContent";
 import { useSiteSettings } from "@site/contexts/SiteSettingsContext";
 import { parseSchemaTypes } from "@site/lib/schemaHelpers";
-import { lazy, Suspense } from "react";
-
-// Lazy-load template renderers to keep the bundle small
-const AboutRenderer = lazy(() => import("@site/components/dynamic/AboutRenderer"));
-const SimpleRenderer = lazy(() => import("@site/components/dynamic/SimpleRenderer"));
-const PracticeRenderer = lazy(() => import("@site/components/dynamic/PracticeRenderer"));
+import AboutRenderer from "@site/components/dynamic/AboutRenderer";
+import SimpleRenderer from "@site/components/dynamic/SimpleRenderer";
+import PracticeRenderer from "@site/components/dynamic/PracticeRenderer";
+import NotFound from "@site/pages/NotFound";
+import { getConfiguredSiteUrl } from "@site/lib/runtimeEnv";
 
 export default function DynamicPage() {
   const location = useLocation();
   const { page, isLoading, notFound } = useDynamicPageContent(location.pathname);
   const { settings } = useSiteSettings();
-  const siteUrl = import.meta.env.VITE_SITE_URL || "";
+  const siteUrl = settings.productionUrl || getConfiguredSiteUrl() || "";
 
   if (isLoading) {
     return (
@@ -30,13 +29,7 @@ export default function DynamicPage() {
   }
 
   if (notFound || !page) {
-    // Let the catch-all 404 handle it
-    const NotFound = lazy(() => import("@site/pages/NotFound"));
-    return (
-      <Suspense fallback={null}>
-        <NotFound />
-      </Suspense>
-    );
+    return <NotFound />;
   }
 
   const { content, contentTemplate, seoMeta, title } = page;
@@ -77,26 +70,24 @@ export default function DynamicPage() {
         pageDescription={seoMeta.metaDescription || ""}
       />
 
-      <Suspense fallback={null}>
-        {contentTemplate === "about" && (
-          <AboutRenderer content={content} />
-        )}
-        {contentTemplate === "simple" && (
-          <SimpleRenderer content={content} />
-        )}
-        {contentTemplate === "practice" && (
-          <PracticeRenderer content={content} />
-        )}
-        {/* Fallback for unknown templates */}
-        {!supportedTemplates.includes(contentTemplate || "") && (
-          <div className="bg-white py-16">
-            <div className="max-w-4xl mx-auto px-4">
-              <h1 className="font-playfair text-4xl text-black mb-8">{title}</h1>
-              <p className="text-gray-500">This page template is not yet supported for dynamic rendering.</p>
-            </div>
+      {contentTemplate === "about" && (
+        <AboutRenderer content={content} />
+      )}
+      {contentTemplate === "simple" && (
+        <SimpleRenderer content={content} />
+      )}
+      {contentTemplate === "practice" && (
+        <PracticeRenderer content={content} />
+      )}
+      {/* Fallback for unknown templates */}
+      {!supportedTemplates.includes(contentTemplate || "") && (
+        <div className="bg-white py-16">
+          <div className="max-w-4xl mx-auto px-4">
+            <h1 className="font-playfair text-4xl text-black mb-8">{title}</h1>
+            <p className="text-gray-500">This page template is not yet supported for dynamic rendering.</p>
           </div>
-        )}
-      </Suspense>
+        </div>
+      )}
     </Layout>
   );
 }

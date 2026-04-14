@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { HomePageContent } from "../lib/cms/homePageTypes";
 import { defaultHomeContent } from "../lib/cms/homePageTypes";
+import { getSupabaseRequestKey, getSupabaseUrl } from "@site/lib/runtimeEnv";
+import { normalizeRoutePath, usePreloadedState } from "@site/contexts/PreloadedStateContext";
 
-// Supabase configuration - use environment variables
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-
-interface PageSeoMeta {
+export interface PageSeoMeta {
   metaTitle: string | null;
   metaDescription: string | null;
   canonicalUrl: string | null;
@@ -25,7 +23,6 @@ interface UseHomeContentResult {
   error: Error | null;
 }
 
-// Cache for home content
 let cachedContent: HomePageContent | null = null;
 let cachedSeoMeta: PageSeoMeta | null = null;
 
@@ -41,10 +38,74 @@ const defaultSeoMeta: PageSeoMeta = {
   schemaData: null,
 };
 
+export async function loadHomeContent() {
+  if (cachedContent && cachedSeoMeta) {
+    return { content: cachedContent, seoMeta: cachedSeoMeta };
+  }
+
+  const supabaseUrl = getSupabaseUrl();
+  const supabaseKey = getSupabaseRequestKey();
+
+  if (!supabaseUrl || !supabaseKey) {
+    return { content: defaultHomeContent, seoMeta: defaultSeoMeta };
+  }
+
+  const response = await fetch(
+    `${supabaseUrl}/rest/v1/pages?url_path=eq./&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
+    {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  if (!Array.isArray(data) || data.length === 0) {
+    return { content: defaultHomeContent, seoMeta: defaultSeoMeta };
+  }
+
+  const pageData = data[0];
+  const cmsContent = pageData.content as HomePageContent;
+  const seoMeta: PageSeoMeta = {
+    metaTitle: pageData.meta_title || null,
+    metaDescription: pageData.meta_description || null,
+    canonicalUrl: pageData.canonical_url || null,
+    ogTitle: pageData.og_title || null,
+    ogDescription: pageData.og_description || null,
+    ogImage: pageData.og_image || null,
+    noindex: pageData.noindex || false,
+    schemaType: pageData.schema_type || null,
+    schemaData: pageData.schema_data || null,
+  };
+
+  const mergedContent = mergeWithDefaults(cmsContent, defaultHomeContent);
+  cachedContent = mergedContent;
+  cachedSeoMeta = seoMeta;
+
+  return { content: mergedContent, seoMeta };
+}
+
 export function useHomeContent(): UseHomeContentResult {
-  const [content, setContent] = useState<HomePageContent>(defaultHomeContent);
-  const [seoMeta, setSeoMeta] = useState<PageSeoMeta>(defaultSeoMeta);
-  const [isLoading, setIsLoading] = useState(true);
+  const preloadedState = usePreloadedState();
+  const preloaded =
+    preloadedState?.routeData?.kind === "home" &&
+    normalizeRoutePath(preloadedState.routePath) === "/"
+      ? (preloadedState.routeData.payload as { content: HomePageContent; seoMeta: PageSeoMeta })
+      : null;
+
+  const [content, setContent] = useState<HomePageContent>(
+    preloaded?.content || defaultHomeContent,
+  );
+  const [seoMeta, setSeoMeta] = useState<PageSeoMeta>(
+    preloaded?.seoMeta || defaultSeoMeta,
+  );
+  const [isLoading, setIsLoading] = useState(!preloaded);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -52,76 +113,27 @@ export function useHomeContent(): UseHomeContentResult {
 
     async function fetchHomeContent() {
       try {
-        // Return cached content if available
-        if (cachedContent && cachedSeoMeta) {
+        if (preloaded) {
+          cachedContent = preloaded.content;
+          cachedSeoMeta = preloaded.seoMeta;
           if (isMounted) {
-            setContent(cachedContent);
-            setSeoMeta(cachedSeoMeta);
+            setContent(preloaded.content);
+            setSeoMeta(preloaded.seoMeta);
             setIsLoading(false);
           }
           return;
         }
 
-        // Fetch homepage from pages table
-        const response = await fetch(
-          `${SUPABASE_URL}/rest/v1/pages?url_path=eq./&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
-          {
-            headers: {
-              apikey: SUPABASE_ANON_KEY,
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            },
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (!Array.isArray(data) || data.length === 0) {
-          // No CMS content, use defaults
-          if (isMounted) {
-            setContent(defaultHomeContent);
-            setSeoMeta(defaultSeoMeta);
-            setIsLoading(false);
-          }
-          return;
-        }
-
-        const pageData = data[0];
-        const cmsContent = pageData.content as HomePageContent;
-
-        // Extract SEO metadata
-        const seoMetadata: PageSeoMeta = {
-          metaTitle: pageData.meta_title || null,
-          metaDescription: pageData.meta_description || null,
-          canonicalUrl: pageData.canonical_url || null,
-          ogTitle: pageData.og_title || null,
-          ogDescription: pageData.og_description || null,
-          ogImage: pageData.og_image || null,
-          noindex: pageData.noindex || false,
-          schemaType: pageData.schema_type || null,
-          schemaData: pageData.schema_data || null,
-        };
-
-        // Merge CMS content with defaults (CMS content takes precedence)
-        const mergedContent = mergeWithDefaults(cmsContent, defaultHomeContent);
-
-        // Cache the results
-        cachedContent = mergedContent;
-        cachedSeoMeta = seoMetadata;
-
+        const loaded = await loadHomeContent();
         if (isMounted) {
-          setContent(mergedContent);
-          setSeoMeta(seoMetadata);
+          setContent(loaded.content);
+          setSeoMeta(loaded.seoMeta);
           setError(null);
         }
       } catch (err) {
         console.error("[useHomeContent] Error:", err);
         if (isMounted) {
           setError(err instanceof Error ? err : new Error("Unknown error"));
-          // Fall back to defaults on error
           setContent(defaultHomeContent);
         }
       } finally {
@@ -131,17 +143,16 @@ export function useHomeContent(): UseHomeContentResult {
       }
     }
 
-    fetchHomeContent();
+    void fetchHomeContent();
 
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [preloaded]);
 
   return { content, seoMeta, isLoading, error };
 }
 
-// Deep merge CMS content with defaults
 function mergeWithDefaults(
   cmsContent: Partial<HomePageContent> | null | undefined,
   defaults: HomePageContent,
@@ -193,7 +204,6 @@ function mergeWithDefaults(
   };
 }
 
-// Helper to clear cache (useful after admin edits)
 export function clearHomeContentCache() {
   cachedContent = null;
   cachedSeoMeta = null;

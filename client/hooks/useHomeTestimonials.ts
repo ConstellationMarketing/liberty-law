@@ -1,55 +1,80 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { TestimonialsContent } from "../lib/cms/homePageTypes";
-
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+import { getSupabaseRequestKey, getSupabaseUrl } from "@site/lib/runtimeEnv";
+import { usePreloadedState } from "@site/contexts/PreloadedStateContext";
 
 interface UseHomeTestimonialsResult {
   testimonials: TestimonialsContent | null;
   isLoading: boolean;
 }
 
-let cached: TestimonialsContent | null | undefined = undefined; // undefined = not yet fetched
+let cached: TestimonialsContent | null | undefined = undefined;
+
+export async function loadHomeTestimonials(): Promise<TestimonialsContent | null> {
+  if (cached !== undefined) {
+    return cached;
+  }
+
+  const supabaseUrl = getSupabaseUrl();
+  const supabaseKey = getSupabaseRequestKey();
+
+  if (!supabaseUrl || !supabaseKey) {
+    cached = null;
+    return cached;
+  }
+
+  const response = await fetch(
+    `${supabaseUrl}/rest/v1/pages?url_path=eq./&status=eq.published&select=content`,
+    {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error: ${response.status}`);
+  }
+
+  const data = await response.json();
+  cached =
+    Array.isArray(data) && data.length > 0 && data[0].content?.testimonials
+      ? (data[0].content.testimonials as TestimonialsContent)
+      : null;
+
+  return cached;
+}
 
 export function useHomeTestimonials(): UseHomeTestimonialsResult {
-  const [testimonials, setTestimonials] = useState<TestimonialsContent | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const preloadedState = usePreloadedState();
+  const preloadedTestimonials =
+    preloadedState?.supportingData.homeTestimonials !== undefined
+      ? preloadedState.supportingData.homeTestimonials
+      : undefined;
+
+  const [testimonials, setTestimonials] = useState<TestimonialsContent | null>(
+    preloadedTestimonials ?? null,
+  );
+  const [isLoading, setIsLoading] = useState(preloadedTestimonials === undefined);
 
   useEffect(() => {
     let isMounted = true;
 
-    async function fetch_() {
+    async function fetchTestimonials() {
       try {
-        if (cached !== undefined) {
+        if (preloadedTestimonials !== undefined) {
+          cached = preloadedTestimonials;
           if (isMounted) {
-            setTestimonials(cached);
+            setTestimonials(preloadedTestimonials);
             setIsLoading(false);
           }
           return;
         }
 
-        const response = await fetch(
-          `${SUPABASE_URL}/rest/v1/pages?url_path=eq./&status=eq.published&select=content`,
-          {
-            headers: {
-              apikey: SUPABASE_ANON_KEY,
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            },
-          },
-        );
-
-        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-
-        const data = await response.json();
-        const result: TestimonialsContent | null =
-          Array.isArray(data) && data.length > 0 && data[0].content?.testimonials
-            ? (data[0].content.testimonials as TestimonialsContent)
-            : null;
-
-        cached = result;
-
+        const loaded = await loadHomeTestimonials();
         if (isMounted) {
-          setTestimonials(result);
+          setTestimonials(loaded);
         }
       } catch (err) {
         console.error("[useHomeTestimonials] Error:", err);
@@ -59,11 +84,11 @@ export function useHomeTestimonials(): UseHomeTestimonialsResult {
       }
     }
 
-    fetch_();
+    void fetchTestimonials();
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [preloadedTestimonials]);
 
   return { testimonials, isLoading };
 }

@@ -11,6 +11,7 @@ import { usePracticePageContent } from "@site/hooks/usePracticePageContent";
 import { useHomeTestimonials } from "@site/hooks/useHomeTestimonials";
 import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
 import { parseSchemaTypes } from "@site/lib/schemaHelpers";
+import { getConfiguredSiteUrl } from "@site/lib/runtimeEnv";
 
 export default function PracticeAreaPage() {
   const { slug = "" } = useParams<{ slug: string }>();
@@ -18,7 +19,7 @@ export default function PracticeAreaPage() {
   const { testimonials } = useHomeTestimonials();
   const { phoneNumber, phoneDisplay, phoneLabel: phoneAvailability } = useGlobalPhone();
   const { settings } = useSiteSettings();
-  const siteUrl = import.meta.env.VITE_SITE_URL || '';
+  const siteUrl = settings.productionUrl || getConfiguredSiteUrl() || '';
 
   if (isLoading) {
     return (

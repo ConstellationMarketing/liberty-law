@@ -1,69 +1,18 @@
-import "./global.css";
-import { lazy, Suspense } from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { createRoot } from "react-dom/client";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { HelmetProvider } from "react-helmet-async";
-import { SiteSettingsProvider } from "./contexts/SiteSettingsContext";
-import Index from "./pages/Index";
-import ScrollToTop from "./components/ScrollToTop";
-import GlobalScripts from "./components/GlobalScripts";
-import WcDniManager from "./components/WcDniManager";
-import { SessionAuthProvider } from "./contexts/SessionAuthContext";
+import { createRoot, hydrateRoot } from "react-dom/client";
+import { ClientApp } from "@site/ClientApp";
+import { readWindowPreloadedState } from "@site/contexts/PreloadedStateContext";
 
-// Lazy-loaded routes for code splitting
-const AboutUs = lazy(() => import("./pages/AboutUs"));
-const PracticeAreas = lazy(() => import("./pages/PracticeAreas"));
-const ContactPage = lazy(() => import("./pages/ContactPage"));
-const AdminRoutes = lazy(() => import("./pages/AdminRoutes"));
-const PrivacyPolicyPage = lazy(() => import("./pages/PrivacyPolicyPage"));
-const TermsPage = lazy(() => import("./pages/TermsPage"));
-const ComplaintsPage = lazy(() => import("./pages/ComplaintsPage"));
-const PracticeAreaPage = lazy(() => import("./pages/PracticeAreaPage"));
-const DynamicPage = lazy(() => import("./pages/DynamicPage"));
-const NotFound = lazy(() => import("./pages/NotFound"));
+const rootElement = document.getElementById("root");
 
-const queryClient = new QueryClient();
+if (!rootElement) {
+  throw new Error("Root element #root was not found");
+}
 
-const App = () => (
-  <HelmetProvider>
-    <QueryClientProvider client={queryClient}>
-      <SiteSettingsProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <SessionAuthProvider>
-              <GlobalScripts />
-              <WcDniManager />
-              <ScrollToTop />
-              <Suspense fallback={null}>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/about" element={<AboutUs />} />
-                  <Route path="/practice-areas" element={<PracticeAreas />} />
-                  <Route path="/practice-areas/:slug" element={<PracticeAreaPage />} />
-                  <Route path="/contact" element={<ContactPage />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
-                  <Route path="/terms-and-conditions" element={<TermsPage />} />
-                  <Route path="/complaints-process" element={<ComplaintsPage />} />
-                  {/* Admin section — auth is enforced inside AdminRoutes / AdminLayout */}
-                  <Route path="/admin/*" element={<AdminRoutes />} />
-                  {/* Dynamic CMS pages — catches any published page by URL */}
-                  <Route path="/:slug" element={<DynamicPage />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </SessionAuthProvider>
-          </BrowserRouter>
-        </TooltipProvider>
-      </SiteSettingsProvider>
-    </QueryClientProvider>
-  </HelmetProvider>
-);
+const preloadedState = readWindowPreloadedState();
+const shouldHydrate = Boolean(preloadedState && rootElement.hasChildNodes());
 
-createRoot(document.getElementById("root")!).render(<App />);
+if (shouldHydrate) {
+  hydrateRoot(rootElement, <ClientApp preloadedState={preloadedState} />);
+} else {
+  createRoot(rootElement).render(<ClientApp preloadedState={preloadedState} />);
+}

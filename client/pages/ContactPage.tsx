@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { useContactContent } from "@site/hooks/useContactContent";
 import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
+import { getConfiguredSiteUrl } from "@site/lib/runtimeEnv";
 
 // Icon mapping for contact methods
 const iconMap: Record<string, LucideIcon> = {
@@ -27,7 +28,7 @@ export default function ContactPage() {
   const { content, seoMeta } = useContactContent();
   const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
   const { settings } = useSiteSettings();
-  const siteUrl = import.meta.env.VITE_SITE_URL || '';
+  const siteUrl = settings.productionUrl || getConfiguredSiteUrl() || '';
 
   // Map contact methods from CMS content with icon components, excluding email
   const contactMethods = content.contactMethods.methods

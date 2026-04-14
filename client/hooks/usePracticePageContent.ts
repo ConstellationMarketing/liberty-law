@@ -1,21 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { PracticePageContent } from "../lib/cms/practicePageTypes";
 import { defaultPracticePageContent } from "../lib/cms/practicePageTypes";
-
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-
-interface PageSeoMeta {
-  metaTitle: string | null;
-  metaDescription: string | null;
-  canonicalUrl: string | null;
-  ogTitle: string | null;
-  ogDescription: string | null;
-  ogImage: string | null;
-  noindex: boolean;
-  schemaType: unknown;
-  schemaData: Record<string, unknown> | null;
-}
+import { getSupabaseRequestKey, getSupabaseUrl } from "@site/lib/runtimeEnv";
+import { normalizeRoutePath, usePreloadedState } from "@site/contexts/PreloadedStateContext";
+import type { PageSeoMeta } from "@site/hooks/useHomeContent";
 
 const defaultSeoMeta: PageSeoMeta = {
   metaTitle: null,
@@ -36,8 +24,12 @@ interface UsePracticePageContentResult {
   notFound: boolean;
 }
 
-// Module-level cache keyed by slug
 const cache = new Map<string, { content: PracticePageContent; seoMeta: PageSeoMeta }>();
+
+export function getPracticePagePath(slug: string) {
+  const cleanSlug = slug.replace(/^\/+|\/+$/g, "");
+  return `/practice-areas/${cleanSlug}/`;
+}
 
 function mergeWithDefaults(
   cmsContent: Partial<PracticePageContent> | null | undefined,
@@ -61,51 +53,101 @@ function mergeWithDefaults(
   };
 }
 
+export async function loadPracticePageContent(slug: string) {
+  const cacheKey = slug.replace(/\/+$/, "");
+  const cached = cache.get(cacheKey);
+  if (cached) return cached;
+
+  const supabaseUrl = getSupabaseUrl();
+  const supabaseKey = getSupabaseRequestKey();
+
+  if (!supabaseUrl || !supabaseKey) {
+    return null;
+  }
+
+  const urlPath = getPracticePagePath(slug);
+  const response = await fetch(
+    `${supabaseUrl}/rest/v1/pages?url_path=eq.${encodeURIComponent(urlPath)}&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
+    {
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${supabaseKey}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error: ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  if (!Array.isArray(data) || data.length === 0) {
+    return null;
+  }
+
+  const pageData = data[0];
+  const loaded = {
+    content: mergeWithDefaults(pageData.content as Partial<PracticePageContent>),
+    seoMeta: {
+      metaTitle: pageData.meta_title || null,
+      metaDescription: pageData.meta_description || null,
+      canonicalUrl: pageData.canonical_url || null,
+      ogTitle: pageData.og_title || null,
+      ogDescription: pageData.og_description || null,
+      ogImage: pageData.og_image || null,
+      noindex: pageData.noindex || false,
+      schemaType: pageData.schema_type || null,
+      schemaData: pageData.schema_data || null,
+    },
+  };
+
+  cache.set(cacheKey, loaded);
+  return loaded;
+}
+
 export function usePracticePageContent(slug: string): UsePracticePageContentResult {
-  const [content, setContent] = useState<PracticePageContent>(defaultPracticePageContent);
-  const [seoMeta, setSeoMeta] = useState<PageSeoMeta>(defaultSeoMeta);
-  const [isLoading, setIsLoading] = useState(true);
+  const preloadedState = usePreloadedState();
+  const expectedPath = normalizeRoutePath(getPracticePagePath(slug));
+  const preloaded =
+    preloadedState?.routeData?.kind === "practice-page" &&
+    normalizeRoutePath(preloadedState.routePath) === expectedPath
+      ? (preloadedState.routeData.payload as { content: PracticePageContent; seoMeta: PageSeoMeta })
+      : null;
+
+  const [content, setContent] = useState<PracticePageContent>(
+    preloaded?.content || defaultPracticePageContent,
+  );
+  const [seoMeta, setSeoMeta] = useState<PageSeoMeta>(
+    preloaded?.seoMeta || defaultSeoMeta,
+  );
+  const [isLoading, setIsLoading] = useState(!preloaded);
   const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
 
     let isMounted = true;
-    setIsLoading(true);
+    if (!preloaded) {
+      setIsLoading(true);
+    }
     setNotFound(false);
 
     async function fetchContent() {
       try {
-        const cached = cache.get(slug);
-        if (cached) {
+        if (preloaded) {
+          cache.set(slug.replace(/\/+$/, ""), preloaded);
           if (isMounted) {
-            setContent(cached.content);
-            setSeoMeta(cached.seoMeta);
+            setContent(preloaded.content);
+            setSeoMeta(preloaded.seoMeta);
             setIsLoading(false);
           }
           return;
         }
 
-        // Normalize slug: strip trailing slashes and build path with trailing slash
-        const cleanSlug = slug.replace(/\/+$/, "");
-        const urlPath = `/practice-areas/${cleanSlug}/`;
-        const response = await fetch(
-          `${SUPABASE_URL}/rest/v1/pages?url_path=eq.${encodeURIComponent(urlPath)}&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
-          {
-            headers: {
-              apikey: SUPABASE_ANON_KEY,
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            },
-          },
-        );
+        const loaded = await loadPracticePageContent(slug);
 
-        if (!response.ok) {
-          throw new Error(`HTTP error: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (!Array.isArray(data) || data.length === 0) {
+        if (!loaded) {
           if (isMounted) {
             setNotFound(true);
             setIsLoading(false);
@@ -113,25 +155,9 @@ export function usePracticePageContent(slug: string): UsePracticePageContentResu
           return;
         }
 
-        const pageData = data[0];
-        const merged = mergeWithDefaults(pageData.content as Partial<PracticePageContent>);
-        const seo: PageSeoMeta = {
-          metaTitle: pageData.meta_title || null,
-          metaDescription: pageData.meta_description || null,
-          canonicalUrl: pageData.canonical_url || null,
-          ogTitle: pageData.og_title || null,
-          ogDescription: pageData.og_description || null,
-          ogImage: pageData.og_image || null,
-          noindex: pageData.noindex || false,
-          schemaType: pageData.schema_type || null,
-          schemaData: pageData.schema_data || null,
-        };
-
-        cache.set(slug, { content: merged, seoMeta: seo });
-
         if (isMounted) {
-          setContent(merged);
-          setSeoMeta(seo);
+          setContent(loaded.content);
+          setSeoMeta(loaded.seoMeta);
         }
       } catch (err) {
         console.error("[usePracticePageContent] Error:", err);
@@ -145,18 +171,18 @@ export function usePracticePageContent(slug: string): UsePracticePageContentResu
       }
     }
 
-    fetchContent();
+    void fetchContent();
     return () => {
       isMounted = false;
     };
-  }, [slug]);
+  }, [preloaded, slug]);
 
   return { content, seoMeta, isLoading, notFound };
 }
 
 export function clearPracticePageCache(slug?: string) {
   if (slug) {
-    cache.delete(slug);
+    cache.delete(slug.replace(/\/+$/, ""));
   } else {
     cache.clear();
   }
