@@ -5,9 +5,9 @@
  * the path segment always ends with a trailing slash.
  *
  * Rules:
- *  - https://libertylawfirm.net/        → unchanged (root already correct)
- *  - https://libertylawfirm.net/about   → https://libertylawfirm.net/about/
- *  - https://libertylawfirm.net/about/  → unchanged (idempotent)
+ *  - https://example.com/        → unchanged (root already correct)
+ *  - https://example.com/about   → https://example.com/about/
+ *  - https://example.com/about/  → unchanged (idempotent)
  *  - Query strings and hash fragments are stripped (invalid in sitemaps)
  *  - External / non-http URLs are left untouched
  *

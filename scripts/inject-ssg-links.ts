@@ -18,10 +18,7 @@ import path from "path";
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
-const siteUrl = (process.env.SITE_URL || process.env.VITE_SITE_URL || "https://libertylawfirm.net").replace(
-  /\/$/,
-  ""
-);
+const siteUrl = (process.env.SITE_URL || process.env.VITE_SITE_URL || "").replace(/\/$/, "");
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -53,7 +50,7 @@ function toAbsolute(href: string): string {
   ) {
     return normalized;
   }
-  return `${siteUrl}${normalized}`;
+  return siteUrl ? `${siteUrl}${normalized}` : normalized;
 }
 
 function escapeHtml(str: string): string {

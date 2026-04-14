@@ -1,11 +1,7 @@
 import { RequestHandler } from "express";
 import { createClient } from "@supabase/supabase-js";
 
-const SITE_URL =
-  (process.env.VITE_SITE_URL || process.env.SITE_URL || "https://libertylawfirm.net").replace(
-    /\/$/,
-    "",
-  );
+const SITE_URL = (process.env.VITE_SITE_URL || process.env.SITE_URL || "").replace(/\/$/, "");
 
 // Static routes always included in the sitemap
 const STATIC_ROUTES = [
@@ -87,6 +83,11 @@ export const handleSitemap: RequestHandler = async (_req, res) => {
       // Non-fatal: return sitemap with static routes only
       console.error("Sitemap: failed to fetch pages from Supabase", err);
     }
+  }
+
+  if (!SITE_URL) {
+    res.status(503).send("Sitemap base URL is not configured.");
+    return;
   }
 
   const xml = buildSitemapXml(urls);
