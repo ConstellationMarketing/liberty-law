@@ -157,15 +157,13 @@ const PUBLIC_SITE_SETTINGS_SELECT = [
   "social_links",
   "copyright_text",
   "site_noindex",
-].join(",");
-
-const PRIVATE_SITE_SETTINGS_SELECT = [
-  PUBLIC_SITE_SETTINGS_SELECT,
   "head_scripts",
   "footer_scripts",
   "ga4_measurement_id",
   "production_url",
 ].join(",");
+
+const PRIVATE_SITE_SETTINGS_SELECT = PUBLIC_SITE_SETTINGS_SELECT;
 
 let cachedSiteSettings: SiteSettings | null = null;
 

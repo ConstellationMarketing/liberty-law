@@ -2,7 +2,10 @@ import { RequestHandler } from "express";
 import { createClient } from "@supabase/supabase-js";
 
 const SITE_URL =
-  process.env.VITE_SITE_URL?.replace(/\/$/, "") || "https://libertylawfirm.net";
+  (process.env.VITE_SITE_URL || process.env.SITE_URL || "https://libertylawfirm.net").replace(
+    /\/$/,
+    "",
+  );
 
 // Static routes always included in the sitemap
 const STATIC_ROUTES = [

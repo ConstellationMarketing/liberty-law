@@ -218,7 +218,9 @@ async function generateSSG() {
     console.log("Generated _redirects with SPA fallback");
   }
 
-  const siteUrl = (resolvedSiteSettings?.productionUrl || process.env.SITE_URL || "").replace(/\/+$/, "");
+  const siteUrl = (
+    resolvedSiteSettings?.productionUrl || process.env.SITE_URL || process.env.VITE_SITE_URL || ""
+  ).replace(/\/+$/, "");
   const siteNoindex = resolvedSiteSettings?.siteNoindex ?? false;
 
   if (!siteNoindex && siteUrl) {

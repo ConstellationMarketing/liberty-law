@@ -79,10 +79,6 @@ export default function AdminSiteSettings() {
     if (data) {
       setSettingsId(data.id);
       setSettings(rowToSiteSettings(data as SiteSettingsRow));
-      // Sync to public table so the frontend can read production_url etc.
-      await supabase
-        .from("site_settings_public")
-        .upsert({ ...data, settings_key: "global" }, { onConflict: "settings_key" });
     }
     setLoading(false);
   };
@@ -112,12 +108,7 @@ export default function AdminSiteSettings() {
       console.error("Error saving settings:", error);
       alert("Failed to save settings: " + error.message);
     } else {
-      // Sync to public table so frontend reads the updated production_url
-      const rowData2 = siteSettingsToRow(settings);
-      await supabase
-        .from("site_settings_public")
-        .upsert({ ...rowData2, settings_key: "global" }, { onConflict: "settings_key" });
-      // Clear the cache so components refetch
+      // Clear the cache so components refetch the updated view-backed settings
       clearSiteSettingsCache();
       window.dispatchEvent(new Event("site-settings-invalidated"));
       alert("Settings saved successfully!");
