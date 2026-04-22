@@ -55,14 +55,16 @@ export default function AdminDashboard() {
         },
       });
 
+      const payload = await response.json().catch(() => null);
+
       if (!response.ok) {
-        throw new Error('Failed to trigger publish');
+        throw new Error(payload?.message || payload?.error || 'Failed to trigger publish');
       }
 
       alert('Build triggered successfully! The site will be updated in a few minutes.');
     } catch (error) {
       console.error('Publish error:', error);
-      alert('Failed to trigger publish. Please try again.');
+      alert(error instanceof Error ? error.message : 'Failed to trigger publish. Please try again.');
     } finally {
       setPublishing(false);
     }

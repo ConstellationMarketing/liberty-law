@@ -3,7 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const netlifyBuildHookUrl = process.env.NETLIFY_BUILD_HOOK_URL;
+const netlifyBuildHookUrl =
+  process.env.NETLIFY_BUILD_HOOK_URL || process.env.netlify_build_hook_url;
 
 export const handler: Handler = async (event: HandlerEvent) => {
   // Only allow POST requests
@@ -48,9 +49,9 @@ export const handler: Handler = async (event: HandlerEvent) => {
   if (!netlifyBuildHookUrl) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         error: 'Build hook not configured',
-        message: 'Please set NETLIFY_BUILD_HOOK_URL environment variable'
+        message: 'Please set NETLIFY_BUILD_HOOK_URL or netlify_build_hook_url environment variable'
       }),
     };
   }
