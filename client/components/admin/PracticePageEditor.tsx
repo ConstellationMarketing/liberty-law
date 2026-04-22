@@ -230,8 +230,12 @@ export default function PracticePageEditor({ content, onChange }: Props) {
                 <Label>Section Image (optional)</Label>
                 <ImageUploader
                   value={section.image ?? ""}
-                  onChange={(url) => updateSection(index, { image: url })}
-                  onAltTextChange={(altText) => updateSection(index, { imageAlt: altText })}
+                  onChange={(url, metadata) =>
+                    updateSection(index, {
+                      image: url,
+                      ...(metadata?.altText ? { imageAlt: metadata.altText } : {}),
+                    })
+                  }
                   folder="practice-areas"
                   placeholder="Upload section image"
                 />

@@ -211,11 +211,12 @@ function HomePageEditor({
             <Label>Attorney Image</Label>
             <ImageUploader
               value={content.about.attorneyImage}
-              onChange={(url) =>
-                update("about", { ...content.about, attorneyImage: url })
-              }
-              onAltTextChange={(altText) =>
-                update("about", { ...content.about, attorneyImageAlt: altText })
+              onChange={(url, metadata) =>
+                update("about", {
+                  ...content.about,
+                  attorneyImage: url,
+                  ...(metadata?.altText ? { attorneyImageAlt: metadata.altText } : {}),
+                })
               }
               folder="about"
               placeholder="Upload attorney image"

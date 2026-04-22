@@ -28,9 +28,8 @@ const getDefaultAltText = (fileName: string, existingAltText?: string | null) =>
 
 interface ImageUploaderProps {
   value?: string;
-  onChange: (url: string) => void;
+  onChange: (url: string, metadata?: { altText?: string }) => void;
   onRemove?: () => void;
-  onAltTextChange?: (altText: string) => void;
   bucket?: string;
   folder?: string;
   className?: string;
@@ -41,7 +40,6 @@ export default function ImageUploader({
   value,
   onChange,
   onRemove,
-  onAltTextChange,
   bucket = "media",
   folder = "uploads",
   className,
@@ -124,8 +122,7 @@ export default function ImageUploader({
         const { data: urlData } = supabase.storage.from(bucket).getPublicUrl(fileName);
         const publicUrl = urlData.publicUrl;
 
-        onChange(publicUrl);
-        onAltTextChange?.(defaultAltText);
+        onChange(publicUrl, { altText: defaultAltText });
 
         try {
           const { data: userData, error: userErr } = await supabase.auth.getUser();
@@ -156,17 +153,17 @@ export default function ImageUploader({
         setUploading(false);
       }
     },
-    [bucket, folder, onAltTextChange, onChange]
+    [bucket, folder, onChange]
   );
 
   const handleLibrarySelect = useCallback(
     (media: Media) => {
-      onChange(media.public_url);
-      onAltTextChange?.(getDefaultAltText(media.file_name, media.alt_text));
+      const altText = getDefaultAltText(media.file_name, media.alt_text);
+      onChange(media.public_url, { altText });
       setLibraryOpen(false);
       setLibrarySearch("");
     },
-    [onAltTextChange, onChange]
+    [onChange]
   );
 
   const handleDrag = useCallback((e: React.DragEvent) => {

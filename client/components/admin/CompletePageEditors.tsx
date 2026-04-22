@@ -156,11 +156,12 @@ export function AboutPageEditor({
             <Label>Story Image</Label>
             <ImageUploader
               value={content.story.image}
-              onChange={(url) =>
-                update("story", { ...content.story, image: url })
-              }
-              onAltTextChange={(altText) =>
-                update("story", { ...content.story, imageAlt: altText })
+              onChange={(url, metadata) =>
+                update("story", {
+                  ...content.story,
+                  image: url,
+                  ...(metadata?.altText ? { imageAlt: metadata.altText } : {}),
+                })
               }
               folder="about"
               placeholder="Upload story image"
@@ -486,11 +487,12 @@ export function AboutPageEditor({
             <Label>Image</Label>
             <ImageUploader
               value={content.whyChooseUs.image}
-              onChange={(url) =>
-                update("whyChooseUs", { ...content.whyChooseUs, image: url })
-              }
-              onAltTextChange={(altText) =>
-                update("whyChooseUs", { ...content.whyChooseUs, imageAlt: altText })
+              onChange={(url, metadata) =>
+                update("whyChooseUs", {
+                  ...content.whyChooseUs,
+                  image: url,
+                  ...(metadata?.altText ? { imageAlt: metadata.altText } : {}),
+                })
               }
               folder="about"
               placeholder="Upload why choose us image"
@@ -1330,11 +1332,12 @@ export function PracticeAreasPageEditor({
             <Label>Image</Label>
             <ImageUploader
               value={content.whyChoose.image}
-              onChange={(url) =>
-                update("whyChoose", { ...content.whyChoose, image: url })
-              }
-              onAltTextChange={(altText) =>
-                update("whyChoose", { ...content.whyChoose, imageAlt: altText })
+              onChange={(url, metadata) =>
+                update("whyChoose", {
+                  ...content.whyChoose,
+                  image: url,
+                  ...(metadata?.altText ? { imageAlt: metadata.altText } : {}),
+                })
               }
               folder="practice-areas"
               placeholder="Upload why choose us image"
