@@ -214,6 +214,9 @@ function HomePageEditor({
               onChange={(url) =>
                 update("about", { ...content.about, attorneyImage: url })
               }
+              onAltTextChange={(altText) =>
+                update("about", { ...content.about, attorneyImageAlt: altText })
+              }
               folder="about"
               placeholder="Upload attorney image"
             />

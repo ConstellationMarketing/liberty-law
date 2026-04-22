@@ -48,6 +48,7 @@ import {
   FileText,
 } from "lucide-react";
 import { optimizeImage } from "../../lib/imageOptimizer";
+import { getImageAlt } from "@site/lib/utils/imageAlt";
 
 export default function AdminMediaLibrary() {
   const [loading, setLoading] = useState(true);
@@ -116,6 +117,8 @@ export default function AdminMediaLibrary() {
           data: { user },
         } = await supabase.auth.getUser();
 
+        const defaultAltText = getImageAlt(optimized.name);
+
         // Save to media table
         const { error: dbError } = await supabase.from("media").insert({
           file_name: optimized.name,
@@ -123,6 +126,7 @@ export default function AdminMediaLibrary() {
           public_url: urlData.publicUrl,
           file_size: optimized.size,
           mime_type: optimized.type,
+          alt_text: defaultAltText,
           uploaded_by: user?.id || null,
         });
 

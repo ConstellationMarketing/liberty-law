@@ -159,6 +159,9 @@ export function AboutPageEditor({
               onChange={(url) =>
                 update("story", { ...content.story, image: url })
               }
+              onAltTextChange={(altText) =>
+                update("story", { ...content.story, imageAlt: altText })
+              }
               folder="about"
               placeholder="Upload story image"
             />
@@ -485,6 +488,9 @@ export function AboutPageEditor({
               value={content.whyChooseUs.image}
               onChange={(url) =>
                 update("whyChooseUs", { ...content.whyChooseUs, image: url })
+              }
+              onAltTextChange={(altText) =>
+                update("whyChooseUs", { ...content.whyChooseUs, imageAlt: altText })
               }
               folder="about"
               placeholder="Upload why choose us image"
@@ -1326,6 +1332,9 @@ export function PracticeAreasPageEditor({
               value={content.whyChoose.image}
               onChange={(url) =>
                 update("whyChoose", { ...content.whyChoose, image: url })
+              }
+              onAltTextChange={(altText) =>
+                update("whyChoose", { ...content.whyChoose, imageAlt: altText })
               }
               folder="practice-areas"
               placeholder="Upload why choose us image"

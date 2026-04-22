@@ -249,6 +249,9 @@ function HomePageEditor({
               onChange={(url) =>
                 update("about", { ...content.about, attorneyImage: url })
               }
+              onAltTextChange={(altText) =>
+                update("about", { ...content.about, attorneyImageAlt: altText })
+              }
               folder="home"
             />
           </div>
@@ -558,6 +561,7 @@ function HomePageEditor({
                   <ImageUploader
                     value={String(item.image ?? "")}
                     onChange={(url) => updateItem({ ...item, image: url })}
+                    onAltTextChange={(altText) => updateItem({ ...item, imageAlt: altText })}
                     folder="team"
                   />
                 </div>
@@ -848,6 +852,7 @@ function AboutPageEditor({
             <ImageUploader
               value={content?.story?.image ?? ""}
               onChange={(url) => update("story", { ...content.story, image: url })}
+              onAltTextChange={(altText) => update("story", { ...content.story, imageAlt: altText })}
               folder="about"
             />
           </div>
@@ -1078,6 +1083,9 @@ function AboutPageEditor({
               value={content?.whyChooseUs?.image ?? ""}
               onChange={(url) =>
                 update("whyChooseUs", { ...content.whyChooseUs, image: url })
+              }
+              onAltTextChange={(altText) =>
+                update("whyChooseUs", { ...content.whyChooseUs, imageAlt: altText })
               }
               folder="about"
             />
@@ -1552,6 +1560,9 @@ function PracticeAreasPageEditor({
               value={content?.whyChoose?.image ?? ""}
               onChange={(url) =>
                 update("whyChoose", { ...content.whyChoose, image: url })
+              }
+              onAltTextChange={(altText) =>
+                update("whyChoose", { ...content.whyChoose, imageAlt: altText })
               }
               folder="practice-areas"
             />
