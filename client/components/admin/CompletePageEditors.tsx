@@ -1262,7 +1262,7 @@ export function PracticeAreasPageEditor({
                     />
                   </div>
                   <Input
-                    placeholder="Link"
+                    placeholder="Leave blank to hide Learn More"
                     value={area.link}
                     onChange={(e) => {
                       const newAreas = [...content.grid.areas];
@@ -1278,7 +1278,7 @@ export function PracticeAreasPageEditor({
               onClick={() =>
                 update("grid", {
                   ...content.grid,
-                  areas: [...content.grid.areas, { icon: "", title: "", description: "", image: "", link: "/practice-areas" }]
+                  areas: [...content.grid.areas, { icon: "", title: "", description: "", image: "", link: "" }]
                 })
               }
             >

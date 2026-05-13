@@ -1522,7 +1522,7 @@ function PracticeAreasPageEditor({
                 <Input
                   value={item.link}
                   onChange={(e) => updateItem({ ...item, link: e.target.value })}
-                  placeholder="/practice-areas"
+                  placeholder="Leave blank to hide Learn More"
                 />
               </div>
             </div>

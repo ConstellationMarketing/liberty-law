@@ -81,7 +81,7 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
         description:
           "Schedule a consultation if you have been charged with Driving Under the Influence. We will review your case, discuss potential defenses, and explain the next steps for your court, legal, and driver's license status.",
         image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025962494-1omap8-1771601057393-khhynw-personal-injury.webp",
-        link: "/practice-areas",
+        link: "",
       },
       {
         icon: "Lock",
@@ -90,7 +90,7 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
           "For serious criminal charges including drug offenses, battery, or theft. We provide a confidential review of your charges to build an aggressive defense strategy to protect your rights and freedom.",
         image:
           "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025957273-hmz6u8-1771601053163-z7au68-pexels-photo-5668484.webp",
-        link: "/practice-areas",
+        link: "",
       },
       {
         icon: "Scale",
@@ -99,7 +99,7 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
           "Legal assistance for misdemeanor charges. We help you understand the potential consequences and work toward the best possible resolution for your case.",
         image:
           "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025961819-7ot96e-1771601055107-cej9xh-pexels-photo-7714896.webp",
-        link: "/practice-areas",
+        link: "",
       },
       {
         icon: "CircleAlert",
@@ -108,7 +108,7 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
           "Defense for speeding tickets, driving while suspended/revoked, and other moving violations. We aim to protect your driving record and minimize fines or insurance impacts.",
         image:
           "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025966504-367ujd-1771601058148-5pgrb6-pexels-photo-7715101.webp",
-        link: "/practice-areas",
+        link: "",
       },
       {
         icon: "Home",
@@ -116,7 +116,7 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
         description:
           "Legal representation for home buyers. We review contracts, handle title work, and guide you through the closing process to ensure a smooth purchase.",
         image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025967264-7w1pmn-1771601058873-l63tmn-premises-liability.webp",
-        link: "/practice-areas",
+        link: "",
       },
       {
         icon: "Building",
@@ -124,7 +124,7 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
         description:
           "Legal representation for home sellers. We assist with contract negotiation, title clearance, and closing documents to protect your interests during the sale.",
         image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025967843-8odbex-1771601059377-rskt2i-product-liability.webp",
-        link: "/practice-areas",
+        link: "",
       },
       {
         icon: "FileX",
@@ -132,7 +132,7 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
         description:
           "Discuss your eligibility to have past criminal records expunged or sealed. We help remove barriers to employment and housing by clearing your record.",
         image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025968373-hpkjuk-1771601059880-kow9l3-civil-litigation.webp",
-        link: "/practice-areas",
+        link: "",
       },
       {
         icon: "CreditCard",
@@ -140,7 +140,7 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
         description:
           "Assistance with formal and informal hearings to reinstate your driver's license after a revocation or suspension.",
         image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025968859-iggh7i-1771601060221-ci16fq-insurance-claims.webp",
-        link: "/practice-areas",
+        link: "",
       },
       {
         icon: "Building2",
@@ -148,7 +148,7 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
         description:
           "Representation for landlords and tenants in residential and commercial lease disputes. We handle eviction proceedings, lease violations, security deposit issues, and other property management legal matters to ensure your rights are protected under Illinois law.",
         image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025969371-2ufox0-1771601060610-x1yxu7-class-action.webp",
-        link: "/practice-areas",
+        link: "",
       },
       {
         icon: "Briefcase",
@@ -156,7 +156,7 @@ export const defaultPracticeAreasContent: PracticeAreasPageContent = {
         description:
           "General legal counsel for small business formation, contract disputes, or other civil legal matters.",
         image: "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772025969840-8ujwrq-1771601060992-6fablo-employment-law.webp",
-        link: "/practice-areas",
+        link: "",
       },
     ],
   },
