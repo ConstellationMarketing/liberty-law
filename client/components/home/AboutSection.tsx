@@ -22,6 +22,24 @@ const defaultContent: AboutContent = {
   features: [],
 };
 
+function renderProtectedHeading(heading: string) {
+  const match = heading.match(/^(.*?\s)?([^\s,]+,\s*P\.\s*C\.)$/);
+
+  if (!match) {
+    return heading;
+  }
+
+  const prefix = match[1] ?? "";
+  const protectedSuffix = match[2];
+
+  return (
+    <>
+      {prefix}
+      <span className="inline-block whitespace-nowrap">{protectedSuffix}</span>
+    </>
+  );
+}
+
 export default function AboutSection({ content }: AboutSectionProps) {
   const data = content || defaultContent;
 
@@ -41,8 +59,8 @@ export default function AboutSection({ content }: AboutSectionProps) {
 
             {/* Heading */}
             <div className="mb-[20px] md:mb-[9.27%]">
-              <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark pb-[10px]">
-                {data.heading}
+              <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark pb-[10px] text-wrap balance">
+                {renderProtectedHeading(data.heading)}
               </h2>
               <SafeHtml
                 html={data.description}
