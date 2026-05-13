@@ -47,6 +47,7 @@ import PracticePageEditor from "@site/components/admin/PracticePageEditor";
 import PageContentEditor from "../../components/admin/PageContentEditor";
 import ImageUploader from "../../components/admin/ImageUploader";
 import { clearPageCache } from "../../hooks/usePageContent";
+import { clearPracticeAreasContentCache } from "@site/hooks/usePracticeAreasContent";
 import type { PageKey } from "../../lib/pageContentTypes";
 import RevisionPanel, { createPageRevision } from "../../components/admin/RevisionPanel";
 import { parseSchemaTypes } from "@site/lib/schemaHelpers";
@@ -213,8 +214,11 @@ export default function AdminPageEdit() {
       alert("Failed to save page: " + error.message);
     } else {
       // Clear the page cache so the frontend fetches fresh content
-      if (["/", "/about", "/contact", "/practice-areas", "/privacy-policy", "/terms-and-conditions", "/complaints-process"].includes(page.url_path)) {
-        clearPageCache(page.url_path as PageKey);
+      if (["/", "/about", "/contact", "/practice-areas/", "/privacy-policy/", "/terms-and-conditions/", "/complaints-process/"].includes(normalizedUrlPath)) {
+        clearPageCache(normalizedUrlPath as PageKey);
+      }
+      if (normalizedUrlPath === "/practice-areas/") {
+        clearPracticeAreasContentCache();
       }
       // For practice detail pages: clear both the old slug-based cache and the dynamic page cache
       if (page.content_template === 'practice') {
