@@ -17,8 +17,11 @@ import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsCont
 import { getConfiguredSiteUrl } from "@site/lib/runtimeEnv";
 
 function getIcon(iconName: string): LucideIcon {
-  const maybeIcon = (LucideIcons as Record<string, unknown>)[iconName];
-  return typeof maybeIcon === "function" ? (maybeIcon as LucideIcon) : Scale;
+  const normalizedName = iconName.trim();
+  if (!normalizedName) return Scale;
+
+  const maybeIcon = (LucideIcons as Record<string, unknown>)[normalizedName];
+  return maybeIcon ? (maybeIcon as LucideIcon) : Scale;
 }
 
 export default function PracticeAreas() {

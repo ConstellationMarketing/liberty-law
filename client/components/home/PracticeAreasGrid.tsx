@@ -4,8 +4,11 @@ import { Scale, type LucideIcon } from "lucide-react";
 import PracticeAreaCard from "./PracticeAreaCard";
 
 function getIcon(iconName: string): LucideIcon {
-  const maybeIcon = (LucideIcons as Record<string, unknown>)[iconName];
-  return typeof maybeIcon === "function" ? (maybeIcon as LucideIcon) : Scale;
+  const normalizedName = iconName.trim();
+  if (!normalizedName) return Scale;
+
+  const maybeIcon = (LucideIcons as Record<string, unknown>)[normalizedName];
+  return maybeIcon ? (maybeIcon as LucideIcon) : Scale;
 }
 
 const lgFillerSpanClass = {
