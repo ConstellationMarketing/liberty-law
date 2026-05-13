@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
 import { useSiteSettings } from "@site/contexts/SiteSettingsContext";
 import { refreshWhatConvertsDni } from "@site/lib/whatconvertsRefresh";
 
@@ -45,9 +44,19 @@ function injectHtml(html: string, target: HTMLElement): () => void {
   };
 }
 
+function hasManualGoogleAnalyticsScript(html: string): boolean {
+  return /googletagmanager\.com\/gtag\/js|google-analytics\.com|gtag\s*\(/i.test(
+    html,
+  );
+}
+
+function shouldLoadAutomaticGa(): boolean {
+  if (typeof window === "undefined") return false;
+  return !(import.meta.env.DEV || window.location.hostname === "localhost");
+}
+
 export default function GlobalScripts() {
   const { settings } = useSiteSettings();
-  const location = useLocation();
   const prevHead = useRef<string>("");
   const prevFooter = useRef<string>("");
 
@@ -71,10 +80,13 @@ export default function GlobalScripts() {
     return cleanup;
   }, [settings.footerScripts]);
 
-  // GA4: auto-inject gtag.js when a measurement ID is configured
+  // GA4: auto-inject gtag.js when a measurement ID is configured.
+  // Skip localhost/dev preview to avoid noisy fetch failures from blocked analytics.
+  // Also skip if GA is already present in CMS head scripts.
   useEffect(() => {
     const id = settings.ga4MeasurementId;
-    if (!id) return;
+    if (!id || !shouldLoadAutomaticGa()) return;
+    if (hasManualGoogleAnalyticsScript(settings.headScripts)) return;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((window as any).gtag) return; // Already initialized — prevent double-injection
@@ -92,7 +104,12 @@ export default function GlobalScripts() {
       gtag('config', '${id}');
     `;
     document.head.appendChild(configScript);
-  }, [settings.ga4MeasurementId]);
+
+    return () => {
+      loaderScript.remove();
+      configScript.remove();
+    };
+  }, [settings.ga4MeasurementId, settings.headScripts]);
 
   return null;
 }
