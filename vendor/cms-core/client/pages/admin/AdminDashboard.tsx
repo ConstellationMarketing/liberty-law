@@ -16,28 +16,51 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [publishing, setPublishing] = useState(false);
+  const [statsError, setStatsError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchStats();
   }, []);
 
   const fetchStats = async () => {
-    const [pagesResult, redirectsResult] = await Promise.all([
-      supabase.from('pages').select('status'),
-      supabase.from('redirects').select('id', { count: 'exact' }),
-    ]);
+    try {
+      setStatsError(null);
 
-    const pages = pagesResult.data || [];
-    const publishedPages = pages.filter(p => p.status === 'published').length;
-    const draftPages = pages.filter(p => p.status === 'draft').length;
+      const [pagesResult, redirectsResult] = await Promise.all([
+        supabase.from('pages').select('status'),
+        supabase.from('redirects').select('id', { count: 'exact' }),
+      ]);
 
-    setStats({
-      totalPages: pages.length,
-      publishedPages,
-      draftPages,
-      redirects: redirectsResult.count || 0,
-    });
-    setLoading(false);
+      if (pagesResult.error) {
+        throw pagesResult.error;
+      }
+
+      if (redirectsResult.error) {
+        throw redirectsResult.error;
+      }
+
+      const pages = pagesResult.data || [];
+      const publishedPages = pages.filter(p => p.status === 'published').length;
+      const draftPages = pages.filter(p => p.status === 'draft').length;
+
+      setStats({
+        totalPages: pages.length,
+        publishedPages,
+        draftPages,
+        redirects: redirectsResult.count || 0,
+      });
+    } catch (error) {
+      console.error('Error fetching dashboard stats:', error);
+      setStats({
+        totalPages: 0,
+        publishedPages: 0,
+        draftPages: 0,
+        redirects: 0,
+      });
+      setStatsError('Dashboard stats are temporarily unavailable.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePublish = async () => {
@@ -104,6 +127,14 @@ export default function AdminDashboard() {
           )}
         </Button>
       </div>
+
+      {statsError && (
+        <Card>
+          <CardContent className="py-4 text-sm text-amber-700">
+            {statsError}
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
