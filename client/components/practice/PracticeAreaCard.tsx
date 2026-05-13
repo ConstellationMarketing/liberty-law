@@ -17,11 +17,17 @@ export default function PracticeAreaCard({
   title,
   description,
   image,
-  link = "/contact",
+  link,
 }: PracticeAreaCardProps) {
+  const normalizedLink = link?.trim() ? withTrailingSlash(link.trim()) : "";
+  const hasAssignedLink = Boolean(
+    normalizedLink && normalizedLink !== "/practice-areas/",
+  );
+  const Wrapper = hasAssignedLink ? Link : "div";
+
   return (
-    <Link
-      to={withTrailingSlash(link)}
+    <Wrapper
+      {...(hasAssignedLink ? { to: normalizedLink } : {})}
       className="relative min-h-[450px] overflow-hidden group bg-law-card border border-law-border transition-all duration-300 hover:border-law-accent"
     >
       {/* Background Image */}
@@ -57,15 +63,16 @@ export default function PracticeAreaCard({
             className="font-outfit text-[20px] leading-[30px] text-white/90 mb-[15px]"
           />
 
-          {/* Learn More Link */}
-          <div className="flex items-center gap-2 text-law-accent group-hover:text-white transition-colors duration-300">
-            <span className="font-outfit text-[20px]">
-              Learn More
-            </span>
-            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-          </div>
+          {hasAssignedLink && (
+            <div className="flex items-center gap-2 text-law-accent group-hover:text-white transition-colors duration-300">
+              <span className="font-outfit text-[20px]">
+                Learn More
+              </span>
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </div>
+          )}
         </div>
       </div>
-    </Link>
+    </Wrapper>
   );
 }
