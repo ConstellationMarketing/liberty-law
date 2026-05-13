@@ -20,9 +20,7 @@ export default function PracticeAreaCard({
   link,
 }: PracticeAreaCardProps) {
   const normalizedLink = link?.trim() ? withTrailingSlash(link.trim()) : "";
-  const hasAssignedLink = Boolean(
-    normalizedLink && normalizedLink !== "/practice-areas/",
-  );
+  const hasAssignedLink = Boolean(normalizedLink);
   const Wrapper = hasAssignedLink ? Link : "div";
 
   return (
