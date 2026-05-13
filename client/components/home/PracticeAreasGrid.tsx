@@ -1,31 +1,24 @@
 import type { PracticeAreaItem } from "@site/lib/cms/homePageTypes";
-import {
-  Car,
-  Lock,
-  Scale,
-  CircleAlert,
-  Home,
-  Building,
-  FileX,
-  CreditCard,
-  Building2,
-  Briefcase,
-  type LucideIcon,
-} from "lucide-react";
+import * as LucideIcons from "lucide-react";
+import { Scale, type LucideIcon } from "lucide-react";
 import PracticeAreaCard from "./PracticeAreaCard";
 
-const iconMap: Record<string, LucideIcon> = {
-  Car,
-  Lock,
-  Scale,
-  CircleAlert,
-  Home,
-  Building,
-  FileX,
-  CreditCard,
-  Building2,
-  Briefcase,
-};
+function getIcon(iconName: string): LucideIcon {
+  const maybeIcon = (LucideIcons as Record<string, unknown>)[iconName];
+  return typeof maybeIcon === "function" ? (maybeIcon as LucideIcon) : Scale;
+}
+
+const lgFillerSpanClass = {
+  0: "",
+  1: "lg:col-span-3",
+  2: "lg:col-span-2",
+  3: "lg:col-span-1",
+} as const;
+
+const smFillerSpanClass = {
+  0: "",
+  1: "sm:col-span-1",
+} as const;
 
 interface PracticeAreasGridProps {
   areas?: PracticeAreaItem[];
@@ -33,6 +26,9 @@ interface PracticeAreasGridProps {
 
 export default function PracticeAreasGrid({ areas }: PracticeAreasGridProps) {
   const practiceAreas = areas || [];
+  const lgRemainder = practiceAreas.length % 4;
+  const smRemainder = practiceAreas.length % 2;
+  const shouldRenderFiller = lgRemainder !== 0 || smRemainder !== 0;
 
   return (
     <div className="bg-white">
@@ -42,18 +38,21 @@ export default function PracticeAreasGrid({ areas }: PracticeAreasGridProps) {
             <PracticeAreaCard
               key={index}
               area={area}
-              Icon={iconMap[area.icon]}
+              Icon={getIcon(area.icon)}
             />
           ))}
 
-          {/* Branding filler for remaining grid space */}
-          <div className="relative min-h-[400px] lg:min-h-[480px] sm:col-span-2 lg:col-span-2 bg-law-dark flex items-center justify-center overflow-hidden">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2Fa1ea6dfbbf1843f0a81b4a7860758155?format=webp&width=800"
-              alt="Liberty Law"
-              className="w-[70%] max-w-[500px] opacity-20 object-contain"
-            />
-          </div>
+          {shouldRenderFiller && (
+            <div
+              className={`relative hidden min-h-[400px] lg:min-h-[480px] bg-law-dark sm:flex items-center justify-center overflow-hidden ${smFillerSpanClass[smRemainder as 0 | 1]} ${lgFillerSpanClass[lgRemainder as 0 | 1 | 2 | 3]}`}
+            >
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets%2F50bd0f2438824f8ea1271cf7dd2c508e%2Fa1ea6dfbbf1843f0a81b4a7860758155?format=webp&width=800"
+                alt="Liberty Law"
+                className="w-[70%] max-w-[500px] opacity-20 object-contain"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -5,42 +5,21 @@ import Layout from "@site/components/layout/Layout";
 import PracticeAreaCard from "@site/components/practice/PracticeAreaCard";
 import CallBox from "@site/components/shared/CallBox";
 import WhyChooseUsSection from "@site/components/shared/WhyChooseUsSection";
+import * as LucideIcons from "lucide-react";
 import {
   Phone,
   Calendar,
   Scale,
-  Car,
-  Briefcase,
-  Users,
-  Home,
-  DollarSign,
-  FileText,
-  Heart,
-  Shield,
-  TrendingUp,
-  Stethoscope,
-  Building,
   type LucideIcon,
 } from "lucide-react";
 import { usePracticeAreasContent } from "@site/hooks/usePracticeAreasContent";
 import { useGlobalPhone, useSiteSettings } from "@site/contexts/SiteSettingsContext";
 import { getConfiguredSiteUrl } from "@site/lib/runtimeEnv";
 
-// Icon mapping for practice areas
-const iconMap: Record<string, LucideIcon> = {
-  Car,
-  Stethoscope,
-  Briefcase,
-  Heart,
-  Building,
-  Shield,
-  Scale,
-  FileText,
-  Users,
-  Home,
-  DollarSign,
-  TrendingUp,
-};
+function getIcon(iconName: string): LucideIcon {
+  const maybeIcon = (LucideIcons as Record<string, unknown>)[iconName];
+  return typeof maybeIcon === "function" ? (maybeIcon as LucideIcon) : Scale;
+}
 
 export default function PracticeAreas() {
   const { content, seoMeta } = usePracticeAreasContent();
@@ -50,7 +29,7 @@ export default function PracticeAreas() {
 
   // Map practice areas from CMS content with icon components
   const practiceAreas = content.grid.areas.map((area) => ({
-    icon: iconMap[area.icon] || Scale,
+    icon: getIcon(area.icon),
     title: area.title,
     description: area.description,
     image: area.image,
