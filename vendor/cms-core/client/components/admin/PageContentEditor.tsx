@@ -79,6 +79,9 @@ function ArrayEditor<T extends Record<string, unknown>>({
   newItem: () => T;
   itemLabel?: string;
 }) {
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState<number | null>(null);
+
   const addItem = () => {
     onChange([...items, newItem()]);
   };
@@ -93,12 +96,55 @@ function ArrayEditor<T extends Record<string, unknown>>({
     onChange(newItems);
   };
 
+  const moveItem = (fromIndex: number, toIndex: number) => {
+    if (fromIndex === toIndex) return;
+    const newItems = [...items];
+    const [movedItem] = newItems.splice(fromIndex, 1);
+    newItems.splice(toIndex, 0, movedItem);
+    onChange(newItems);
+  };
+
   return (
     <div className="space-y-4">
       {items.map((item, index) => (
-        <div key={index} className="relative border rounded-lg p-4 bg-gray-50">
+        <div
+          key={index}
+          className={`relative border rounded-lg p-4 bg-gray-50 transition-colors ${
+            dropTargetIndex === index ? "border-law-accent bg-law-accent/5" : ""
+          }`}
+          onDragOver={(e) => {
+            e.preventDefault();
+            if (draggedIndex !== null && draggedIndex !== index) {
+              setDropTargetIndex(index);
+            }
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            if (draggedIndex !== null) {
+              moveItem(draggedIndex, index);
+            }
+            setDraggedIndex(null);
+            setDropTargetIndex(null);
+          }}
+          onDragEnd={() => {
+            setDraggedIndex(null);
+            setDropTargetIndex(null);
+          }}
+        >
           <div className="absolute top-2 right-2 flex gap-2">
-            <GripVertical className="h-4 w-4 text-gray-400 cursor-move" />
+            <button
+              type="button"
+              draggable
+              onDragStart={(e) => {
+                setDraggedIndex(index);
+                setDropTargetIndex(index);
+                e.dataTransfer.effectAllowed = "move";
+              }}
+              className="text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
+              aria-label={`Drag to reorder ${itemLabel.toLowerCase()} ${index + 1}`}
+            >
+              <GripVertical className="h-4 w-4" />
+            </button>
             <button
               type="button"
               onClick={() => removeItem(index)}
@@ -107,7 +153,7 @@ function ArrayEditor<T extends Record<string, unknown>>({
               <Trash2 className="h-4 w-4" />
             </button>
           </div>
-          <div className="text-sm font-medium text-gray-500 mb-3">
+          <div className="text-sm font-medium text-gray-500 mb-3 pr-12">
             {itemLabel} {index + 1}
           </div>
           {renderItem(item, index, (updated) => updateItem(index, updated))}
