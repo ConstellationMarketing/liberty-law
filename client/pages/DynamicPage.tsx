@@ -9,6 +9,7 @@ import { parseSchemaTypes } from "@site/lib/schemaHelpers";
 import AboutRenderer from "@site/components/dynamic/AboutRenderer";
 import SimpleRenderer from "@site/components/dynamic/SimpleRenderer";
 import PracticeRenderer from "@site/components/dynamic/PracticeRenderer";
+import BlockRenderer from "@site/components/BlockRenderer";
 import PostPage from "@site/pages/PostPage";
 import NotFound from "@site/pages/NotFound";
 import { getConfiguredSiteUrl } from "@site/lib/runtimeEnv";
@@ -54,7 +55,7 @@ export default function DynamicPage() {
     return [...types, "FAQPage"];
   })();
 
-  const supportedTemplates = ["about", "simple", "practice"];
+  const supportedTemplates = ["about", "simple", "practice", "blocks"];
 
   return (
     <Layout>
@@ -85,8 +86,11 @@ export default function DynamicPage() {
       {contentTemplate === "practice" && (
         <PracticeRenderer content={content} />
       )}
+      {(contentTemplate === "blocks" || Array.isArray(content)) && (
+        <BlockRenderer content={Array.isArray(content) ? content : []} />
+      )}
       {/* Fallback for unknown templates */}
-      {!supportedTemplates.includes(contentTemplate || "") && (
+      {!supportedTemplates.includes(contentTemplate || "") && !Array.isArray(content) && (
         <div className="bg-white py-16">
           <div className="max-w-4xl mx-auto px-4">
             <h1 className="font-playfair text-4xl text-black mb-8">{title}</h1>

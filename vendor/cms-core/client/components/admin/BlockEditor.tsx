@@ -30,6 +30,7 @@ import {
   MapPin,
   Columns,
   FileText,
+  Newspaper,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -45,6 +46,9 @@ interface BlockEditorProps {
 
 const BLOCK_TYPES = [
   { type: 'hero', label: 'Hero Section', icon: Layout },
+  { type: 'about-hero', label: 'About-Style Hero', icon: Layout },
+  { type: 'blog-posts', label: 'Blog Posts Grid', icon: Newspaper },
+  { type: 'about-cta', label: 'About-Style CTA', icon: Phone },
   { type: 'heading', label: 'Heading', icon: Type },
   { type: 'paragraph', label: 'Paragraph', icon: FileText },
   { type: 'bullets', label: 'Bullet List', icon: List },
@@ -63,6 +67,29 @@ function getDefaultBlock(type: string): ContentBlock {
   switch (type) {
     case 'hero':
       return { type: 'hero', title: 'Page Title', subtitle: 'Page subtitle', showCTA: false };
+    case 'about-hero':
+      return {
+        type: 'about-hero',
+        sectionLabel: '– Resources',
+        tagline: 'Legal Resources',
+        description: 'Read the latest legal insights and updates from Liberty Law.',
+      };
+    case 'blog-posts':
+      return {
+        type: 'blog-posts',
+        sectionLabel: '– Blog',
+        heading: 'Latest Legal Insights',
+        description: 'Browse helpful legal information and updates from Liberty Law.',
+        postsPerPage: 9,
+      };
+    case 'about-cta':
+      return {
+        type: 'about-cta',
+        heading: 'We are ready to help you. Connect with us.',
+        description: 'Committed to achieving the best possible outcome for your situation.',
+        primaryButton: { label: 'Call Us 24/7', phone: '630-449-4800' },
+        secondaryButton: { label: 'Contact Us', sublabel: 'Free Consultation', link: '/contact/' },
+      };
     case 'heading':
       return { type: 'heading', level: 2, text: 'Section Heading' };
     case 'paragraph':
@@ -236,6 +263,83 @@ function BlockFields({ block, onUpdate }: { block: ContentBlock; onUpdate: (upda
           <div className="flex items-center gap-2">
             <Switch checked={block.showCTA || false} onCheckedChange={(checked) => onUpdate({ showCTA: checked })} />
             <Label>Show Call-to-Action Button</Label>
+          </div>
+        </div>
+      );
+
+    case 'about-hero':
+      return (
+        <div className="space-y-4">
+          <div>
+            <Label>Section Label</Label>
+            <Input value={block.sectionLabel} onChange={(e) => onUpdate({ sectionLabel: e.target.value })} />
+          </div>
+          <div>
+            <Label>Tagline / Main Heading</Label>
+            <Input value={block.tagline} onChange={(e) => onUpdate({ tagline: e.target.value })} />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Textarea value={block.description} onChange={(e) => onUpdate({ description: e.target.value })} rows={4} />
+          </div>
+        </div>
+      );
+
+    case 'blog-posts':
+      return (
+        <div className="space-y-4">
+          <div>
+            <Label>Section Label</Label>
+            <Input value={block.sectionLabel || ''} onChange={(e) => onUpdate({ sectionLabel: e.target.value })} />
+          </div>
+          <div>
+            <Label>Heading</Label>
+            <Input value={block.heading} onChange={(e) => onUpdate({ heading: e.target.value })} />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Textarea value={block.description || ''} onChange={(e) => onUpdate({ description: e.target.value })} rows={3} />
+          </div>
+          <div>
+            <Label>Posts Per Page</Label>
+            <Input type="number" min={1} max={24} value={block.postsPerPage || 9} onChange={(e) => onUpdate({ postsPerPage: Number(e.target.value) || 9 })} />
+            <p className="text-xs text-gray-500 mt-1">Use 9 for three rows of three posts before pagination.</p>
+          </div>
+        </div>
+      );
+
+    case 'about-cta':
+      return (
+        <div className="space-y-4">
+          <div>
+            <Label>Heading</Label>
+            <Input value={block.heading} onChange={(e) => onUpdate({ heading: e.target.value })} />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <Textarea value={block.description} onChange={(e) => onUpdate({ description: e.target.value })} rows={3} />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label>Phone Button Label</Label>
+              <Input value={block.primaryButton.label} onChange={(e) => onUpdate({ primaryButton: { ...block.primaryButton, label: e.target.value } })} />
+            </div>
+            <div>
+              <Label>Phone Number</Label>
+              <Input value={block.primaryButton.phone} onChange={(e) => onUpdate({ primaryButton: { ...block.primaryButton, phone: e.target.value } })} />
+            </div>
+            <div>
+              <Label>Secondary Button Label</Label>
+              <Input value={block.secondaryButton.label} onChange={(e) => onUpdate({ secondaryButton: { ...block.secondaryButton, label: e.target.value } })} />
+            </div>
+            <div>
+              <Label>Secondary Button Sublabel</Label>
+              <Input value={block.secondaryButton.sublabel} onChange={(e) => onUpdate({ secondaryButton: { ...block.secondaryButton, sublabel: e.target.value } })} />
+            </div>
+            <div className="md:col-span-2">
+              <Label>Secondary Button Link</Label>
+              <Input value={block.secondaryButton.link} onChange={(e) => onUpdate({ secondaryButton: { ...block.secondaryButton, link: e.target.value } })} />
+            </div>
           </div>
         </div>
       );

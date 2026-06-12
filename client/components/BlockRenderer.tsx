@@ -1,8 +1,14 @@
+import { useState } from "react";
 import type { ContentBlock } from "@/lib/database.types";
 import { getImageAlt } from "@site/lib/utils/imageAlt";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Star, Phone } from "lucide-react";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
+import CallBox from "@site/components/shared/CallBox";
+import PostCard from "@site/components/posts/PostCard";
+import { usePublishedPosts } from "@site/hooks/usePostsContent";
+import { useGlobalPhone } from "@site/contexts/SiteSettingsContext";
+import { Star, Phone, Calendar } from "lucide-react";
 import {
   Car,
   Truck,
@@ -65,6 +71,12 @@ function RenderBlock({
   switch (block.type) {
     case "hero":
       return <HeroBlock block={block} isPreview={isPreview} />;
+    case "about-hero":
+      return <AboutHeroBlock block={block} />;
+    case "blog-posts":
+      return <BlogPostsBlock block={block} />;
+    case "about-cta":
+      return <AboutCtaBlock block={block} />;
     case "heading":
       return <HeadingBlock block={block} />;
     case "paragraph":
@@ -138,6 +150,147 @@ function HeroBlock({
         )}
       </div>
     </section>
+  );
+}
+
+function AboutHeroBlock({
+  block,
+}: {
+  block: Extract<ContentBlock, { type: "about-hero" }>;
+}) {
+  const { phoneDisplay, phoneLabel, phoneNumber } = useGlobalPhone();
+
+  return (
+    <div className="bg-law-dark pt-[30px] md:pt-[54px] pb-[30px] md:pb-[54px]">
+      <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%]">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-[5%]">
+          <div className="lg:w-[65%]">
+            {block.sectionLabel && (
+              <h1 className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-law-accent mb-[10px]">
+                {block.sectionLabel}
+              </h1>
+            )}
+            <p className="font-playfair text-[clamp(2.5rem,7vw,68.8px)] font-light leading-[1.2] text-white mb-[20px] md:mb-[30px]">
+              {block.tagline}
+            </p>
+            {block.description && (
+              <SafeHtml html={block.description} className="font-outfit text-[20px] leading-[30px] text-white/90" />
+            )}
+          </div>
+          <div className="lg:w-[30%] flex items-center">
+            <CallBox icon={Phone} title={phoneLabel} subtitle={phoneDisplay} href={`tel:${phoneNumber}`} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function BlogPostsBlock({
+  block,
+}: {
+  block: Extract<ContentBlock, { type: "blog-posts" }>;
+}) {
+  const { payload, isLoading } = usePublishedPosts();
+  const [page, setPage] = useState(1);
+  const posts = payload?.posts || [];
+  const perPage = Math.max(1, block.postsPerPage || 9);
+  const totalPages = Math.max(1, Math.ceil(posts.length / perPage));
+  const currentPage = Math.min(page, totalPages);
+  const visiblePosts = posts.slice((currentPage - 1) * perPage, currentPage * perPage);
+
+  return (
+    <section className="bg-gray-50 py-[45px] md:py-[70px]">
+      <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[85%]">
+        <div className="text-center mb-[30px] md:mb-[50px]">
+          {block.sectionLabel && (
+            <p className="font-outfit text-[18px] md:text-[24px] leading-tight md:leading-[36px] text-law-accent mb-[10px]">
+              {block.sectionLabel}
+            </p>
+          )}
+          <h2 className="font-playfair text-[32px] md:text-[48px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark">
+            {block.heading}
+          </h2>
+          {block.description && (
+            <p className="font-outfit text-[20px] leading-[30px] text-black/70 mt-[15px] max-w-[760px] mx-auto">
+              {block.description}
+            </p>
+          )}
+        </div>
+
+        {isLoading ? (
+          <p className="font-outfit text-center text-black/60">Loading posts...</p>
+        ) : visiblePosts.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7">
+              {visiblePosts.map((post) => (
+                <PostCard key={post.id} post={post} />
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setPage((value) => Math.max(1, value - 1))}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </Button>
+                {Array.from({ length: totalPages }, (_, index) => index + 1).map((pageNumber) => (
+                  <Button
+                    key={pageNumber}
+                    type="button"
+                    variant={pageNumber === currentPage ? "default" : "outline"}
+                    onClick={() => setPage(pageNumber)}
+                    className={pageNumber === currentPage ? "bg-law-accent hover:bg-law-dark" : ""}
+                  >
+                    {pageNumber}
+                  </Button>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </Button>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="bg-white p-10 text-center shadow-sm ring-1 ring-black/10">
+            <h3 className="font-playfair text-[32px] text-law-dark">No posts published yet</h3>
+            <p className="mt-3 font-outfit text-[18px] text-black/70">Published posts will appear here automatically.</p>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function AboutCtaBlock({
+  block,
+}: {
+  block: Extract<ContentBlock, { type: "about-cta" }>;
+}) {
+  return (
+    <div className="bg-law-accent py-[40px] md:py-[60px]">
+      <div className="max-w-[2560px] mx-auto w-[95%] md:w-[90%] lg:w-[80%]">
+        <div className="text-center mb-[30px] md:mb-[40px]">
+          <h2 className="font-playfair text-[36px] md:text-[48px] lg:text-[60px] leading-tight text-white pb-[15px]">
+            {block.heading}
+          </h2>
+          <SafeHtml html={block.description} className="font-outfit text-[20px] leading-[30px] text-white/80" />
+        </div>
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8 justify-center items-center md:items-start">
+          <CallBox icon={Phone} title={block.primaryButton.label} subtitle={block.primaryButton.phone} href={`tel:${block.primaryButton.phone.replace(/\D/g, "")}`} className="bg-law-accent-dark hover:bg-black" variant="dark" />
+          <CallBox icon={Calendar} title={block.secondaryButton.label} subtitle={block.secondaryButton.sublabel} link={block.secondaryButton.link} className="bg-law-accent-dark hover:bg-black" variant="dark" />
+        </div>
+      </div>
+    </div>
   );
 }
 

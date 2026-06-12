@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { type DragEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 import type {
@@ -56,6 +56,8 @@ export default function AdminSiteSettings() {
   const [settings, setSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
   const [settingsId, setSettingsId] = useState<string | null>(null);
   const [expandedNavItems, setExpandedNavItems] = useState<Set<number>>(new Set());
+  const [draggedNavIndex, setDraggedNavIndex] = useState<number | null>(null);
+  const [dragOverNavIndex, setDragOverNavIndex] = useState<number | null>(null);
   const { isAdmin, isLoading: roleLoading } = useUserRole();
 
   useEffect(() => {
@@ -120,6 +122,77 @@ export default function AdminSiteSettings() {
     setSettings({ ...settings, ...updates });
   };
 
+  const normalizeNavOrder = (items: NavigationItem[]) =>
+    items.map((item, index) => ({ ...item, order: index + 1 }));
+
+  const remapExpandedNavItems = (fromIndex: number, toIndex: number) => {
+    setExpandedNavItems((prev) => {
+      const next = new Set<number>();
+      prev.forEach((index) => {
+        if (index === fromIndex) {
+          next.add(toIndex);
+        } else if (fromIndex < toIndex && index > fromIndex && index <= toIndex) {
+          next.add(index - 1);
+        } else if (fromIndex > toIndex && index >= toIndex && index < fromIndex) {
+          next.add(index + 1);
+        } else {
+          next.add(index);
+        }
+      });
+      return next;
+    });
+  };
+
+  const handleNavDragStart = (
+    event: DragEvent<HTMLDivElement>,
+    index: number,
+  ) => {
+    setDraggedNavIndex(index);
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", String(index));
+  };
+
+  const handleNavDragOver = (
+    event: DragEvent<HTMLDivElement>,
+    index: number,
+  ) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    if (draggedNavIndex !== null && draggedNavIndex !== index) {
+      setDragOverNavIndex(index);
+    }
+  };
+
+  const handleNavDrop = (
+    event: DragEvent<HTMLDivElement>,
+    toIndex: number,
+  ) => {
+    event.preventDefault();
+    const transferredIndex = Number.parseInt(
+      event.dataTransfer.getData("text/plain"),
+      10,
+    );
+    const fromIndex = draggedNavIndex ?? transferredIndex;
+
+    setDraggedNavIndex(null);
+    setDragOverNavIndex(null);
+
+    if (!Number.isInteger(fromIndex) || fromIndex === toIndex) return;
+
+    const items = [...settings.navigationItems];
+    const [movedItem] = items.splice(fromIndex, 1);
+    if (!movedItem) return;
+
+    items.splice(toIndex, 0, movedItem);
+    remapExpandedNavItems(fromIndex, toIndex);
+    updateSettings({ navigationItems: normalizeNavOrder(items) });
+  };
+
+  const handleNavDragEnd = () => {
+    setDraggedNavIndex(null);
+    setDragOverNavIndex(null);
+  };
+
   // Navigation items handlers
   const addNavItem = () => {
     const newOrder = settings.navigationItems.length + 1;
@@ -145,7 +218,7 @@ export default function AdminSiteSettings() {
       prev.forEach((idx) => { if (idx < index) next.add(idx); else if (idx > index) next.add(idx - 1); });
       return next;
     });
-    updateSettings({ navigationItems: items });
+    updateSettings({ navigationItems: normalizeNavOrder(items) });
   };
 
   // Nav child item handlers
@@ -444,11 +517,26 @@ export default function AdminSiteSettings() {
                 return (
                   <div
                     key={index}
-                    className="border border-gray-200 rounded-lg overflow-hidden"
+                    onDragOver={(event) => handleNavDragOver(event, index)}
+                    onDrop={(event) => handleNavDrop(event, index)}
+                    className={`border rounded-lg overflow-hidden transition-colors ${
+                      dragOverNavIndex === index
+                        ? "border-blue-400 bg-blue-50/40"
+                        : "border-gray-200"
+                    } ${draggedNavIndex === index ? "opacity-60" : ""}`}
                   >
                     {/* Parent row */}
                     <div className="flex items-center gap-3 p-3 bg-gray-50">
-                      <GripVertical className="h-5 w-5 text-gray-400 cursor-move flex-shrink-0" />
+                      <div
+                        draggable
+                        onDragStart={(event) => handleNavDragStart(event, index)}
+                        onDragEnd={handleNavDragEnd}
+                        className="flex h-8 w-6 cursor-grab items-center justify-center text-gray-400 active:cursor-grabbing"
+                        title="Drag to reorder"
+                        aria-label="Drag to reorder navigation item"
+                      >
+                        <GripVertical className="h-5 w-5" />
+                      </div>
                       <div className="flex-1 grid grid-cols-3 gap-3">
                         <Input
                           value={item.label}

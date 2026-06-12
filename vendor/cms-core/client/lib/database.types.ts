@@ -6,6 +6,26 @@ export type ContentBlock =
       backgroundImage?: string;
       showCTA?: boolean;
     }
+  | {
+      type: "about-hero";
+      sectionLabel: string;
+      tagline: string;
+      description: string;
+    }
+  | {
+      type: "blog-posts";
+      sectionLabel?: string;
+      heading: string;
+      description?: string;
+      postsPerPage?: number;
+    }
+  | {
+      type: "about-cta";
+      heading: string;
+      description: string;
+      primaryButton: { label: string; phone: string };
+      secondaryButton: { label: string; sublabel: string; link: string };
+    }
   | { type: "heading"; level: 1 | 2 | 3; text: string }
   | { type: "paragraph"; content: string }
   | { type: "bullets"; items: string[] }
