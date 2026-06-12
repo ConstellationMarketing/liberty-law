@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Calendar, Loader2, User } from "lucide-react";
 import Layout from "@site/components/layout/Layout";
 import Seo from "@site/components/Seo";
@@ -17,7 +17,9 @@ function formatDate(date: string) {
 }
 
 export default function PostPage() {
-  const { slug = "" } = useParams<{ slug: string }>();
+  const { slug: routeSlug = "" } = useParams<{ slug: string }>();
+  const location = useLocation();
+  const slug = routeSlug || location.pathname.replace(/^\/+|\/+$/g, "");
   const { payload, isLoading, notFound } = usePostContent(slug);
   const post = payload?.post;
 
@@ -51,7 +53,7 @@ export default function PostPage() {
       <Seo
         title={post.metaTitle || post.title}
         description={post.metaDescription || post.excerpt}
-        canonical={`/posts/${post.slug}/`}
+        canonical={`/${post.slug}/`}
         image={post.featuredImage || undefined}
       />
 

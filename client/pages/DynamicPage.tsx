@@ -9,6 +9,7 @@ import { parseSchemaTypes } from "@site/lib/schemaHelpers";
 import AboutRenderer from "@site/components/dynamic/AboutRenderer";
 import SimpleRenderer from "@site/components/dynamic/SimpleRenderer";
 import PracticeRenderer from "@site/components/dynamic/PracticeRenderer";
+import PostPage from "@site/pages/PostPage";
 import NotFound from "@site/pages/NotFound";
 import { getConfiguredSiteUrl } from "@site/lib/runtimeEnv";
 
@@ -29,6 +30,11 @@ export default function DynamicPage() {
   }
 
   if (notFound || !page) {
+    const slug = location.pathname.replace(/^\/+|\/+$/g, "");
+    if (slug && !slug.includes("/")) {
+      return <PostPage />;
+    }
+
     return <NotFound />;
   }
 

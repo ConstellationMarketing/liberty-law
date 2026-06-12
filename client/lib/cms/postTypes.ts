@@ -121,7 +121,7 @@ export function normalizeSlug(value: string): string {
 }
 
 export function postUrl(slug: string): string {
-  return `/posts/${normalizeSlug(slug)}/`;
+  return `/${normalizeSlug(slug)}/`;
 }
 
 export function categoryUrl(slug: string): string {

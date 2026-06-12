@@ -175,7 +175,7 @@ export default function AdminPostEdit() {
               onBlur={(e) => updatePost({ slug: normalizeSlug(e.target.value) })}
               placeholder="my-post-slug"
             />
-            <p className="text-xs text-gray-500">Public URL: /posts/{normalizeSlug(post.slug || post.title)}/</p>
+            <p className="text-xs text-gray-500">Public URL: /{normalizeSlug(post.slug || post.title)}/</p>
           </div>
           <div className="space-y-2">
             <Label htmlFor="publishDate">Publish Date</Label>

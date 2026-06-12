@@ -9,7 +9,6 @@ import TermsPage from "@site/pages/TermsPage";
 import ComplaintsPage from "@site/pages/ComplaintsPage";
 import PracticeAreaPage from "@site/pages/PracticeAreaPage";
 import PostsPage from "@site/pages/PostsPage";
-import PostPage from "@site/pages/PostPage";
 import PostCategoryPage from "@site/pages/PostCategoryPage";
 import DynamicPage from "@site/pages/DynamicPage";
 
@@ -23,7 +22,6 @@ export default function PublicRoutes() {
       <Route path="/practice-areas" element={<PracticeAreas />} />
       <Route path="/practice-areas/:slug" element={<PracticeAreaPage />} />
       <Route path="/posts" element={<PostsPage />} />
-      <Route path="/posts/:slug" element={<PostPage />} />
       <Route path="/category/:slug" element={<PostCategoryPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />

@@ -89,7 +89,7 @@ export const handleSitemap: RequestHandler = async (_req, res) => {
 
       if (!postsError && posts) {
         for (const post of posts) {
-          const normalizedPath = normalizeSlash(`/posts/${post.slug}/`);
+          const normalizedPath = normalizeSlash(`/${post.slug}/`);
           if (seenPaths.has(normalizedPath)) continue;
           seenPaths.add(normalizedPath);
           urls.push({

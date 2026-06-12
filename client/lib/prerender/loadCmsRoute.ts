@@ -29,11 +29,13 @@ function getPracticeSlugFromPath(routePath: string) {
 
 function getPostSlugFromPath(routePath: string) {
   const normalized = normalizeRoutePath(routePath);
-  if (!normalized.startsWith("/posts/") || normalized === "/posts/") {
+  const slug = normalized.replace(/^\/+|\/+$/g, "");
+
+  if (!slug || slug.includes("/")) {
     return null;
   }
 
-  return normalized.replace(/^\/posts\//, "").replace(/\/+$/, "");
+  return slug;
 }
 
 function getCategorySlugFromPath(routePath: string) {
@@ -137,18 +139,6 @@ async function buildRoutePayload(
     }
   }
 
-  const postSlug = getPostSlugFromPath(normalizedPath);
-  if (postSlug) {
-    const postPayload = await loadPostBySlug(postSlug);
-    if (postPayload) {
-      return {
-        kind: "post",
-        payload: postPayload,
-        supportingData: {},
-      };
-    }
-  }
-
   const categorySlug = getCategorySlugFromPath(normalizedPath);
   if (categorySlug) {
     const categoryPayload = await loadCategoryBySlug(categorySlug);
@@ -162,21 +152,33 @@ async function buildRoutePayload(
   }
 
   const dynamicPayload = await loadDynamicPageContent(normalizedPath);
-  if (!dynamicPayload) {
-    return null;
+  if (dynamicPayload) {
+    const requiresHomeTestimonials = dynamicPayload.contentTemplate === "practice";
+
+    return {
+      kind: "dynamic",
+      payload: dynamicPayload,
+      supportingData: {
+        ...(requiresHomeTestimonials
+          ? { homeTestimonials: await loadHomeTestimonials() }
+          : {}),
+      },
+    };
   }
 
-  const requiresHomeTestimonials = dynamicPayload.contentTemplate === "practice";
+  const postSlug = getPostSlugFromPath(normalizedPath);
+  if (postSlug) {
+    const postPayload = await loadPostBySlug(postSlug);
+    if (postPayload) {
+      return {
+        kind: "post",
+        payload: postPayload,
+        supportingData: {},
+      };
+    }
+  }
 
-  return {
-    kind: "dynamic",
-    payload: dynamicPayload,
-    supportingData: {
-      ...(requiresHomeTestimonials
-        ? { homeTestimonials: await loadHomeTestimonials() }
-        : {}),
-    },
-  };
+  return null;
 }
 
 export async function loadCmsPreloadedState(
