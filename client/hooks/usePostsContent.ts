@@ -175,7 +175,11 @@ export async function loadCategoryBySlug(slug: string): Promise<CategoryPayload 
 
 function useAsyncPayload<T>(cacheKind: string, loader: () => Promise<T | null>, deps: DependencyList = []) {
   const preloadedState = usePreloadedState();
-  const normalizedPath = normalizeRoutePath(typeof window !== "undefined" ? window.location.pathname : "");
+  const normalizedPath = normalizeRoutePath(
+    typeof window !== "undefined"
+      ? window.location.pathname
+      : preloadedState?.routePath || "",
+  );
   const preloaded =
     preloadedState?.routeData?.kind === cacheKind &&
     normalizeRoutePath(preloadedState.routePath) === normalizedPath

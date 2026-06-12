@@ -81,6 +81,9 @@ export async function loadDynamicPageContent(urlPath: string): Promise<DynamicPa
 export function useDynamicPageContent(urlPath: string): UseDynamicPageResult {
   const preloadedState = usePreloadedState();
   const cleanPath = normalizeDynamicPath(urlPath);
+  const isPreloadedPostRoute =
+    preloadedState?.routeData?.kind === "post" &&
+    normalizeRoutePath(preloadedState.routePath) === cleanPath;
   const preloaded =
     preloadedState?.routeData?.kind === "dynamic" &&
     normalizeRoutePath(preloadedState.routePath) === cleanPath
@@ -88,13 +91,20 @@ export function useDynamicPageContent(urlPath: string): UseDynamicPageResult {
       : null;
 
   const [page, setPage] = useState<DynamicPageData | null>(preloaded || null);
-  const [isLoading, setIsLoading] = useState(!preloaded);
-  const [notFound, setNotFound] = useState(false);
+  const [isLoading, setIsLoading] = useState(!preloaded && !isPreloadedPostRoute);
+  const [notFound, setNotFound] = useState(isPreloadedPostRoute);
 
   useEffect(() => {
     let isMounted = true;
 
     async function fetchPage() {
+      if (isPreloadedPostRoute) {
+        setPage(null);
+        setIsLoading(false);
+        setNotFound(true);
+        return;
+      }
+
       if (preloaded) {
         cache.set(cleanPath, preloaded);
         if (isMounted) {
@@ -139,7 +149,7 @@ export function useDynamicPageContent(urlPath: string): UseDynamicPageResult {
     return () => {
       isMounted = false;
     };
-  }, [cleanPath, preloaded, urlPath]);
+  }, [cleanPath, isPreloadedPostRoute, preloaded, urlPath]);
 
   return { page, isLoading, notFound };
 }
