@@ -3,7 +3,8 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
-import { Bold, Italic, List, ListOrdered, Heading2, Undo, Redo, Link as LinkIcon, Unlink, Check, X } from 'lucide-react';
+import Underline from '@tiptap/extension-underline';
+import { Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, Heading2, Undo, Redo, Link as LinkIcon, Unlink, Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface RichTextEditorProps {
@@ -25,7 +26,9 @@ export default function RichTextEditor({
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        link: false,
+      }),
       Placeholder.configure({
         placeholder,
       }),
@@ -35,6 +38,7 @@ export default function RichTextEditor({
           rel: 'noopener noreferrer',
         },
       }),
+      Underline,
     ],
     content: value,
     onUpdate: ({ editor }) => {
@@ -59,7 +63,8 @@ export default function RichTextEditor({
     if (!editor) return;
 
     if (linkUrl.trim() === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+      editor.chain().focus().extendMarkRange('link').unsetLink().unsetUnderline().run();
+      onChange(editor.getHTML());
     } else {
       editor.chain().focus().extendMarkRange('link').setLink({ href: linkUrl.trim() }).run();
     }
@@ -103,6 +108,17 @@ export default function RichTextEditor({
           title="Italic"
         >
           <Italic className="h-4 w-4" />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          className={cn(
+            'p-2 rounded hover:bg-gray-200 transition-colors',
+            editor.isActive('underline') && 'bg-gray-300'
+          )}
+          title="Underline"
+        >
+          <UnderlineIcon className="h-4 w-4" />
         </button>
         <div className="w-px h-6 bg-gray-300 mx-1" />
         <button
@@ -154,7 +170,10 @@ export default function RichTextEditor({
         {editor.isActive('link') && (
           <button
             type="button"
-            onClick={() => editor.chain().focus().unsetLink().run()}
+            onClick={() => {
+              editor.chain().focus().extendMarkRange('link').unsetLink().unsetUnderline().run();
+              onChange(editor.getHTML());
+            }}
             className="p-2 rounded hover:bg-gray-200 transition-colors"
             title="Remove Link"
           >

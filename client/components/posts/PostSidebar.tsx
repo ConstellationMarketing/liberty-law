@@ -87,14 +87,14 @@ export default function PostSidebar({
       )}
 
       {settings.showCtaBox && (settings.ctaHeading || settings.ctaDescription) && (
-        <SidebarCard className="bg-law-dark text-white ring-0">
+        <div className="bg-law-dark p-6 text-white shadow-sm ring-1 ring-law-accent/30">
           {settings.ctaHeading && (
             <h2 className="font-playfair text-[28px] leading-tight text-white">
               {settings.ctaHeading}
             </h2>
           )}
           {settings.ctaDescription && (
-            <p className="mt-3 font-outfit text-[16px] leading-[26px] text-white/80">
+            <p className="mt-3 font-outfit text-[16px] leading-[26px] text-white/85">
               {settings.ctaDescription}
             </p>
           )}
@@ -106,7 +106,7 @@ export default function PostSidebar({
               {settings.ctaButtonText}
             </Link>
           )}
-        </SidebarCard>
+        </div>
       )}
     </aside>
   );
