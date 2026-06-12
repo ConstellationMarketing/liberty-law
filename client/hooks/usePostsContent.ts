@@ -1,4 +1,4 @@
-import type { DependencyList } from "react";
+import { useEffect, useState, type DependencyList } from "react";
 import { getSupabaseRequestKey, getSupabaseUrl } from "@site/lib/runtimeEnv";
 import { normalizeRoutePath, usePreloadedState } from "@site/contexts/PreloadedStateContext";
 import type { PostCategoryRow, PostRow, PostSidebarSettingsRow } from "@/lib/database.types";
