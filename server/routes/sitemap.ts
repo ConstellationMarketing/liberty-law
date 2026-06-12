@@ -8,6 +8,7 @@ const STATIC_ROUTES = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/about/", changefreq: "monthly", priority: "0.8" },
   { path: "/practice-areas/", changefreq: "monthly", priority: "0.9" },
+  { path: "/posts/", changefreq: "weekly", priority: "0.7" },
   { path: "/contact/", changefreq: "monthly", priority: "0.7" },
 ];
 
@@ -76,6 +77,49 @@ export const handleSitemap: RequestHandler = async (_req, res) => {
               : undefined,
             changefreq: "monthly",
             priority: "0.6",
+          });
+        }
+      }
+
+      const { data: posts, error: postsError } = await supabase
+        .from("posts")
+        .select("slug, updated_at")
+        .eq("status", "published")
+        .order("publish_date", { ascending: false });
+
+      if (!postsError && posts) {
+        for (const post of posts) {
+          const normalizedPath = normalizeSlash(`/posts/${post.slug}/`);
+          if (seenPaths.has(normalizedPath)) continue;
+          seenPaths.add(normalizedPath);
+          urls.push({
+            loc: `${SITE_URL}${normalizedPath}`,
+            lastmod: post.updated_at
+              ? new Date(post.updated_at).toISOString().split("T")[0]
+              : undefined,
+            changefreq: "monthly",
+            priority: "0.6",
+          });
+        }
+      }
+
+      const { data: categories, error: categoriesError } = await supabase
+        .from("post_categories")
+        .select("slug, updated_at")
+        .order("slug");
+
+      if (!categoriesError && categories) {
+        for (const category of categories) {
+          const normalizedPath = normalizeSlash(`/category/${category.slug}/`);
+          if (seenPaths.has(normalizedPath)) continue;
+          seenPaths.add(normalizedPath);
+          urls.push({
+            loc: `${SITE_URL}${normalizedPath}`,
+            lastmod: category.updated_at
+              ? new Date(category.updated_at).toISOString().split("T")[0]
+              : undefined,
+            changefreq: "monthly",
+            priority: "0.5",
           });
         }
       }

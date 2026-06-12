@@ -11,6 +11,9 @@ import {
   Replace,
   Image,
   Users,
+  Newspaper,
+  Tags,
+  PanelRight,
 } from "lucide-react";
 import { supabase } from "../../lib/supabase";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +31,9 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Pages", href: "/admin/pages", icon: FileText },
+  { label: "Posts", href: "/admin/posts", icon: Newspaper },
+  { label: "Post Categories", href: "/admin/post-categories", icon: Tags },
+  { label: "Post Sidebar", href: "/admin/post-sidebar", icon: PanelRight },
   { label: "Media Library", href: "/admin/media", icon: Image },
   { label: "Site Settings", href: "/admin/site-settings", icon: Settings },
   { label: "Redirects", href: "/admin/redirects", icon: ArrowRightLeft, adminOnly: true },

@@ -125,6 +125,64 @@ export interface PageRevision {
   created_by: string | null;
 }
 
+export type PostStatus = "draft" | "published";
+
+export interface PostCategoryRow {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  featured_image: string;
+  image_alt: string;
+  meta_title: string;
+  meta_description: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PostRow {
+  id: string;
+  title: string;
+  slug: string;
+  meta_title: string;
+  meta_description: string;
+  featured_image: string;
+  featured_image_alt: string;
+  excerpt: string;
+  publish_date: string;
+  author_name: string;
+  category_id: string | null;
+  body: string;
+  cta_button_text: string;
+  cta_button_link: string;
+  status: PostStatus;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PostSidebarSettingsRow {
+  id: string;
+  settings_key: string;
+  intro_heading: string;
+  intro_description: string;
+  intro_button_text: string;
+  intro_button_link: string;
+  show_recent_posts: boolean;
+  recent_posts_heading: string;
+  recent_posts_limit: number;
+  show_categories: boolean;
+  categories_heading: string;
+  show_cta_box: boolean;
+  cta_heading: string;
+  cta_description: string;
+  cta_button_text: string;
+  cta_button_link: string;
+  posts_meta_title: string;
+  posts_meta_description: string;
+  updated_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -159,6 +217,32 @@ export interface Database {
         Row: PageRevision;
         Insert: Omit<PageRevision, "id" | "created_at"> & { id?: string };
         Update: Partial<Omit<PageRevision, "id" | "created_at">>;
+      };
+      post_categories: {
+        Row: PostCategoryRow;
+        Insert: Omit<PostCategoryRow, "id" | "created_at" | "updated_at"> & {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<PostCategoryRow, "id" | "created_at">>;
+      };
+      posts: {
+        Row: PostRow;
+        Insert: Omit<PostRow, "id" | "created_at" | "updated_at"> & {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<PostRow, "id" | "created_at">>;
+      };
+      post_sidebar_settings: {
+        Row: PostSidebarSettingsRow;
+        Insert: Omit<PostSidebarSettingsRow, "id" | "updated_at"> & {
+          id?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<PostSidebarSettingsRow, "id">>;
       };
     };
   };

@@ -9,6 +9,7 @@ import { getPracticePagePath, loadPracticePageContent } from "@site/hooks/usePra
 import { loadDynamicPageContent } from "@site/hooks/useDynamicPageContent";
 import { loadSimplePageContent } from "@site/hooks/useSimplePageContent";
 import { loadHomeTestimonials } from "@site/hooks/useHomeTestimonials";
+import { loadCategoryBySlug, loadPostBySlug, loadPublishedPosts } from "@site/hooks/usePostsContent";
 import {
   defaultComplaintsContent,
   defaultPrivacyPolicyContent,
@@ -24,6 +25,24 @@ function getPracticeSlugFromPath(routePath: string) {
   return normalized
     .replace(/^\/practice-areas\//, "")
     .replace(/\/+$/, "");
+}
+
+function getPostSlugFromPath(routePath: string) {
+  const normalized = normalizeRoutePath(routePath);
+  if (!normalized.startsWith("/posts/") || normalized === "/posts/") {
+    return null;
+  }
+
+  return normalized.replace(/^\/posts\//, "").replace(/\/+$/, "");
+}
+
+function getCategorySlugFromPath(routePath: string) {
+  const normalized = normalizeRoutePath(routePath);
+  if (!normalized.startsWith("/category/") || normalized === "/category/") {
+    return null;
+  }
+
+  return normalized.replace(/^\/category\//, "").replace(/\/+$/, "");
 }
 
 async function buildRoutePayload(
@@ -59,6 +78,14 @@ async function buildRoutePayload(
     return {
       kind: "practice-areas",
       payload: await loadPracticeAreasContent(),
+      supportingData: {},
+    };
+  }
+
+  if (normalizedPath === "/posts/") {
+    return {
+      kind: "posts-index",
+      payload: await loadPublishedPosts(),
       supportingData: {},
     };
   }
@@ -106,6 +133,30 @@ async function buildRoutePayload(
         supportingData: {
           homeTestimonials: await loadHomeTestimonials(),
         },
+      };
+    }
+  }
+
+  const postSlug = getPostSlugFromPath(normalizedPath);
+  if (postSlug) {
+    const postPayload = await loadPostBySlug(postSlug);
+    if (postPayload) {
+      return {
+        kind: "post",
+        payload: postPayload,
+        supportingData: {},
+      };
+    }
+  }
+
+  const categorySlug = getCategorySlugFromPath(normalizedPath);
+  if (categorySlug) {
+    const categoryPayload = await loadCategoryBySlug(categorySlug);
+    if (categoryPayload) {
+      return {
+        kind: "post-category",
+        payload: categoryPayload,
+        supportingData: {},
       };
     }
   }

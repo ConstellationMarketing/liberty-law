@@ -8,6 +8,9 @@ export type PreloadedRouteKind =
   | "contact"
   | "practice-areas"
   | "practice-page"
+  | "posts-index"
+  | "post"
+  | "post-category"
   | "dynamic"
   | "simple";
 
