@@ -154,6 +154,16 @@ async function buildRoutePayload(
   const dynamicPayload = await loadDynamicPageContent(normalizedPath);
   if (dynamicPayload) {
     const requiresHomeTestimonials = dynamicPayload.contentTemplate === "practice";
+    const contentBlocks = Array.isArray(dynamicPayload.content)
+      ? dynamicPayload.content
+      : [];
+    const requiresPostsIndex = contentBlocks.some(
+      (block) =>
+        typeof block === "object" &&
+        block !== null &&
+        "type" in block &&
+        block.type === "blog-posts",
+    );
 
     return {
       kind: "dynamic",
@@ -161,6 +171,9 @@ async function buildRoutePayload(
       supportingData: {
         ...(requiresHomeTestimonials
           ? { homeTestimonials: await loadHomeTestimonials() }
+          : {}),
+        ...(requiresPostsIndex
+          ? { postsIndex: await loadPublishedPosts() }
           : {}),
       },
     };

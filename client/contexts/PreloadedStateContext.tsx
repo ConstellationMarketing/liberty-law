@@ -1,6 +1,7 @@
 import { createContext, useContext, type ReactNode } from "react";
 import type { TestimonialsContent } from "@site/lib/cms/homePageTypes";
 import type { SiteSettings } from "@site/lib/siteSettings";
+import type { PostCategory, PostContent, PostSidebarSettings } from "@site/lib/cms/postTypes";
 
 export type PreloadedRouteKind =
   | "home"
@@ -23,6 +24,11 @@ export interface CmsPreloadedState {
   siteSettings: SiteSettings | null;
   supportingData: {
     homeTestimonials?: TestimonialsContent | null;
+    postsIndex?: {
+      posts: PostContent[];
+      categories: PostCategory[];
+      sidebarSettings: PostSidebarSettings;
+    } | null;
   };
 }
 

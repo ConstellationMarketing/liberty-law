@@ -194,6 +194,29 @@ async function main() {
           addUnique(links, page.url_path, page.title || "");
         }
       }
+
+      // --- All published posts ---
+      const { data: posts } = await supabase
+        .from("posts")
+        .select("slug, title")
+        .eq("status", "published");
+
+      if (posts) {
+        for (const post of posts) {
+          addUnique(links, `/${post.slug}/`, post.title || "");
+        }
+      }
+
+      // --- All post categories ---
+      const { data: categories } = await supabase
+        .from("post_categories")
+        .select("slug, name");
+
+      if (categories) {
+        for (const category of categories) {
+          addUnique(links, `/category/${category.slug}/`, category.name || "");
+        }
+      }
     } catch (err) {
       console.warn("Supabase unavailable, using static links only:", err);
     }

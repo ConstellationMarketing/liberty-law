@@ -31,6 +31,29 @@ interface PublishedPage {
   updated_at: string;
 }
 
+interface PublishedPost {
+  id: string;
+  title: string;
+  slug: string;
+  updated_at: string;
+}
+
+interface PublishedPostCategory {
+  id: string;
+  name: string;
+  slug: string;
+  updated_at: string;
+}
+
+interface SsgRoute {
+  routePath: string;
+  title: string;
+  lastmod?: string;
+  noindex?: boolean;
+  changefreq: string;
+  priority: string;
+}
+
 interface Redirect {
   from_path: string;
   to_path: string;
@@ -133,16 +156,25 @@ function escapeHtml(text: string): string {
     .replace(/'/g, "&#039;");
 }
 
-function generateSitemap(pages: PublishedPage[], siteUrl: string): string {
-  const urls = pages
-    .filter((page) => !page.noindex)
-    .map((page) => {
-      const routePath = ensureTrailingSlashPath(page.url_path);
+function generateSitemap(routes: SsgRoute[], siteUrl: string): string {
+  const seenPaths = new Set<string>();
+  const urls = routes
+    .filter((route) => !route.noindex)
+    .filter((route) => {
+      const normalizedPath = ensureTrailingSlashPath(route.routePath);
+      if (seenPaths.has(normalizedPath)) return false;
+      seenPaths.add(normalizedPath);
+      return true;
+    })
+    .map((route) => {
+      const routePath = ensureTrailingSlashPath(route.routePath);
+      const lastmod = route.lastmod
+        ? `\n    <lastmod>${new Date(route.lastmod).toISOString().split("T")[0]}</lastmod>`
+        : "";
       return `  <url>
-    <loc>${siteUrl}${routePath}</loc>
-    <lastmod>${new Date(page.updated_at).toISOString().split("T")[0]}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>${routePath === "/" ? "1.0" : "0.8"}</priority>
+    <loc>${siteUrl}${routePath}</loc>${lastmod}
+    <changefreq>${route.changefreq}</changefreq>
+    <priority>${route.priority}</priority>
   </url>`;
     })
     .join("\n");
@@ -166,7 +198,58 @@ async function generateSSG() {
     process.exit(1);
   }
 
+  const { data: posts, error: postsError } = await supabase
+    .from("posts")
+    .select("id, title, slug, updated_at")
+    .eq("status", "published")
+    .order("publish_date", { ascending: false });
+
+  if (postsError) {
+    console.error("Error fetching posts:", postsError);
+    process.exit(1);
+  }
+
+  const { data: categories, error: categoriesError } = await supabase
+    .from("post_categories")
+    .select("id, name, slug, updated_at")
+    .order("slug");
+
+  if (categoriesError) {
+    console.error("Error fetching post categories:", categoriesError);
+    process.exit(1);
+  }
+
   console.log(`Found ${pages?.length || 0} published pages`);
+  console.log(`Found ${posts?.length || 0} published posts`);
+  console.log(`Found ${categories?.length || 0} post categories`);
+
+  const routeTargets: SsgRoute[] = [
+    ...((pages || []) as PublishedPage[]).map((page) => {
+      const routePath = ensureTrailingSlashPath(page.url_path);
+      return {
+        routePath,
+        title: page.title,
+        lastmod: page.updated_at,
+        noindex: page.noindex,
+        changefreq: "weekly",
+        priority: routePath === "/" ? "1.0" : "0.8",
+      };
+    }),
+    ...((posts || []) as PublishedPost[]).map((post) => ({
+      routePath: ensureTrailingSlashPath(`/${post.slug}/`),
+      title: post.title,
+      lastmod: post.updated_at,
+      changefreq: "monthly",
+      priority: "0.6",
+    })),
+    ...((categories || []) as PublishedPostCategory[]).map((category) => ({
+      routePath: ensureTrailingSlashPath(`/category/${category.slug}/`),
+      title: category.name,
+      lastmod: category.updated_at,
+      changefreq: "monthly",
+      priority: "0.5",
+    })),
+  ];
 
   const templatePath = path.join(process.cwd(), "dist/spa/index.html");
   if (!fs.existsSync(templatePath)) {
@@ -177,8 +260,13 @@ async function generateSSG() {
   const template = fs.readFileSync(templatePath, "utf-8");
   let resolvedSiteSettings: CmsPreloadedState["siteSettings"] = null;
 
-  for (const page of pages || []) {
-    const routePath = ensureTrailingSlashPath(page.url_path);
+  const generatedPaths = new Set<string>();
+
+  for (const routeTarget of routeTargets) {
+    const routePath = ensureTrailingSlashPath(routeTarget.routePath);
+    if (generatedPaths.has(routePath)) continue;
+    generatedPaths.add(routePath);
+
     const preloadedState = await loadCmsPreloadedState(routePath);
 
     if (!preloadedState) {
@@ -224,7 +312,7 @@ async function generateSSG() {
   const siteNoindex = resolvedSiteSettings?.siteNoindex ?? false;
 
   if (!siteNoindex && siteUrl) {
-    const sitemap = generateSitemap((pages || []) as PublishedPage[], siteUrl);
+    const sitemap = generateSitemap(routeTargets, siteUrl);
     fs.writeFileSync(path.join(process.cwd(), "dist/spa/sitemap.xml"), sitemap);
     console.log("Generated sitemap.xml");
   } else {

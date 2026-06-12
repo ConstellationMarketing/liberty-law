@@ -180,7 +180,10 @@ function useAsyncPayload<T>(cacheKind: string, loader: () => Promise<T | null>, 
     preloadedState?.routeData?.kind === cacheKind &&
     normalizeRoutePath(preloadedState.routePath) === normalizedPath
       ? (preloadedState.routeData.payload as T)
-      : null;
+      : cacheKind === "posts-index" &&
+          normalizeRoutePath(preloadedState?.routePath || "") === normalizedPath
+        ? (preloadedState?.supportingData.postsIndex as T | null) || null
+        : null;
 
   const [payload, setPayload] = useState<T | null>(preloaded || null);
   const [isLoading, setIsLoading] = useState(!preloaded);
