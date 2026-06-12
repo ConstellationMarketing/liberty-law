@@ -28,7 +28,7 @@ import { clearPostsCache } from "@site/hooks/usePostsContent";
 
 export default function AdminPostEdit() {
   const { id } = useParams<{ id: string }>();
-  const isNew = id === "new";
+  const isNew = !id || id === "new";
   const navigate = useNavigate();
   const [post, setPost] = useState<PostContent>(defaultPostContent);
   const [categories, setCategories] = useState<PostCategoryRow[]>([]);
