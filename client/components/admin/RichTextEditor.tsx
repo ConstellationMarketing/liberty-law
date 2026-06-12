@@ -4,7 +4,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
 import Underline from '@tiptap/extension-underline';
-import { Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, Heading2, Undo, Redo, Link as LinkIcon, Unlink, Check, X } from 'lucide-react';
+import { Bold, Italic, Underline as UnderlineIcon, List, ListOrdered, Undo, Redo, Link as LinkIcon, Unlink, Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface RichTextEditorProps {
@@ -14,6 +14,9 @@ interface RichTextEditorProps {
   className?: string;
 }
 
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+const headingLevels: HeadingLevel[] = [1, 2, 3, 4, 5, 6];
+
 export default function RichTextEditor({
   value,
   onChange,
@@ -22,12 +25,14 @@ export default function RichTextEditor({
 }: RichTextEditorProps) {
   const [showLinkInput, setShowLinkInput] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
+  const [blockFormat, setBlockFormat] = useState('paragraph');
   const linkInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         link: false,
+        underline: false,
       }),
       Placeholder.configure({
         placeholder,
@@ -51,6 +56,42 @@ export default function RichTextEditor({
       linkInputRef.current.focus();
     }
   }, [showLinkInput]);
+
+  useEffect(() => {
+    if (!editor) return;
+
+    const updateBlockFormat = () => {
+      const activeHeading = headingLevels.find((level) =>
+        editor.isActive('heading', { level }),
+      );
+      setBlockFormat(activeHeading ? `heading-${activeHeading}` : 'paragraph');
+    };
+
+    updateBlockFormat();
+    editor.on('selectionUpdate', updateBlockFormat);
+    editor.on('transaction', updateBlockFormat);
+
+    return () => {
+      editor.off('selectionUpdate', updateBlockFormat);
+      editor.off('transaction', updateBlockFormat);
+    };
+  }, [editor]);
+
+  const applyBlockFormat = useCallback((value: string) => {
+    if (!editor) return;
+
+    if (value === 'paragraph') {
+      editor.chain().focus().setParagraph().run();
+      setBlockFormat('paragraph');
+      return;
+    }
+
+    const level = Number(value.replace('heading-', '')) as HeadingLevel;
+    if (headingLevels.includes(level)) {
+      editor.chain().focus().setHeading({ level }).run();
+      setBlockFormat(value);
+    }
+  }, [editor]);
 
   const openLinkInput = useCallback(() => {
     if (!editor) return;
@@ -121,17 +162,20 @@ export default function RichTextEditor({
           <UnderlineIcon className="h-4 w-4" />
         </button>
         <div className="w-px h-6 bg-gray-300 mx-1" />
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('heading', { level: 2 }) && 'bg-gray-300'
-          )}
-          title="Heading"
+        <select
+          value={blockFormat}
+          onChange={(event) => applyBlockFormat(event.target.value)}
+          className="h-9 rounded border border-gray-300 bg-white px-2 font-outfit text-sm text-gray-700 outline-none transition-colors hover:bg-gray-50 focus:border-blue-400 focus:ring-1 focus:ring-blue-400"
+          title="Heading level"
+          aria-label="Heading level"
         >
-          <Heading2 className="h-4 w-4" />
-        </button>
+          <option value="paragraph">Paragraph</option>
+          {headingLevels.map((level) => (
+            <option key={level} value={`heading-${level}`}>
+              Heading {level} {level === 1 ? '(H1)' : `(H${level})`}
+            </option>
+          ))}
+        </select>
         <div className="w-px h-6 bg-gray-300 mx-1" />
         <button
           type="button"
