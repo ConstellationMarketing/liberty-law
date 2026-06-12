@@ -26,6 +26,33 @@ import {
 } from "@site/lib/cms/postTypes";
 import { clearPostsCache } from "@site/hooks/usePostsContent";
 
+function stripHtml(html: string) {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, " ")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function truncateDescription(text: string, maxLength = 155) {
+  if (text.length <= maxLength) return text;
+
+  const truncated = text.slice(0, maxLength + 1);
+  const lastSpace = truncated.lastIndexOf(" ");
+  const clean = (lastSpace > 100 ? truncated.slice(0, lastSpace) : truncated.slice(0, maxLength)).trim();
+  return clean.replace(/[,.!?;:]+$/, "") + "...";
+}
+
+function generatePostMetaDescription(post: PostContent) {
+  const source = stripHtml(post.excerpt || post.body || post.title);
+  return truncateDescription(source);
+}
+
 export default function AdminPostEdit() {
   const { id } = useParams<{ id: string }>();
   const isNew = !id || id === "new";
@@ -81,6 +108,16 @@ export default function AdminPostEdit() {
       title,
       slug: current.slug ? current.slug : normalizeSlug(title),
     }));
+  };
+
+  const handleGenerateMetaDescription = () => {
+    const generated = generatePostMetaDescription(post);
+    if (!generated) {
+      alert("Add post content before generating a meta description.");
+      return;
+    }
+
+    updatePost({ metaDescription: generated });
   };
 
   const handleSave = async () => {
@@ -217,8 +254,16 @@ export default function AdminPostEdit() {
             <Input id="metaTitle" value={post.metaTitle} onChange={(e) => updatePost({ metaTitle: e.target.value })} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="metaDescription">Meta Description</Label>
+            <div className="flex items-center justify-between gap-3">
+              <Label htmlFor="metaDescription">Meta Description</Label>
+              <Button type="button" variant="outline" size="sm" onClick={handleGenerateMetaDescription}>
+                Generate from Post Content
+              </Button>
+            </div>
             <Textarea id="metaDescription" value={post.metaDescription} onChange={(e) => updatePost({ metaDescription: e.target.value })} rows={3} />
+            <p className="text-xs text-gray-500">
+              This generator only applies to Posts and saves into this CMS field.
+            </p>
           </div>
         </CardContent>
       </Card>
