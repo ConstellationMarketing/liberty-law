@@ -146,6 +146,7 @@ export const handleGoogleReviews: RequestHandler = async (req, res) => {
     const minimumRating = clampNumber(req.query.minimumRating, 5, 1, 5);
     const start = clampNumber(req.query.start, 1, 1, 5);
     const count = clampNumber(req.query.count, 3, 1, 5);
+    const minWords = clampNumber(req.query.minWords, minimumReviewWords + 1, 1, 200);
     const nameDisplay = getNameDisplay(req.query.nameDisplay);
 
     const url = new URL(placesDetailsUrl);
@@ -180,7 +181,7 @@ export const handleGoogleReviews: RequestHandler = async (req, res) => {
       .filter(
         (review: GooglePlaceReview) =>
           Number(review.rating || 0) >= minimumRating &&
-          countWords(review.text) > minimumReviewWords,
+          countWords(review.text) >= minWords,
       )
       .slice(startIndex, startIndex + count)
       .map((review: GooglePlaceReview) => ({
@@ -193,7 +194,7 @@ export const handleGoogleReviews: RequestHandler = async (req, res) => {
       }))
       .filter((review) => review.text);
 
-    res.set("Cache-Control", "public, max-age=900, s-maxage=900");
+    res.set("Cache-Control", "no-store");
     return res.json({
       placeName: sanitizeText(result.name),
       rating: Number.isFinite(Number(result.rating)) ? Number(result.rating) : null,

@@ -27,6 +27,11 @@ interface GoogleReviewsSectionProps {
 const googleIconUrl =
   "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026032541-mxc63k-google-icon.webp";
 const maxDisplayedReviewWords = 55;
+const minimumReviewWords = 20;
+
+function getWordCount(text: string) {
+  return text.trim().split(/\s+/).filter(Boolean).length;
+}
 
 function limitWords(text: string, maxWords: number) {
   const words = text.trim().split(/\s+/).filter(Boolean);
@@ -140,6 +145,7 @@ export default function GoogleReviewsSection({ content }: GoogleReviewsSectionPr
       start: String(data.startReviewNumber || 1),
       count: String(data.displayCount || 3),
       nameDisplay: data.reviewerNameDisplay || "first",
+      minWords: String(minimumReviewWords + 1),
     });
 
     return `/api/google-reviews?${params.toString()}`;
@@ -163,7 +169,10 @@ export default function GoogleReviewsSection({ content }: GoogleReviewsSectionPr
       setReviewData(null);
 
       try {
-        const response = await fetch(requestUrl, { signal: controller.signal });
+        const response = await fetch(requestUrl, {
+          signal: controller.signal,
+          cache: "no-store",
+        });
         const payload = await response.json();
 
         if (!response.ok) {
@@ -191,7 +200,9 @@ export default function GoogleReviewsSection({ content }: GoogleReviewsSectionPr
     return null;
   }
 
-  const reviews = reviewData?.reviews || [];
+  const reviews = (reviewData?.reviews || []).filter(
+    (review) => getWordCount(review.text) > minimumReviewWords,
+  );
 
   return (
     <section className="bg-white pt-[54px]" aria-labelledby="google-reviews-heading">
