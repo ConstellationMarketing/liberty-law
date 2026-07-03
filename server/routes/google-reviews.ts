@@ -1,7 +1,9 @@
 import { RequestHandler } from "express";
+import { createClient } from "@supabase/supabase-js";
 
 const placesDetailsUrl = "https://maps.googleapis.com/maps/api/place/details/json";
 const allowedNameDisplays = new Set(["full", "first", "initials", "hidden"]);
+const placeIdCache = new Map<string, { allowed: boolean; expiresAt: number }>();
 
 type ReviewerNameDisplay = "full" | "first" | "initials" | "hidden";
 
@@ -26,6 +28,62 @@ function sanitizeText(value: unknown) {
   return String(value || "")
     .replace(/[\u0000-\u001f\u007f]/g, "")
     .trim();
+}
+
+function sanitizeUrl(value: unknown) {
+  const url = sanitizeText(value);
+  if (!url) return "";
+
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" || parsed.protocol === "https:" ? url : "";
+  } catch {
+    return "";
+  }
+}
+
+async function isAllowedPlaceId(placeId: string) {
+  const cached = placeIdCache.get(placeId);
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.allowed;
+  }
+
+  const configuredIds = sanitizeText(process.env.GOOGLE_PLACES_ALLOWED_PLACE_IDS)
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
+
+  if (configuredIds.includes(placeId)) {
+    placeIdCache.set(placeId, { allowed: true, expiresAt: Date.now() + 60_000 });
+    return true;
+  }
+
+  const supabaseUrl = process.env.VITE_SUPABASE_URL;
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    placeIdCache.set(placeId, { allowed: false, expiresAt: Date.now() + 60_000 });
+    return false;
+  }
+
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  const { data, error } = await supabase
+    .from("pages")
+    .select("content")
+    .eq("url_path", "/")
+    .eq("status", "published")
+    .maybeSingle();
+
+  if (error) {
+    console.error("[google-reviews] Failed to verify Place ID", error.message);
+    placeIdCache.set(placeId, { allowed: false, expiresAt: Date.now() + 60_000 });
+    return false;
+  }
+
+  const allowed = sanitizeText(data?.content?.googleReviews?.placeId) === placeId;
+  placeIdCache.set(placeId, { allowed, expiresAt: Date.now() + 60_000 });
+  return allowed;
 }
 
 function formatReviewerName(name: string, display: ReviewerNameDisplay) {
@@ -74,6 +132,12 @@ export const handleGoogleReviews: RequestHandler = async (req, res) => {
       return res.status(400).json({ error: "Missing Google Place ID" });
     }
 
+    const isAllowed = await isAllowedPlaceId(placeId);
+
+    if (!isAllowed) {
+      return res.status(403).json({ error: "Google Place ID is not allowed" });
+    }
+
     const minimumRating = clampNumber(req.query.minimumRating, 5, 1, 5);
     const start = clampNumber(req.query.start, 1, 1, 5);
     const count = clampNumber(req.query.count, 3, 1, 5);
@@ -112,7 +176,7 @@ export const handleGoogleReviews: RequestHandler = async (req, res) => {
       .slice(startIndex, startIndex + count)
       .map((review: GooglePlaceReview) => ({
         authorName: formatReviewerName(review.author_name || "", nameDisplay),
-        authorUrl: nameDisplay === "full" ? sanitizeText(review.author_url) : "",
+        authorUrl: nameDisplay === "full" ? sanitizeUrl(review.author_url) : "",
         rating: clampNumber(review.rating, 5, 1, 5),
         text: sanitizeText(review.text),
         relativeTimeDescription: sanitizeText(review.relative_time_description),
@@ -127,7 +191,7 @@ export const handleGoogleReviews: RequestHandler = async (req, res) => {
       totalRatings: Number.isFinite(Number(result.user_ratings_total))
         ? Number(result.user_ratings_total)
         : null,
-      googleUrl: sanitizeText(result.url) || null,
+      googleUrl: sanitizeUrl(result.url) || null,
       reviews: filteredReviews,
     });
   } catch (err) {

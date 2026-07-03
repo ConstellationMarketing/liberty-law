@@ -210,7 +210,7 @@ export default function GoogleReviewsSection({ content }: GoogleReviewsSectionPr
       </div>
 
       <div className="mx-auto w-[80%] max-w-[1600px] pb-[54px]">
-        {isLoading ? (
+        {isLoading || (!reviewData && !error) ? (
           <div className="rounded-md border border-gray-200 p-6 text-center font-outfit text-lg text-gray-600">
             Loading Google reviews…
           </div>
