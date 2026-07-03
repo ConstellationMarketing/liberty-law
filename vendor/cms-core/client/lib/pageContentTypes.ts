@@ -13,6 +13,18 @@ export interface HomePageContent {
     phone: string;
     phoneLabel: string;
   };
+  googleReviews: {
+    enabled: boolean;
+    sectionLabel: string;
+    heading: string;
+    description: string;
+    placeId: string;
+    minimumRating: number;
+    startReviewNumber: number;
+    reviewerNameDisplay: "full" | "first" | "initials" | "hidden";
+    displayCount: number;
+    emptyMessage: string;
+  };
   about: {
     sectionLabel: string;
     heading: string;

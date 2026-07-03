@@ -3,7 +3,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Collapsible,
   CollapsibleContent,
@@ -227,6 +235,163 @@ function HomePageEditor({
               value={content?.hero?.phoneLabel ?? ""}
               onChange={(e) =>
                 update("hero", { ...content.hero, phoneLabel: e.target.value })
+              }
+            />
+          </div>
+        </div>
+      </Section>
+
+      {/* Google Reviews Section */}
+      <Section title="Google Reviews Section" defaultOpen={false}>
+        <div className="grid gap-4">
+          <div className="flex items-center gap-3 rounded-md border p-4">
+            <Switch
+              checked={content?.googleReviews?.enabled ?? false}
+              onCheckedChange={(checked) =>
+                update("googleReviews", {
+                  ...content.googleReviews,
+                  enabled: checked,
+                })
+              }
+            />
+            <div>
+              <Label>Enable Google Reviews Section</Label>
+              <p className="text-sm text-muted-foreground">
+                Shows this section directly under the homepage hero when a Place ID is set.
+              </p>
+            </div>
+          </div>
+          <div>
+            <Label>Google Place ID</Label>
+            <Input
+              value={content?.googleReviews?.placeId ?? ""}
+              onChange={(e) =>
+                update("googleReviews", {
+                  ...content.googleReviews,
+                  placeId: e.target.value,
+                })
+              }
+              placeholder="ChIJ..."
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label>Section Label</Label>
+              <Input
+                value={content?.googleReviews?.sectionLabel ?? ""}
+                onChange={(e) =>
+                  update("googleReviews", {
+                    ...content.googleReviews,
+                    sectionLabel: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <HeadingInput
+              label="Heading"
+              value={content?.googleReviews?.heading ?? ""}
+              onChange={(v) =>
+                update("googleReviews", {
+                  ...content.googleReviews,
+                  heading: v,
+                })
+              }
+            />
+          </div>
+          <div>
+            <Label>Description</Label>
+            <RichTextEditor
+              value={content?.googleReviews?.description ?? ""}
+              onChange={(v) =>
+                update("googleReviews", {
+                  ...content.googleReviews,
+                  description: v,
+                })
+              }
+              placeholder="Google reviews section description..."
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <Label>Minimum Star Rating</Label>
+              <Input
+                type="number"
+                min={1}
+                max={5}
+                step={1}
+                value={content?.googleReviews?.minimumRating ?? 5}
+                onChange={(e) =>
+                  update("googleReviews", {
+                    ...content.googleReviews,
+                    minimumRating: Number(e.target.value),
+                  })
+                }
+              />
+            </div>
+            <div>
+              <Label>Start Review Number</Label>
+              <Input
+                type="number"
+                min={1}
+                max={5}
+                step={1}
+                value={content?.googleReviews?.startReviewNumber ?? 1}
+                onChange={(e) =>
+                  update("googleReviews", {
+                    ...content.googleReviews,
+                    startReviewNumber: Number(e.target.value),
+                  })
+                }
+              />
+            </div>
+            <div>
+              <Label>Reviews to Display</Label>
+              <Input
+                type="number"
+                min={1}
+                max={3}
+                step={1}
+                value={content?.googleReviews?.displayCount ?? 3}
+                onChange={(e) =>
+                  update("googleReviews", {
+                    ...content.googleReviews,
+                    displayCount: Number(e.target.value),
+                  })
+                }
+              />
+            </div>
+            <div>
+              <Label>Reviewer Name Display</Label>
+              <Select
+                value={content?.googleReviews?.reviewerNameDisplay ?? "first"}
+                onValueChange={(value) =>
+                  update("googleReviews", {
+                    ...content.googleReviews,
+                    reviewerNameDisplay: value as HomePageContent["googleReviews"]["reviewerNameDisplay"],
+                  })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="full">Full name</SelectItem>
+                  <SelectItem value="first">First name only</SelectItem>
+                  <SelectItem value="initials">Initials</SelectItem>
+                  <SelectItem value="hidden">Hidden</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div>
+            <Label>Empty/Error Message</Label>
+            <Input
+              value={content?.googleReviews?.emptyMessage ?? ""}
+              onChange={(e) =>
+                update("googleReviews", {
+                  ...content.googleReviews,
+                  emptyMessage: e.target.value,
+                })
               }
             />
           </div>
