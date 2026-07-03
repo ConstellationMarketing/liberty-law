@@ -97,9 +97,25 @@ export interface ContactContent {
   formHeading: string;
 }
 
+export type ReviewerNameDisplay = "full" | "first" | "initials" | "hidden";
+
+export interface GoogleReviewsContent {
+  enabled: boolean;
+  sectionLabel: string;
+  heading: string;
+  description: string;
+  placeId: string;
+  minimumRating: number;
+  startReviewNumber: number;
+  reviewerNameDisplay: ReviewerNameDisplay;
+  displayCount: number;
+  emptyMessage: string;
+}
+
 // Complete homepage content structure
 export interface HomePageContent {
   hero: HeroContent;
+  googleReviews: GoogleReviewsContent;
   about: AboutContent;
   practiceAreasIntro: PracticeAreasIntroContent;
   practiceAreas: PracticeAreaItem[];
@@ -121,6 +137,19 @@ export const defaultHomeContent: HomePageContent = {
       "We provide expert representation for Criminal Defense, DUI, Real Estate, and Business Law matters across DuPage, Kane, Kendall, Will, and Grundy Counties.",
     phone: "630-449-4800",
     phoneLabel: "Call Us 24/7",
+  },
+  googleReviews: {
+    enabled: false,
+    sectionLabel: "– Google Reviews",
+    heading: "Real Voices, Real Trust: Our Google Reviews",
+    description:
+      "Read the latest 5-star reviews from clients who chose Liberty Law, P.C.",
+    placeId: "",
+    minimumRating: 5,
+    startReviewNumber: 1,
+    reviewerNameDisplay: "first",
+    displayCount: 3,
+    emptyMessage: "No matching Google reviews are available right now.",
   },
   about: {
     sectionLabel: "— Criminal Defense Lawyer",

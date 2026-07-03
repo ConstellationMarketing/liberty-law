@@ -161,6 +161,10 @@ function mergeWithDefaults(
 
   return {
     hero: { ...defaults.hero, ...cmsContent.hero },
+    googleReviews: {
+      ...defaults.googleReviews,
+      ...cmsContent.googleReviews,
+    },
     about: {
       ...defaults.about,
       ...cmsContent.about,

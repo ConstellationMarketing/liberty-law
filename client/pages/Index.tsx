@@ -4,6 +4,7 @@ import Layout from "@site/components/layout/Layout";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
 import Hero from "@site/components/home/Hero";
 import ContactForm from "@site/components/home/ContactForm";
+import GoogleReviewsSection from "@site/components/home/GoogleReviewsSection";
 import AboutSection from "@site/components/home/AboutSection";
 import PracticeAreasSection from "@site/components/home/PracticeAreasSection";
 import PracticeAreasGrid from "@site/components/home/PracticeAreasGrid";
@@ -128,6 +129,9 @@ export default function Index() {
           </div>
         </div>
       </div>
+
+      {/* Google Reviews Section */}
+      <GoogleReviewsSection content={content.googleReviews} />
 
       {/* About Us Section */}
       <AboutSection content={content.about} />

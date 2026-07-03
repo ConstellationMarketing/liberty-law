@@ -1,173 +1,231 @@
-// TODO: These types don't exist in homePageTypes yet - add them if needed
-// import type {
-//   GoogleReviewsContent,
-//   GoogleReviewItem,
-// } from "@site/lib/cms/homePageTypes";
+import { useEffect, useMemo, useState } from "react";
+import { SafeHtml } from "@site/components/ui/SafeHtml";
+import type { GoogleReviewsContent } from "@site/lib/cms/homePageTypes";
+import { defaultHomeContent } from "@site/lib/cms/homePageTypes";
 
-// Temporary local types
-interface GoogleReviewItem {
+interface GoogleReview {
+  authorName: string;
+  rating: number;
   text: string;
-  author: string;
-  ratingImage: string;
+  relativeTimeDescription?: string;
+  time?: number;
+  authorUrl?: string;
 }
 
-interface GoogleReviewsContent {
-  sectionLabel: string;
-  heading: string;
-  description: string;
-  reviews: GoogleReviewItem[];
+interface GoogleReviewsResponse {
+  placeName: string;
+  rating: number | null;
+  totalRatings: number | null;
+  googleUrl: string | null;
+  reviews: GoogleReview[];
 }
 
 interface GoogleReviewsSectionProps {
   content?: GoogleReviewsContent;
 }
 
-const defaultContent: GoogleReviewsContent = {
-  sectionLabel: "– Google Reviews",
-  heading: "Real Voices, Real Trust: Our Google Reviews",
-  description:
-    "Our clients share their stories and insights about working with us. Dive into their experiences to understand how we prioritize your legal success.",
-  reviews: [
-    {
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-      author: "Lorem Ipsum",
-      ratingImage:
-        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
-    },
-    {
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-      author: "Lorem Ipsum",
-      ratingImage:
-        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
-    },
-    {
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-      author: "Lorem Ipsum",
-      ratingImage:
-        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
-    },
-    {
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-      author: "Lorem Ipsum",
-      ratingImage:
-        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
-    },
-    {
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-      author: "Lorem Ipsum",
-      ratingImage:
-        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
-    },
-    {
-      text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi . Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor. consectetur adipiscing elit, sed do eiusmod tempor.",
-      author: "Lorem Ipsum",
-      ratingImage:
-        "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026884381-eem13o-google-rating-stars.webp",
-    },
-  ],
-};
+const googleIconUrl =
+  "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026032541-mxc63k-google-icon.webp";
 
-export default function GoogleReviewsSection({
-  content,
-}: GoogleReviewsSectionProps) {
-  const data = content || defaultContent;
-  const reviews = data.reviews || defaultContent.reviews;
+function RatingStars({ rating = 5 }: { rating?: number }) {
+  const roundedRating = Math.max(0, Math.min(5, Math.round(rating)));
 
   return (
-    <div className="bg-white pt-[54px]">
-      {/* Header Section */}
-      <div className="max-w-[1080px] mx-auto w-[80%] py-[27px]">
-        <div className="text-center mb-[10px]">
-          <p
-            className="font-outfit text-[24px] leading-[36px]"
-            style={{ color: "#EC3024" }}
+    <div className="flex items-center gap-1" aria-label={`${rating} out of 5 stars`}>
+      {Array.from({ length: 5 }, (_, index) => (
+        <span
+          key={index}
+          className={index < roundedRating ? "text-[#fbbc04]" : "text-gray-300"}
+          aria-hidden="true"
+        >
+          ★
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function GoogleRatingBadge({ data }: { data: GoogleReviewsResponse }) {
+  const badge = (
+    <div className="inline-flex flex-wrap items-center justify-center gap-3 rounded-full border border-gray-200 bg-white px-5 py-3 shadow-sm">
+      <img src={googleIconUrl} alt="Google" loading="lazy" className="h-6 w-6" />
+      <div className="flex items-center gap-2">
+        <span className="font-outfit text-sm font-semibold uppercase tracking-[0.12em] text-gray-700">
+          Google Rating
+        </span>
+        <span className="font-outfit text-lg font-bold text-law-dark">
+          {data.rating?.toFixed(1) || "5.0"}
+        </span>
+      </div>
+      <RatingStars rating={data.rating || 5} />
+      {data.totalRatings ? (
+        <span className="font-outfit text-sm text-gray-600">
+          {data.totalRatings.toLocaleString()} reviews
+        </span>
+      ) : null}
+    </div>
+  );
+
+  if (!data.googleUrl) {
+    return badge;
+  }
+
+  return (
+    <a href={data.googleUrl} target="_blank" rel="noopener noreferrer" className="inline-block">
+      {badge}
+    </a>
+  );
+}
+
+function ReviewCard({ review }: { review: GoogleReview }) {
+  return (
+    <article className="flex h-full flex-col justify-between border border-[rgb(224,224,224)] bg-white p-6 shadow-sm">
+      <div>
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <RatingStars rating={review.rating} />
+          <img src={googleIconUrl} alt="Google" loading="lazy" className="h-8 w-8" />
+        </div>
+        <p className="font-outfit text-[18px] leading-[30px] text-black md:text-[20px] md:leading-[32px]">
+          “{review.text}”
+        </p>
+      </div>
+      <footer className="mt-6 flex items-center justify-between gap-4 font-outfit text-[18px] leading-[28px] text-black">
+        {review.authorUrl ? (
+          <a
+            href={review.authorUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold hover:text-law-accent"
           >
+            {review.authorName}
+          </a>
+        ) : (
+          <strong className="font-bold">{review.authorName}</strong>
+        )}
+        {review.relativeTimeDescription ? (
+          <span className="text-sm text-gray-500">{review.relativeTimeDescription}</span>
+        ) : null}
+      </footer>
+    </article>
+  );
+}
+
+export default function GoogleReviewsSection({ content }: GoogleReviewsSectionProps) {
+  const data = content || defaultHomeContent.googleReviews;
+  const [reviewData, setReviewData] = useState<GoogleReviewsResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const placeId = data.placeId?.trim();
+  const shouldRender = data.enabled && Boolean(placeId);
+
+  const requestUrl = useMemo(() => {
+    if (!shouldRender) return null;
+
+    const params = new URLSearchParams({
+      placeId,
+      minimumRating: String(data.minimumRating || 5),
+      start: String(data.startReviewNumber || 1),
+      count: String(data.displayCount || 3),
+      nameDisplay: data.reviewerNameDisplay || "first",
+    });
+
+    return `/api/google-reviews?${params.toString()}`;
+  }, [
+    shouldRender,
+    placeId,
+    data.minimumRating,
+    data.startReviewNumber,
+    data.displayCount,
+    data.reviewerNameDisplay,
+  ]);
+
+  useEffect(() => {
+    if (!requestUrl) return;
+
+    const controller = new AbortController();
+
+    async function loadReviews() {
+      setIsLoading(true);
+      setError(null);
+      setReviewData(null);
+
+      try {
+        const response = await fetch(requestUrl, { signal: controller.signal });
+        const payload = await response.json();
+
+        if (!response.ok) {
+          throw new Error(payload?.error || "Unable to load Google reviews");
+        }
+
+        setReviewData(payload);
+      } catch (err) {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        setReviewData(null);
+        setError(err instanceof Error ? err.message : "Unable to load Google reviews");
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    void loadReviews();
+
+    return () => controller.abort();
+  }, [requestUrl]);
+
+  if (!shouldRender) {
+    return null;
+  }
+
+  const reviews = reviewData?.reviews || [];
+
+  return (
+    <section className="bg-white pt-[54px]" aria-labelledby="google-reviews-heading">
+      <div className="mx-auto w-[80%] max-w-[1080px] py-[27px]">
+        <div className="mb-[10px] text-center">
+          <p className="font-outfit text-[24px] leading-[36px] text-law-accent">
             {data.sectionLabel}
           </p>
         </div>
         <div className="text-center">
-          <h2 className="font-playfair text-[28px] md:text-[40px] lg:text-[54px] leading-tight md:leading-[54px] text-law-dark pb-[10px]">
+          <h2
+            id="google-reviews-heading"
+            className="font-playfair text-[28px] leading-tight text-law-dark pb-[10px] md:text-[40px] md:leading-[54px] lg:text-[54px]"
+          >
             {data.heading}
           </h2>
-          <p className="font-outfit text-[24px] leading-[36px] text-black text-center">
-            {data.description}
-          </p>
+          <SafeHtml
+            html={data.description}
+            className="font-outfit text-[20px] leading-[32px] text-black md:text-[24px] md:leading-[36px]"
+            as="div"
+          />
+          {reviewData ? (
+            <div className="mt-6">
+              <GoogleRatingBadge data={reviewData} />
+            </div>
+          ) : null}
         </div>
       </div>
 
-      {/* First Row - 3 Reviews */}
-      <div className="max-w-[1600px] mx-auto w-[80%] flex flex-col md:flex-row gap-0 mb-[30px]">
-        {reviews.slice(0, 3).map((review, index) => (
-          <div
-            key={index}
-            className={`md:w-[31.3333%] border-[0.8px] border-[rgb(224,224,224)] p-[20px] ${
-              index < 2 ? "md:mr-[3%] mb-4 md:mb-0" : ""
-            }`}
-          >
-            <div className="mb-[30px]">
-              <div className="pb-[10px]">
-                <img
-                  src={review.ratingImage}
-                  alt="5 stars"
-                  width={186}
-                  height={34}
-                  loading="lazy"
-                  className="max-w-full"
-                />
-              </div>
-              <p className="font-outfit text-[22px] leading-[33px] text-black pb-[22px]">
-                {review.text}
-              </p>
-              <div className="font-outfit text-[22px] leading-[33px] text-black flex items-center justify-between">
-                <strong className="font-bold">{review.author}</strong>
-                <img
-                  src="https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026032541-mxc63k-google-icon.webp"
-                  alt="Google"
-                  loading="lazy"
-                  className="max-w-full"
-                />
-              </div>
-            </div>
+      <div className="mx-auto w-[80%] max-w-[1600px] pb-[54px]">
+        {isLoading ? (
+          <div className="rounded-md border border-gray-200 p-6 text-center font-outfit text-lg text-gray-600">
+            Loading Google reviews…
           </div>
-        ))}
-      </div>
-
-      {/* Second Row - 3 Reviews */}
-      <div className="max-w-[1600px] mx-auto w-[80%] flex flex-col md:flex-row gap-0">
-        {reviews.slice(3, 6).map((review, index) => (
-          <div
-            key={index}
-            className={`md:w-[31.3333%] border-[0.8px] border-[rgb(224,224,224)] p-[20px] ${
-              index < 2 ? "md:mr-[3%] mb-4 md:mb-0" : ""
-            }`}
-          >
-            <div className="mb-[30px]">
-              <div className="pb-[10px]">
-                <img
-                  src={review.ratingImage}
-                  alt="5 stars"
-                  width={186}
-                  height={34}
-                  loading="lazy"
-                  className="max-w-full"
-                />
-              </div>
-              <p className="font-outfit text-[22px] leading-[33px] text-black pb-[22px]">
-                {review.text}
-              </p>
-              <div className="font-outfit text-[22px] leading-[33px] text-black flex items-center justify-between">
-                <strong className="font-bold">{review.author}</strong>
-                <img
-                  src="https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026032541-mxc63k-google-icon.webp"
-                  alt="Google"
-                  loading="lazy"
-                  className="max-w-full"
-                />
-              </div>
-            </div>
+        ) : error || reviews.length === 0 ? (
+          <div className="rounded-md border border-gray-200 p-6 text-center font-outfit text-lg text-gray-600">
+            {data.emptyMessage}
           </div>
-        ))}
+        ) : (
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            {reviews.map((review, index) => (
+              <ReviewCard key={`${review.authorName}-${review.time || index}`} review={review} />
+            ))}
+          </div>
+        )}
       </div>
-    </div>
+    </section>
   );
 }

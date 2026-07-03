@@ -58,6 +58,10 @@ export const handleSyncHomepage: RequestHandler = async (_req, res) => {
       // Hero - use current customizations if available
       hero: currentContent?.hero || defaultHomeContent.hero,
 
+      // Google Reviews - preserve existing settings if available
+      googleReviews:
+        currentContent?.googleReviews || defaultHomeContent.googleReviews,
+
       // About - preserve existing
       about: currentContent?.about || defaultHomeContent.about,
 
@@ -108,6 +112,7 @@ export const handleSyncHomepage: RequestHandler = async (_req, res) => {
       changes: {
         updated: [
           "hero (updated to current content)",
+          "googleReviews (added/preserved Google reviews settings)",
           "practiceAreasIntro (updated description)",
           "practiceAreas (all 10 practice areas with correct content)",
           "cta (new CTA section replacing awards)",
@@ -118,9 +123,8 @@ export const handleSyncHomepage: RequestHandler = async (_req, res) => {
           "partnerLogos (not used in current frontend)",
           "awards (replaced by CTA section)",
           "process (replaced by Team section)",
-          "googleReviews (removed from frontend)",
         ],
-        preserved: ["about", "testimonials", "faq"],
+        preserved: ["about", "googleReviews", "testimonials", "faq"],
       },
       practiceAreas: syncedContent.practiceAreas.map((pa) => pa.title),
       data: updated,

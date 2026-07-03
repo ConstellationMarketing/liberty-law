@@ -11,6 +11,7 @@ import { handleSeedContact } from "./routes/seed-contact";
 import { handleSeedPracticeAreas } from "./routes/seed-practice-areas";
 import { handleMigrateMedia } from "./routes/migrate-media";
 import { handleSitemap } from "./routes/sitemap";
+import { handleGoogleReviews } from "./routes/google-reviews";
 
 export function createServer() {
   const app = express();
@@ -27,6 +28,7 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+  app.get("/api/google-reviews", handleGoogleReviews);
 
   // Health check endpoint
   app.get("/api/health", handleHealthCheck);
