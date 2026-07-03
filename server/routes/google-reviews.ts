@@ -121,6 +121,43 @@ function getNameDisplay(value: unknown): ReviewerNameDisplay {
     : "first";
 }
 
+async function fetchPlaceDetails(placeId: string, apiKey: string, reviewsSort: "newest" | "most_relevant") {
+  const url = new URL(placesDetailsUrl);
+  url.searchParams.set("place_id", placeId);
+  url.searchParams.set("fields", "name,rating,user_ratings_total,url,reviews");
+  url.searchParams.set("reviews_sort", reviewsSort);
+  url.searchParams.set("key", apiKey);
+
+  const response = await fetch(url);
+  const payload = await response.json();
+
+  if (!response.ok || payload.status !== "OK") {
+    const status = payload.status || response.status;
+    const message = payload.error_message || "Unable to load Google reviews";
+
+    console.error("[google-reviews] Google Places request failed", {
+      status,
+      message,
+      reviewsSort,
+    });
+
+    throw new Error(String(status));
+  }
+
+  return payload.result || {};
+}
+
+function mergeReviews(primaryReviews: GooglePlaceReview[], fallbackReviews: GooglePlaceReview[]) {
+  const seen = new Set<string>();
+
+  return [...primaryReviews, ...fallbackReviews].filter((review) => {
+    const key = [review.author_name, review.time, review.text].map((value) => sanitizeText(value)).join("|");
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 export const handleGoogleReviews: RequestHandler = async (req, res) => {
   try {
     const apiKey = process.env.GOOGLE_PLACES_API_KEY;
@@ -149,32 +186,37 @@ export const handleGoogleReviews: RequestHandler = async (req, res) => {
     const minWords = clampNumber(req.query.minWords, minimumReviewWords + 1, 1, 200);
     const nameDisplay = getNameDisplay(req.query.nameDisplay);
 
-    const url = new URL(placesDetailsUrl);
-    url.searchParams.set("place_id", placeId);
-    url.searchParams.set("fields", "name,rating,user_ratings_total,url,reviews");
-    url.searchParams.set("reviews_sort", "newest");
-    url.searchParams.set("key", apiKey);
+    let result;
 
-    const response = await fetch(url);
-    const payload = await response.json();
-
-    if (!response.ok || payload.status !== "OK") {
-      const status = payload.status || response.status;
-      const message = payload.error_message || "Unable to load Google reviews";
-
-      console.error("[google-reviews] Google Places request failed", {
-        status,
-        message,
-      });
-
-      return res.status(response.ok ? 502 : response.status).json({
+    try {
+      result = await fetchPlaceDetails(placeId, apiKey, "newest");
+    } catch (err) {
+      return res.status(502).json({
         error: "Unable to load Google reviews",
-        status,
+        status: err instanceof Error ? err.message : "UNKNOWN",
       });
     }
 
-    const result = payload.result || {};
-    const reviews = Array.isArray(result.reviews) ? result.reviews : [];
+    const newestReviews = Array.isArray(result.reviews) ? result.reviews : [];
+    const newestQualifyingCount = newestReviews.filter(
+      (review: GooglePlaceReview) =>
+        Number(review.rating || 0) >= minimumRating && countWords(review.text) >= minWords,
+    ).length;
+
+    let reviews = newestReviews;
+
+    if (newestQualifyingCount < start + count - 1) {
+      try {
+        const fallbackResult = await fetchPlaceDetails(placeId, apiKey, "most_relevant");
+        const fallbackReviews = Array.isArray(fallbackResult.reviews)
+          ? fallbackResult.reviews
+          : [];
+        reviews = mergeReviews(newestReviews, fallbackReviews);
+      } catch {
+        reviews = newestReviews;
+      }
+    }
+
     const startIndex = start - 1;
 
     const filteredReviews = reviews
