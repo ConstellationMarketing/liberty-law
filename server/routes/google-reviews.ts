@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 const placesDetailsUrl = "https://maps.googleapis.com/maps/api/place/details/json";
 const allowedNameDisplays = new Set(["full", "first", "initials", "hidden"]);
 const placeIdCache = new Map<string, { allowed: boolean; expiresAt: number }>();
+const minimumReviewWords = 20;
 
 type ReviewerNameDisplay = "full" | "first" | "initials" | "hidden";
 
@@ -40,6 +41,10 @@ function sanitizeUrl(value: unknown) {
   } catch {
     return "";
   }
+}
+
+function countWords(value: unknown) {
+  return sanitizeText(value).split(/\s+/).filter(Boolean).length;
 }
 
 async function isAllowedPlaceId(placeId: string) {
@@ -172,7 +177,11 @@ export const handleGoogleReviews: RequestHandler = async (req, res) => {
     const startIndex = start - 1;
 
     const filteredReviews = reviews
-      .filter((review: GooglePlaceReview) => Number(review.rating || 0) >= minimumRating)
+      .filter(
+        (review: GooglePlaceReview) =>
+          Number(review.rating || 0) >= minimumRating &&
+          countWords(review.text) > minimumReviewWords,
+      )
       .slice(startIndex, startIndex + count)
       .map((review: GooglePlaceReview) => ({
         authorName: formatReviewerName(review.author_name || "", nameDisplay),

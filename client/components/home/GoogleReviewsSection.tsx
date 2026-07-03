@@ -26,6 +26,13 @@ interface GoogleReviewsSectionProps {
 
 const googleIconUrl =
   "https://yruteqltqizjvipueulo.supabase.co/storage/v1/object/public/media/library/1772026032541-mxc63k-google-icon.webp";
+const maxDisplayedReviewWords = 55;
+
+function limitWords(text: string, maxWords: number) {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  if (words.length <= maxWords) return text;
+  return `${words.slice(0, maxWords).join(" ")}…`;
+}
 
 function RatingStars({ rating = 5 }: { rating?: number }) {
   const roundedRating = Math.max(0, Math.min(5, Math.round(rating)));
@@ -78,6 +85,8 @@ function GoogleRatingBadge({ data }: { data: GoogleReviewsResponse }) {
 }
 
 function ReviewCard({ review }: { review: GoogleReview }) {
+  const displayedText = limitWords(review.text, maxDisplayedReviewWords);
+
   return (
     <article className="flex h-full flex-col justify-between border border-[rgb(224,224,224)] bg-white p-6 shadow-sm">
       <div>
@@ -85,8 +94,11 @@ function ReviewCard({ review }: { review: GoogleReview }) {
           <RatingStars rating={review.rating} />
           <img src={googleIconUrl} alt="Google" loading="lazy" className="h-8 w-8" />
         </div>
-        <p className="font-outfit text-[18px] leading-[30px] text-black md:text-[20px] md:leading-[32px]">
-          “{review.text}”
+        <p
+          className="font-outfit text-[18px] leading-[30px] text-black md:text-[20px] md:leading-[32px]"
+          title={review.text}
+        >
+          “{displayedText}”
         </p>
       </div>
       <footer className="mt-6 flex items-center justify-between gap-4 font-outfit text-[18px] leading-[28px] text-black">
