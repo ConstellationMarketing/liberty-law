@@ -150,14 +150,15 @@ async function main() {
         const navItems = Array.isArray(settings.navigation_items)
           ? settings.navigation_items
           : [];
-        for (const item of navItems) {
-          addUnique(links, item.href, item.label);
-          if (Array.isArray(item.children)) {
-            for (const child of item.children) {
-              addUnique(links, child.href, child.label);
+        const addNavigationLinks = (items: any[]) => {
+          for (const item of items) {
+            addUnique(links, item.href, item.label);
+            if (Array.isArray(item.children)) {
+              addNavigationLinks(item.children);
             }
           }
-        }
+        };
+        addNavigationLinks(navItems);
 
         // Footer links
         for (const arr of [

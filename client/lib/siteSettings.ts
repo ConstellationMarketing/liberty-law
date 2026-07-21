@@ -1,5 +1,13 @@
 import { getRuntimeEnvValue, getSupabaseRequestKey, getSupabaseUrl } from "@site/lib/runtimeEnv";
 
+export interface NavigationItem {
+  label: string;
+  href: string;
+  order?: number;
+  openInNewTab?: boolean;
+  children?: NavigationItem[];
+}
+
 export interface SiteSettings {
   siteName: string;
   logoUrl: string;
@@ -10,7 +18,7 @@ export interface SiteSettings {
   applyPhoneGlobally: boolean;
   headerCtaText: string;
   headerCtaUrl: string;
-  navigationItems: { label: string; href: string; order?: number; openInNewTab?: boolean; children?: { label: string; href: string; openInNewTab?: boolean }[] }[];
+  navigationItems: NavigationItem[];
   footerAboutLinks: { label: string; href?: string }[];
   footerPracticeLinks: { label: string; href?: string }[];
   addressLine1: string;

@@ -11,7 +11,7 @@ type NavItemType = {
   href: string;
   order?: number;
   openInNewTab?: boolean;
-  children?: { label: string; href: string; openInNewTab?: boolean }[];
+  children?: NavItemType[];
 };
 
 /** Renders an anchor or React Router Link depending on whether the link
@@ -55,6 +55,55 @@ function NavLink({
   );
 }
 
+function DesktopDropdownItem({ item }: { item: NavItemType }) {
+  const [open, setOpen] = useState(false);
+  const hasChildren = Boolean(item.children?.length);
+
+  if (!hasChildren) {
+    return (
+      <NavLink
+        href={item.href}
+        label={item.label}
+        openInNewTab={item.openInNewTab}
+        className="block px-5 py-3 font-outfit text-[16px] text-white hover:bg-white/10 transition-colors first:rounded-t-lg last:rounded-b-lg"
+      />
+    );
+  }
+
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <div className="flex items-center hover:bg-white/10 transition-colors">
+        <NavLink
+          href={item.href}
+          label={item.label}
+          openInNewTab={item.openInNewTab}
+          className="flex-1 px-5 py-3 font-outfit text-[16px] text-white whitespace-nowrap"
+        />
+        <ChevronDown className="mr-3 h-4 w-4 -rotate-90 text-white" />
+      </div>
+      <div
+        className={`absolute left-full top-0 ml-1 min-w-[220px] rounded-lg border border-law-border bg-law-card shadow-xl transition-all duration-200 ${
+          open ? "visible translate-x-0 opacity-100" : "invisible -translate-x-1 opacity-0"
+        }`}
+      >
+        {item.children!.map((grandchild, index) => (
+          <NavLink
+            key={`${grandchild.href}-${index}`}
+            href={grandchild.href}
+            label={grandchild.label}
+            openInNewTab={grandchild.openInNewTab}
+            className="block px-5 py-3 font-outfit text-[16px] text-white hover:bg-white/10 transition-colors first:rounded-t-lg last:rounded-b-lg"
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /** Desktop nav item — plain link or dropdown trigger with flyout. */
 function DesktopNavItem({ item }: { item: NavItemType }) {
   const [open, setOpen] = useState(false);
@@ -95,14 +144,8 @@ function DesktopNavItem({ item }: { item: NavItemType }) {
           open ? "opacity-100 visible translate-y-0" : "opacity-0 invisible -translate-y-1"
         }`}
       >
-        {item.children!.map((child) => (
-          <NavLink
-            key={child.href}
-            href={child.href}
-            label={child.label}
-            openInNewTab={child.openInNewTab}
-            className="block px-5 py-3 font-outfit text-[16px] text-white hover:bg-white/10 transition-colors first:rounded-t-lg last:rounded-b-lg"
-          />
+        {item.children!.map((child, index) => (
+          <DesktopDropdownItem key={`${child.href}-${index}`} item={child} />
         ))}
       </div>
     </div>
@@ -196,12 +239,25 @@ function MobileMenu({
   const [expandedDropdowns, setExpandedDropdowns] = useState<Set<number>>(
     new Set(),
   );
+  const [expandedChildDropdowns, setExpandedChildDropdowns] = useState<Set<string>>(
+    new Set(),
+  );
 
   const toggleDropdown = (index: number) => {
     setExpandedDropdowns((prev) => {
       const next = new Set(prev);
       if (next.has(index)) next.delete(index);
       else next.add(index);
+      return next;
+    });
+  };
+
+  const toggleChildDropdown = (parentIndex: number, childIndex: number) => {
+    const key = `${parentIndex}-${childIndex}`;
+    setExpandedChildDropdowns((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
       return next;
     });
   };
@@ -243,16 +299,51 @@ function MobileMenu({
                     </div>
                     {isExpanded && (
                       <div className="bg-white/5 rounded-lg mx-2 mb-1">
-                        {item.children!.map((child) => (
-                          <NavLink
-                            key={child.href}
-                            href={child.href}
-                            label={child.label}
-                            openInNewTab={child.openInNewTab}
-                            onClick={() => setOpen(false)}
-                            className="block font-outfit text-[17px] text-white py-[8px] px-[8%] hover:opacity-80 transition-opacity"
-                          />
-                        ))}
+                        {item.children!.map((child, childIndex) => {
+                          const hasGrandchildren = Boolean(child.children?.length);
+                          const childKey = `${index}-${childIndex}`;
+                          const isChildExpanded = expandedChildDropdowns.has(childKey);
+
+                          return (
+                            <div key={`${child.href}-${childIndex}`}>
+                              <div className="flex items-center">
+                                <NavLink
+                                  href={child.href}
+                                  label={child.label}
+                                  openInNewTab={child.openInNewTab}
+                                  onClick={() => setOpen(false)}
+                                  className="flex-1 font-outfit text-[17px] text-white py-[8px] px-[8%] hover:opacity-80 transition-opacity"
+                                />
+                                {hasGrandchildren && (
+                                  <button
+                                    type="button"
+                                    onClick={() => toggleChildDropdown(index, childIndex)}
+                                    className="px-4 py-2 text-white hover:opacity-80"
+                                    aria-label={`Toggle ${child.label} submenu`}
+                                  >
+                                    <ChevronDown
+                                      className={`h-4 w-4 transition-transform duration-200 ${isChildExpanded ? "rotate-180" : ""}`}
+                                    />
+                                  </button>
+                                )}
+                              </div>
+                              {hasGrandchildren && isChildExpanded && (
+                                <div className="bg-black/10 py-1">
+                                  {child.children!.map((grandchild, grandchildIndex) => (
+                                    <NavLink
+                                      key={`${grandchild.href}-${grandchildIndex}`}
+                                      href={grandchild.href}
+                                      label={grandchild.label}
+                                      openInNewTab={grandchild.openInNewTab}
+                                      onClick={() => setOpen(false)}
+                                      className="block py-[7px] pl-[14%] pr-[8%] font-outfit text-[15px] text-white hover:opacity-80 transition-opacity"
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </>

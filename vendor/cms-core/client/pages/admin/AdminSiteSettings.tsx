@@ -58,6 +58,8 @@ export default function AdminSiteSettings() {
   const [expandedNavItems, setExpandedNavItems] = useState<Set<number>>(new Set());
   const [draggedNavIndex, setDraggedNavIndex] = useState<number | null>(null);
   const [dragOverNavIndex, setDragOverNavIndex] = useState<number | null>(null);
+  const [draggedChild, setDraggedChild] = useState<{ navIndex: number; childIndex: number } | null>(null);
+  const [dragOverChild, setDragOverChild] = useState<{ navIndex: number; childIndex: number } | null>(null);
   const { isAdmin, isLoading: roleLoading } = useUserRole();
 
   useEffect(() => {
@@ -234,7 +236,7 @@ export default function AdminSiteSettings() {
   const updateChildInNavItem = (
     navIndex: number,
     childIndex: number,
-    updates: Partial<{ label: string; href: string; openInNewTab: boolean }>,
+    updates: Partial<NavigationItem>,
   ) => {
     const items = [...settings.navigationItems];
     const children = [...(items[navIndex].children ?? [])];
@@ -246,6 +248,100 @@ export default function AdminSiteSettings() {
   const removeChildFromNavItem = (navIndex: number, childIndex: number) => {
     const items = [...settings.navigationItems];
     const children = (items[navIndex].children ?? []).filter((_, i) => i !== childIndex);
+    items[navIndex] = { ...items[navIndex], children };
+    updateSettings({ navigationItems: items });
+  };
+
+  const handleChildDragStart = (
+    event: DragEvent<HTMLDivElement>,
+    navIndex: number,
+    childIndex: number,
+  ) => {
+    event.stopPropagation();
+    setDraggedChild({ navIndex, childIndex });
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("application/x-nav-child", String(childIndex));
+  };
+
+  const handleChildDragOver = (
+    event: DragEvent<HTMLDivElement>,
+    navIndex: number,
+    childIndex: number,
+  ) => {
+    if (!draggedChild || draggedChild.navIndex !== navIndex) return;
+    event.preventDefault();
+    event.stopPropagation();
+    event.dataTransfer.dropEffect = "move";
+    if (draggedChild.childIndex !== childIndex) {
+      setDragOverChild({ navIndex, childIndex });
+    }
+  };
+
+  const handleChildDrop = (
+    event: DragEvent<HTMLDivElement>,
+    navIndex: number,
+    toIndex: number,
+  ) => {
+    if (!draggedChild || draggedChild.navIndex !== navIndex) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const fromIndex = draggedChild.childIndex;
+    setDraggedChild(null);
+    setDragOverChild(null);
+    if (fromIndex === toIndex) return;
+
+    const items = [...settings.navigationItems];
+    const children = [...(items[navIndex].children ?? [])];
+    const [movedChild] = children.splice(fromIndex, 1);
+    if (!movedChild) return;
+    children.splice(toIndex, 0, movedChild);
+    items[navIndex] = { ...items[navIndex], children };
+    updateSettings({ navigationItems: items });
+  };
+
+  const handleChildDragEnd = () => {
+    setDraggedChild(null);
+    setDragOverChild(null);
+  };
+
+  const addGrandchildToNavItem = (navIndex: number, childIndex: number) => {
+    const items = [...settings.navigationItems];
+    const children = [...(items[navIndex].children ?? [])];
+    const grandchildren = [
+      ...(children[childIndex].children ?? []),
+      { label: "", href: "/" },
+    ];
+    children[childIndex] = { ...children[childIndex], children: grandchildren };
+    items[navIndex] = { ...items[navIndex], children };
+    updateSettings({ navigationItems: items });
+  };
+
+  const updateGrandchildInNavItem = (
+    navIndex: number,
+    childIndex: number,
+    grandchildIndex: number,
+    updates: Partial<NavigationItem>,
+  ) => {
+    const items = [...settings.navigationItems];
+    const children = [...(items[navIndex].children ?? [])];
+    const grandchildren = [...(children[childIndex].children ?? [])];
+    grandchildren[grandchildIndex] = { ...grandchildren[grandchildIndex], ...updates };
+    children[childIndex] = { ...children[childIndex], children: grandchildren };
+    items[navIndex] = { ...items[navIndex], children };
+    updateSettings({ navigationItems: items });
+  };
+
+  const removeGrandchildFromNavItem = (
+    navIndex: number,
+    childIndex: number,
+    grandchildIndex: number,
+  ) => {
+    const items = [...settings.navigationItems];
+    const children = [...(items[navIndex].children ?? [])];
+    const grandchildren = (children[childIndex].children ?? []).filter(
+      (_, index) => index !== grandchildIndex,
+    );
+    children[childIndex] = { ...children[childIndex], children: grandchildren };
     items[navIndex] = { ...items[navIndex], children };
     updateSettings({ navigationItems: items });
   };
@@ -599,41 +695,115 @@ export default function AdminSiteSettings() {
                         {(item.children ?? []).map((child, childIndex) => (
                           <div
                             key={childIndex}
-                            className="flex items-center gap-3 pl-6 pr-2 py-2 bg-gray-50 rounded-md border-l-2 border-blue-200"
+                            onDragOver={(event) => handleChildDragOver(event, index, childIndex)}
+                            onDrop={(event) => handleChildDrop(event, index, childIndex)}
+                            className={`rounded-md border-l-2 bg-gray-50 transition-colors ${
+                              dragOverChild?.navIndex === index && dragOverChild.childIndex === childIndex
+                                ? "border-blue-500 bg-blue-50"
+                                : "border-blue-200"
+                            } ${
+                              draggedChild?.navIndex === index && draggedChild.childIndex === childIndex
+                                ? "opacity-60"
+                                : ""
+                            }`}
                           >
-                            <div className="flex-1 grid grid-cols-3 gap-3">
-                              <Input
-                                value={child.label}
-                                onChange={(e) =>
-                                  updateChildInNavItem(index, childIndex, { label: e.target.value })
-                                }
-                                placeholder="Label"
-                              />
-                              <Input
-                                value={child.href}
-                                onChange={(e) =>
-                                  updateChildInNavItem(index, childIndex, { href: e.target.value })
-                                }
-                                placeholder="/page-url"
-                              />
-                              <div className="flex items-center gap-2">
-                                <Switch
-                                  checked={child.openInNewTab || false}
-                                  onCheckedChange={(checked) =>
-                                    updateChildInNavItem(index, childIndex, { openInNewTab: checked })
-                                  }
-                                />
-                                <span className="text-sm text-gray-500">New tab</span>
+                            <div className="flex items-center gap-3 pl-2 pr-2 py-2">
+                              <div
+                                draggable
+                                onDragStart={(event) => handleChildDragStart(event, index, childIndex)}
+                                onDragEnd={handleChildDragEnd}
+                                className="flex h-8 w-6 cursor-grab items-center justify-center text-gray-400 active:cursor-grabbing"
+                                title="Drag to reorder dropdown item"
+                                aria-label="Drag to reorder dropdown item"
+                              >
+                                <GripVertical className="h-4 w-4" />
                               </div>
+                              <div className="flex-1 grid grid-cols-3 gap-3">
+                                <Input
+                                  value={child.label}
+                                  onChange={(e) =>
+                                    updateChildInNavItem(index, childIndex, { label: e.target.value })
+                                  }
+                                  placeholder="Label"
+                                />
+                                <Input
+                                  value={child.href}
+                                  onChange={(e) =>
+                                    updateChildInNavItem(index, childIndex, { href: e.target.value })
+                                  }
+                                  placeholder="/page-url"
+                                />
+                                <div className="flex items-center gap-2">
+                                  <Switch
+                                    checked={child.openInNewTab || false}
+                                    onCheckedChange={(checked) =>
+                                      updateChildInNavItem(index, childIndex, { openInNewTab: checked })
+                                    }
+                                  />
+                                  <span className="text-sm text-gray-500">New tab</span>
+                                </div>
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removeChildFromNavItem(index, childIndex)}
+                                className="text-red-500 hover:text-red-700 hover:bg-red-50 flex-shrink-0"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
                             </div>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeChildFromNavItem(index, childIndex)}
-                              className="text-red-500 hover:text-red-700 hover:bg-red-50 flex-shrink-0"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
+
+                            <div className="space-y-2 border-t border-gray-200 px-3 py-2 ml-8">
+                              {(child.children ?? []).map((grandchild, grandchildIndex) => (
+                                <div
+                                  key={grandchildIndex}
+                                  className="flex items-center gap-3 rounded-md border-l-2 border-amber-300 bg-white py-2 pl-4 pr-2"
+                                >
+                                  <div className="flex-1 grid grid-cols-3 gap-3">
+                                    <Input
+                                      value={grandchild.label}
+                                      onChange={(e) =>
+                                        updateGrandchildInNavItem(index, childIndex, grandchildIndex, { label: e.target.value })
+                                      }
+                                      placeholder="Grandchild label"
+                                    />
+                                    <Input
+                                      value={grandchild.href}
+                                      onChange={(e) =>
+                                        updateGrandchildInNavItem(index, childIndex, grandchildIndex, { href: e.target.value })
+                                      }
+                                      placeholder="/page-url"
+                                    />
+                                    <div className="flex items-center gap-2">
+                                      <Switch
+                                        checked={grandchild.openInNewTab || false}
+                                        onCheckedChange={(checked) =>
+                                          updateGrandchildInNavItem(index, childIndex, grandchildIndex, { openInNewTab: checked })
+                                        }
+                                      />
+                                      <span className="text-sm text-gray-500">New tab</span>
+                                    </div>
+                                  </div>
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => removeGrandchildFromNavItem(index, childIndex, grandchildIndex)}
+                                    className="text-red-500 hover:text-red-700 hover:bg-red-50 flex-shrink-0"
+                                  >
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              ))}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => addGrandchildToNavItem(index, childIndex)}
+                                className="text-gray-600"
+                              >
+                                <Plus className="h-3.5 w-3.5 mr-1.5" />
+                                Add Grandchild Item
+                              </Button>
+                            </div>
                           </div>
                         ))}
                         <Button
