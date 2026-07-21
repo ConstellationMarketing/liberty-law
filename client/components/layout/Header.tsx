@@ -86,8 +86,8 @@ function DesktopDropdownItem({ item }: { item: NavItemType }) {
         <ChevronDown className="mr-3 h-4 w-4 -rotate-90 text-white" />
       </div>
       <div
-        className={`absolute left-full top-0 ml-1 min-w-[220px] rounded-lg border border-law-border bg-law-card shadow-xl transition-all duration-200 ${
-          open ? "visible translate-x-0 opacity-100" : "invisible -translate-x-1 opacity-0"
+        className={`absolute right-full top-0 mr-1 min-w-[220px] rounded-lg border border-law-border bg-law-card shadow-xl transition-all duration-200 ${
+          open ? "visible translate-x-0 opacity-100" : "invisible translate-x-1 opacity-0"
         }`}
       >
         {item.children!.map((grandchild, index) => (
