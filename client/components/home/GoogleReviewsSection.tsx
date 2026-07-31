@@ -169,10 +169,22 @@ export default function GoogleReviewsSection({ content }: GoogleReviewsSectionPr
       setReviewData(null);
 
       try {
-        const response = await fetch(requestUrl, {
-          signal: controller.signal,
-          cache: "no-store",
-        });
+        const fetchReviews = (url: string) =>
+          fetch(url, {
+            signal: controller.signal,
+            cache: "no-store",
+          });
+
+        let response = await fetchReviews(requestUrl);
+
+        if (!response.headers.get("content-type")?.includes("application/json")) {
+          const directNetlifyUrl = requestUrl.replace(
+            "/api/google-reviews",
+            "/.netlify/functions/api/google-reviews",
+          );
+          response = await fetchReviews(directNetlifyUrl);
+        }
+
         const payload = await response.json();
 
         if (!response.ok) {
