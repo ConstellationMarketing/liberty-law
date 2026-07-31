@@ -40,7 +40,7 @@ export async function loadContactContent() {
   }
 
   const response = await fetch(
-    `${supabaseUrl}/rest/v1/pages?url_path=eq./contact&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
+    `${supabaseUrl}/rest/v1/pages?url_path=eq.${encodeURIComponent("/contact/")}&status=eq.published&select=content,meta_title,meta_description,canonical_url,og_title,og_description,og_image,noindex,schema_type,schema_data`,
     {
       headers: {
         apikey: supabaseKey,
