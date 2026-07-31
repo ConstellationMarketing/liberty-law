@@ -1,5 +1,5 @@
 import serverless from "serverless-http";
 
-import { createServer } from "../../../../server";
+import { createPublicServer } from "../../../../server/netlify";
 
-export const handler = serverless(createServer());
+export const handler = serverless(createPublicServer());
