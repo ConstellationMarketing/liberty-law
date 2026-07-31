@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { createClient } from "@supabase/supabase-js";
 
 const placesDetailsUrl = "https://maps.googleapis.com/maps/api/place/details/json";
