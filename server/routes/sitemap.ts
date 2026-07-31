@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { createClient } from "@supabase/supabase-js";
 
 const SITE_URL = (process.env.VITE_SITE_URL || process.env.SITE_URL || "").replace(/\/$/, "");

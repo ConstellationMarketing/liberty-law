@@ -16,7 +16,7 @@
 
 [[redirects]]
   from = "/api/google-reviews"
-  to = "/.netlify/functions/google-reviews"
+  to = "/.netlify/functions/api/google-reviews"
   status = 200
   force = true
 

@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 
 interface HealthCheckResponse {
   status: "ok" | "degraded" | "error";
