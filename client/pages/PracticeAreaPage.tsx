@@ -92,6 +92,15 @@ export default function PracticeAreaPage() {
               }
             : undefined
         }
+        secondTestimonial={
+          slug === "felony-defense-lawyer-in-naperville-il"
+            ? {
+                text:
+                  "We worked with David and he was great! We Would definitely go with him again, I recommend him to anyone who needs an attorney. We appreciate all your help! Thanks again! :)",
+                author: "A.M",
+              }
+            : undefined
+        }
       />
 
       {/* 3. Content Sections */}

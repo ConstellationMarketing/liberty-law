@@ -18,19 +18,28 @@ interface Props {
     text: string;
     author: string;
   };
+  secondTestimonial?: {
+    text: string;
+    author: string;
+  };
 }
 
 export default function PracticeTestimonials({
   testimonials,
   firstTestimonial,
+  secondTestimonial,
 }: Props) {
   if (!testimonials?.items?.length) return null;
 
-  const items = testimonials.items.slice(0, 3).map((item, index) =>
-    index === 0 && firstTestimonial
-      ? { ...item, ...firstTestimonial }
-      : item,
-  );
+  const items = testimonials.items.slice(0, 3).map((item, index) => {
+    if (index === 0 && firstTestimonial) {
+      return { ...item, ...firstTestimonial };
+    }
+    if (index === 1 && secondTestimonial) {
+      return { ...item, ...secondTestimonial };
+    }
+    return item;
+  });
 
   return (
     <div className="bg-gray-50 py-[50px] md:py-[70px]">
