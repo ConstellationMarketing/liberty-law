@@ -14,12 +14,23 @@ function FiveStars() {
 
 interface Props {
   testimonials: TestimonialsContent | null | undefined;
+  firstTestimonial?: {
+    text: string;
+    author: string;
+  };
 }
 
-export default function PracticeTestimonials({ testimonials }: Props) {
+export default function PracticeTestimonials({
+  testimonials,
+  firstTestimonial,
+}: Props) {
   if (!testimonials?.items?.length) return null;
 
-  const items = testimonials.items.slice(0, 3);
+  const items = testimonials.items.slice(0, 3).map((item, index) =>
+    index === 0 && firstTestimonial
+      ? { ...item, ...firstTestimonial }
+      : item,
+  );
 
   return (
     <div className="bg-gray-50 py-[50px] md:py-[70px]">

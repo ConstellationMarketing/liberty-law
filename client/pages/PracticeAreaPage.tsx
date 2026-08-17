@@ -81,7 +81,18 @@ export default function PracticeAreaPage() {
       <PracticePageHero hero={content.hero} />
 
       {/* 2. Testimonials */}
-      <PracticeTestimonials testimonials={testimonials} />
+      <PracticeTestimonials
+        testimonials={testimonials}
+        firstTestimonial={
+          slug === "felony-defense-lawyer-in-naperville-il"
+            ? {
+                text:
+                  "Experienced and professional attorney. Had the opportunity to work with Mr. Liberty in the past and have nothing but good things to say about him. Great attention to detail and looks out for his clients.",
+                author: "J.M",
+              }
+            : undefined
+        }
+      />
 
       {/* 3. Content Sections */}
       <ContentSections
