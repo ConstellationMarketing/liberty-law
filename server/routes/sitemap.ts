@@ -8,7 +8,7 @@ const STATIC_ROUTES = [
   { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/about/", changefreq: "monthly", priority: "0.8" },
   { path: "/practice-areas/", changefreq: "monthly", priority: "0.9" },
-  { path: "/posts/", changefreq: "weekly", priority: "0.7" },
+  { path: "/resources/", changefreq: "weekly", priority: "0.7" },
   { path: "/contact/", changefreq: "monthly", priority: "0.7" },
 ];
 
@@ -68,7 +68,7 @@ export const handleSitemap: RequestHandler = async (_req, res) => {
       if (!error && pages) {
         for (const page of pages) {
           const normalizedPath = normalizeSlash(page.url_path);
-          if (seenPaths.has(normalizedPath)) continue;
+          if (normalizedPath === "/posts/" || seenPaths.has(normalizedPath)) continue;
           seenPaths.add(normalizedPath);
           urls.push({
             loc: `${SITE_URL}${normalizedPath}`,
