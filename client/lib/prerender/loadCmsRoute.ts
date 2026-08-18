@@ -84,14 +84,6 @@ async function buildRoutePayload(
     };
   }
 
-  if (normalizedPath === "/posts/") {
-    return {
-      kind: "posts-index",
-      payload: await loadPublishedPosts(),
-      supportingData: {},
-    };
-  }
-
   if (normalizedPath === "/privacy-policy/") {
     return {
       kind: "simple",

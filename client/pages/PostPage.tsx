@@ -40,7 +40,7 @@ export default function PostPage() {
         <div className="flex min-h-[60vh] flex-col items-center justify-center gap-5 bg-white px-4 text-center">
           <h1 className="font-playfair text-[44px] text-law-dark">Post Not Found</h1>
           <p className="font-outfit text-[18px] text-black/70">We couldn't find the post you were looking for.</p>
-          <Link to="/posts/" className="bg-law-accent px-7 py-3 font-outfit font-semibold text-white hover:bg-law-dark">
+          <Link to="/resources/" className="bg-law-accent px-7 py-3 font-outfit font-semibold text-white hover:bg-law-dark">
             View All Posts
           </Link>
         </div>

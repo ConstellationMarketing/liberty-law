@@ -224,17 +224,19 @@ async function generateSSG() {
   console.log(`Found ${categories?.length || 0} post categories`);
 
   const routeTargets: SsgRoute[] = [
-    ...((pages || []) as PublishedPage[]).map((page) => {
-      const routePath = ensureTrailingSlashPath(page.url_path);
-      return {
-        routePath,
-        title: page.title,
-        lastmod: page.updated_at,
-        noindex: page.noindex,
-        changefreq: "weekly",
-        priority: routePath === "/" ? "1.0" : "0.8",
-      };
-    }),
+    ...((pages || []) as PublishedPage[])
+      .filter((page) => ensureTrailingSlashPath(page.url_path) !== "/posts/")
+      .map((page) => {
+        const routePath = ensureTrailingSlashPath(page.url_path);
+        return {
+          routePath,
+          title: page.title,
+          lastmod: page.updated_at,
+          noindex: page.noindex,
+          changefreq: "weekly",
+          priority: routePath === "/" ? "1.0" : "0.8",
+        };
+      }),
     ...((posts || []) as PublishedPost[]).map((post) => ({
       routePath: ensureTrailingSlashPath(`/${post.slug}/`),
       title: post.title,
@@ -292,18 +294,29 @@ async function generateSSG() {
     .select("from_path, to_path, status_code")
     .eq("enabled", true);
 
+  const requiredRedirects = [
+    "/posts /resources/ 301",
+    "/posts/ /resources/ 301",
+  ];
+
   if (redirectsError) {
     console.error("Error fetching redirects:", redirectsError);
   } else if (redirects && redirects.length > 0) {
-    const redirectsContent = redirects
-      .map((r: Redirect) => `${r.from_path} ${r.to_path} ${r.status_code}`)
-      .join("\n");
+    const redirectsContent = [
+      ...requiredRedirects,
+      ...redirects.map((r: Redirect) =>
+        `${r.from_path} ${r.to_path} ${r.status_code}`,
+      ),
+    ].join("\n");
     const fullRedirectsContent = `${redirectsContent}\n/* /index.html 200`;
     fs.writeFileSync(path.join(process.cwd(), "dist/spa/_redirects"), fullRedirectsContent);
-    console.log(`Generated _redirects with ${redirects.length} redirects`);
+    console.log(`Generated _redirects with ${redirects.length + requiredRedirects.length} redirects`);
   } else {
-    fs.writeFileSync(path.join(process.cwd(), "dist/spa/_redirects"), "/* /index.html 200");
-    console.log("Generated _redirects with SPA fallback");
+    fs.writeFileSync(
+      path.join(process.cwd(), "dist/spa/_redirects"),
+      `${requiredRedirects.join("\n")}\n/* /index.html 200`,
+    );
+    console.log("Generated _redirects with required redirects and SPA fallback");
   }
 
   const siteUrl = (

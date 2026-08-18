@@ -37,8 +37,18 @@ export default function Seo({
       .catch(() => setFaviconUrl(settings.logoUrl));
   }, [settings.logoUrl]);
 
-  // Build full canonical URL
-  const fullCanonical = canonical || (siteUrl ? `${siteUrl}${pathname}` : undefined);
+  // Build an absolute canonical URL, including when a page supplies a relative path.
+  const normalizedSiteUrl = siteUrl.replace(/\/+$/, '');
+  const canonicalPath = canonical
+    ? canonical.startsWith('/')
+      ? canonical
+      : `/${canonical}`
+    : pathname;
+  const fullCanonical = canonical?.match(/^https?:\/\//i)
+    ? canonical
+    : normalizedSiteUrl
+      ? `${normalizedSiteUrl}${canonicalPath}`
+      : canonical;
 
   // Use CMS title exactly as entered; fall back to site name only when no title set
   const fullTitle = title || settings.siteName;
