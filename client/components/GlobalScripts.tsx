@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { useSiteSettings } from "@site/contexts/SiteSettingsContext";
-import { refreshWhatConvertsDni } from "@site/lib/whatconvertsRefresh";
 
 /**
  * Parses an HTML string and injects any <script> and other tags
@@ -65,10 +64,6 @@ export default function GlobalScripts() {
     if (settings.headScripts === prevHead.current) return;
     prevHead.current = settings.headScripts;
     const cleanup = injectHtml(settings.headScripts, document.head);
-    // Force-refresh immediately after injecting head scripts: this is the
-    // moment the WC script first lands in the DOM, so we bypass the throttle
-    // to guarantee DNI runs regardless of any earlier (failed) attempts.
-    refreshWhatConvertsDni("head-scripts", { force: true });
     return cleanup;
   }, [settings.headScripts]);
 

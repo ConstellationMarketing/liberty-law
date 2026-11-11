@@ -53,21 +53,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 **Note**: `.env.local` is gitignored by default and will not be committed.
 
-### Method 2: Using DevServerControl Tool
-
-If you're working in the Builder.io environment, you can set environment variables using the DevServerControl tool:
-
-```typescript
-// Set each variable individually
-DevServerControl.set_env_variable(["VITE_SUPABASE_URL", "https://..."]);
-DevServerControl.set_env_variable(["VITE_SUPABASE_ANON_KEY", "eyJ..."]);
-DevServerControl.set_env_variable(["SUPABASE_SERVICE_ROLE_KEY", "eyJ..."]);
-
-// Restart the dev server
-DevServerControl.restart = true;
-```
-
-### Method 3: Production Deployment
+### Method 2: Production Deployment
 
 For production deployments (Netlify, Vercel, etc.):
 
@@ -158,7 +144,6 @@ Variables are loaded in this order (later overrides earlier):
 1. `.env` - Default/public variables (committed to git)
 2. `.env.local` - Local overrides (gitignored, NOT committed)
 3. System environment variables
-4. DevServerControl runtime variables
 
 **Best Practice**: Use `.env.local` for secrets and local development.
 

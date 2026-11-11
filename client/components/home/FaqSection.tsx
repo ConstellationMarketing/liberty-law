@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { SafeHtml } from "@site/components/ui/SafeHtml";
-import { triggerDniRefreshAfterReveal } from "@site/components/WcDniManager";
 import type { FaqContent, FaqItem } from "@site/lib/cms/homePageTypes";
 
 interface FaqSectionProps {
@@ -48,10 +47,6 @@ export default function FaqSection({ content }: FaqSectionProps) {
   const toggleFaq = (index: number) => {
     const newIndex = openIndex === index ? -1 : index;
     setOpenIndex(newIndex);
-    // When opening a tab, trigger DNI refresh so phone numbers inside get swapped
-    if (newIndex !== -1) {
-      triggerDniRefreshAfterReveal();
-    }
   };
 
   return (

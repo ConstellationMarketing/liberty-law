@@ -76,16 +76,11 @@ export default function Footer() {
               </div>
               <div className="table-cell align-top pl-[15px]">
                 {/*
-                  data-dni-phone="footer" — WC DNI sync target.
-                  Two child spans keep label and number as separate text nodes.
-                  WC's text-node matcher targets only the number span
-                  (contiguous phone-number text node) and ignores the label.
                   after:absolute after:inset-0 stretches the click area to cover
                   the entire relative-positioned parent div (whole call box).
                 */}
                 <a
                   href={`tel:${phoneNumber}`}
-                  data-dni-phone="footer"
                   data-phone="footer"
                   className="block after:absolute after:inset-0 after:content-['']"
                 >
