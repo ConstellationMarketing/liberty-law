@@ -106,13 +106,11 @@ export default function Index() {
                     {phoneLabel}
                   </h4>
                   {/*
-                    data-dni-phone="primary" — WC swaps this simple anchor (href + textContent).
                     after:absolute after:inset-0 after:content-[''] stretches the click area
                     to cover the entire relative-positioned parent div.
                   */}
                   <a
                     href={`tel:${phoneNumber}`}
-                    data-dni-phone="primary"
                     className="font-outfit text-[clamp(1.75rem,5vw,40px)] text-white leading-tight transition-colors duration-300 after:absolute after:inset-0 after:content-['']"
                   >
                     {phoneDisplay}

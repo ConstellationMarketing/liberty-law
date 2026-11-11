@@ -6,7 +6,6 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import ScrollToTop from "@site/components/ScrollToTop";
 import GlobalScripts from "@site/components/GlobalScripts";
-import WcDniManager from "@site/components/WcDniManager";
 import {
   PreloadedStateProvider,
   type CmsPreloadedState,
@@ -29,7 +28,6 @@ function RoutedApp({
       {includeInteractiveEffects && (
         <>
           <GlobalScripts />
-          <WcDniManager />
           <ScrollToTop />
         </>
       )}
